@@ -18,11 +18,16 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
+  username: <%= ENV["POSTGRES_USERNAME"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV["POSTGRES_HOST"] %>
+  port: <%= ENV["POSTGRES_PORT"] %>
 
 development:
   <<: *default
   database: randomizer_development
+  host: <%= ENV["POSTGRES_DEV_HOST"] %>
+  port: <%= ENV["POSTGRES_DEV_PORT"] %>
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -57,6 +62,8 @@ development:
 test:
   <<: *default
   database: randomizer_test
+  host: <%= ENV["POSTGRES_DEV_HOST"] %>
+  port: <%= ENV["POSTGRES_DEV_PORT"] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -81,5 +88,3 @@ test:
 production:
   <<: *default
   database: randomizer_production
-  username: randomizer
-  password: <%= ENV["RANDOMIZER_DATABASE_PASSWORD"] %>
