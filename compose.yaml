@@ -16,6 +16,7 @@ services:
       - back_net
     volumes:
       - .postgres:/posgtres
+      - randomizer_vol:/var/lib/postgresql/data
     ports:
       - 5433:5432
   web:
