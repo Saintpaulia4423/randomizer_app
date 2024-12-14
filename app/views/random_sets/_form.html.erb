@@ -1,0 +1,32 @@
+<%= form_with(model: random_set) do |form| %>
+  <% if random_set.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(random_set.errors.count, "error") %> prohibited this random_set from being saved:</h2>
+
+      <ul>
+        <% random_set.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :dict, style: "display: block" %>
+    <%= form.text_field :dict %>
+  </div>
+
+  <div>
+    <%= form.label :edit_pass, style: "display: block" %>
+    <%= form.text_field :edit_pass %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

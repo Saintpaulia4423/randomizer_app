@@ -10,8 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 0) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_14_081154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "lotteries", force: :cascade do |t|
+    t.string "name"
+    t.text "dict"
+    t.integer "reality"
+    t.boolean "defalut_check"
+    t.integer "origin_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "random_sets", force: :cascade do |t|
+    t.string "name"
+    t.integer "parent"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "dict"
+    t.string "edit_pass"
+  end
 end

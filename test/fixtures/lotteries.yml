@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  dict: MyText
+  reality: 1
+  defalut_check: false
+
+two:
+  name: MyString
+  dict: MyText
+  reality: 1
+  defalut_check: false

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @random_set %>
+
+<div>
+  <%= link_to "Edit this random set", edit_random_set_path(@random_set) %> |
+  <%= link_to "Back to random sets", random_sets_path %>
+
+  <%= button_to "Destroy this random set", @random_set, method: :delete %>
+</div>
