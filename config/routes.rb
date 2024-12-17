@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "lotteries/new"
+  get "lotteries/create"
+  get "lotteries/edit"
+  get "lotteries/update"
+  get "lotteries/destroy"
   resources :random_sets
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
