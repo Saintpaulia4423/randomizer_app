@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_14_081154) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_21_093555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_14_081154) do
     t.integer "origin_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "random_set_id", null: false
+    t.index ["random_set_id"], name: "index_lotteries_on_random_set_id"
   end
 
   create_table "random_sets", force: :cascade do |t|
@@ -32,5 +34,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_14_081154) do
     t.datetime "updated_at", null: false
     t.text "dict"
     t.string "edit_pass"
+    t.string "session_digest"
+    t.string "edit_pass_digest"
   end
+
+  add_foreign_key "lotteries", "random_sets"
 end

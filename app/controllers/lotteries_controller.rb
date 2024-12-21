@@ -1,5 +1,5 @@
 class LotteriesController < ApplicationController
-  before_action :check_lottery, only: %i[ show edit update destroy ]
+  before_action :check_lottery, only: %i[ edit update destroy ]
 
   def new
     @lottery = Lottery.new
