@@ -20,13 +20,17 @@
   <body>
     <div class="vh-100 container-fluid">
       <div class="row">
-        <div class="col ps-0 position-fixed" style="width: 200px;">
+        <div class="col ps-0 position-fixed side-bar">
           <%= render "sidebar" %>
         </div>
-        <div class="col" style="witdh: 200px;"></div>
+      </div>
+      <div class="row">
+        <div class="col side-bar"></div>
         
         <div class="col my-4">
+          <%= render "flash" %>
           <%= yield %>
         </div>
+      </div>
   </body>
 </html>
