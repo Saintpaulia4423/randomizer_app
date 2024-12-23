@@ -1,17 +1,16 @@
-<div id="<%= dom_id random_set %>">
-  <p>
-    <strong>Name:</strong>
-    <%= random_set.name %>
-  </p>
-
-  <p>
-    <strong>Parent:</strong>
-    <%= random_set.parent %>
-  </p>
-
-  <p>
-    <strong>Data:</strong>
-    <%= random_set.data %>
-  </p>
-
-</div>
+<%= turbo_frame_tag random_set do %>
+  <div class="row py-2 border-top">
+    <div class="col-4 my-auto">
+      <%= random_set.name %>
+    </div>
+    <div class="col-4 my-auto">
+      <%= random_set.dict %>
+    </div>
+    <div class="col-4">
+      <div class="d-flex justify-content-end">
+        <%# <%= link_to "確認", random_set_lottery_path(random_set), class: "btn btn-sm btn-outline-primary me-2", data: { turbo_frame: "precheck" } %> %>
+        <%= link_to "選択", random_set_lotteries_path(random_set.id), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+<% end %>

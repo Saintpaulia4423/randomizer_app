@@ -6,7 +6,7 @@ class LotteriesController < ApplicationController
   end
 
   def create
-    @lottery = current_user.lotteries.build(lottery_params)
+    @lottery = current_set.lotteries.build(lottery_params)
 
     respond_to do |format|
       if @lottery.save
@@ -17,6 +17,14 @@ class LotteriesController < ApplicationController
         format.json { render json: @lottery.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def index
+    @lotteries = current_set.lotteries
+  end
+
+  def show
+    @lottery = current_set.lotteries.find[:id]
   end
 
   def edit

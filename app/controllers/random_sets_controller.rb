@@ -3,6 +3,7 @@ class RandomSetsController < ApplicationController
 
   # GET /random_sets or /random_sets.json
   def index
+    @search = RandomSet.ransack(params[:q])
     @random_sets = RandomSet.all
   end
 
@@ -65,6 +66,6 @@ class RandomSetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def random_set_params
-      params.require(:random_set).permit(:name, :parent, :data)
+      params.require(:random_set).permit(:name, :dict, :data)
     end
 end
