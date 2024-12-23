@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_21_093555) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_23_091829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_21_093555) do
     t.string "name"
     t.text "dict"
     t.integer "reality"
-    t.boolean "defalut_check"
+    t.boolean "defalut_check", default: false
     t.integer "origin_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -35,7 +35,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_21_093555) do
     t.text "dict"
     t.string "edit_pass"
     t.string "session_digest"
-    t.string "edit_pass_digest"
+    t.string "password_digest"
   end
 
   add_foreign_key "lotteries", "random_sets"
