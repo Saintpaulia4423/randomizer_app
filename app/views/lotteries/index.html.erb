@@ -1,1 +1,5 @@
-<%= render @lotteries %>
+<%= render "lotteriesPreview", title: @random_set_title do %>
+  <ul class="list-unstyled">
+    <%= render @lotteries %>
+  </ul>
+<% end %>

@@ -21,6 +21,7 @@ class LotteriesController < ApplicationController
 
   def index
     @lotteries = current_set.lotteries
+    @random_set_title = current_set.name
   end
 
   def show
