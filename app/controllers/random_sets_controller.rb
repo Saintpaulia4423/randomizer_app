@@ -3,8 +3,11 @@ class RandomSetsController < ApplicationController
 
   # GET /random_sets or /random_sets.json
   def index
-    @search = RandomSet.ransack(params[:q])
     @random_sets = RandomSet.all
+
+    @search = RandomSet.ransack(params[:q])
+    @search.sorts = "id desc" if @search.sorts.empty?
+    @random_sets = @search.result
   end
 
   # GET /random_sets/1 or /random_sets/1.json
