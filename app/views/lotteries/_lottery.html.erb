@@ -1,5 +1,6 @@
 <%= turbo_frame_tag lottery do %>
   <li>
     <%= lottery.name %>
+    <%= get_realityname(lottery.reality) %>
   </li>
 <% end %>
