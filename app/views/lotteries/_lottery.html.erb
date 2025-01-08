@@ -1,5 +1,13 @@
 <%= turbo_frame_tag lottery do %>
-  <div class="row py-2">
-    <%= lottery.name %>
-  </div>
+  <li>
+    <div class="row border-bottom">
+      <div class="col-4 mt-auto">
+        <%= get_realityname(lottery.reality) %>
+      </div>
+      <div class="col-4 mt-auto">
+        <%= lottery.name %>
+      </div>
+      <div class="col-4 mt-auto"></div>
+    </div>
+  </li>
 <% end %>

@@ -8,7 +8,7 @@
     </div>
     <div class="col-4">
       <div class="d-flex justify-content-end">
-        <%# <%= link_to "確認", random_set_lottery_path(random_set), class: "btn btn-sm btn-outline-primary me-2", data: { turbo_frame: "precheck" } %> %>
+        <%= link_to "確認", random_set_lotteries_path(random_set.id), class: "btn btn-sm btn-outline-primary me-2", data: { turbo_frame: "preview_modal" } %>
         <%= link_to "選択", random_set_lotteries_path(random_set.id), class: "btn btn-sm btn-outline-secondary" %>
       </div>
     </div>
