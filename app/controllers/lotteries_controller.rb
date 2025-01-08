@@ -20,7 +20,10 @@ class LotteriesController < ApplicationController
   end
 
   def index
-    @lotteries = current_set.lotteries
+    @search = current_set.lotteries.ransack(params[:q])
+    @search.sorts = "reality desc" if @search.sorts.empty?
+    @lotteries = @search.result
+
     @random_set_title = current_set.name
   end
 

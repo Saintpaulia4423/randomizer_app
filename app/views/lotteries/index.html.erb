@@ -1,5 +1,23 @@
 <%= render "lotteriesPreview", title: @random_set_title do %>
-  <ul class="list-unstyled">
-    <%= render @lotteries %>
-  </ul>
+  <div class="mx-3">
+    <%= turbo_frame_tag "lottery-list" do %>
+      <%# 最上位行 %>
+      <div class="row">
+        <div class="col-4 mt-auto">
+          <%= sort_link(@search, :reality, class: "btn btn-primary" ) %>
+        </div>
+        <div class="col-4 mt-auto">
+          <%= sort_link(@search, :name, class: "btn btn-primary" ) %>
+        </div>
+        <%# blank %>
+        <div class="col-4 mt-auto">
+        </div>
+      </div>
+      <br>
+      <%# 本体部 %>
+      <ul class="list-unstyled">
+        <%= render @lotteries %>
+      </ul>
+    <% end %>
+  </div>
 <% end %>
