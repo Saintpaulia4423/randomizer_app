@@ -1,11 +1,12 @@
-<% content_for :title, "New random set" %>
+<% content_for :title, "セット作成" %>
 
-<h1>New random set</h1>
+<h1>セット作成</h1>
 
-<%= render "form", random_set: @random_set %>
-
-<br>
-
-<div>
-  <%= link_to "Back to random sets", random_sets_path %>
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-brush-fill">セット情報</i>
+  </div>
+  <div class="card-body">
+    <%= render "form", random_set: @random_set %>
+  </div>
 </div>

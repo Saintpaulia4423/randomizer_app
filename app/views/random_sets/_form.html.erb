@@ -11,22 +11,22 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="input-group mb-3">
+    <%= form.label :name, class: "input-group-text", id: "random_set_name" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "3文字～255文字まで", aria: { describedby: "random_set_name" } %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.label :dict, class: "input-group-text", id: "random_set_dict" %>
+    <%= form.text_field :dict, class: "form-control", placeholder: "説明を入力", aria: { describedby: "random_set_dict" }  %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.label :password, class: "input-group-text", id: "random_set_password" %>
+    <%= form.text_field :password, class: "form-control", placeholder: "編集時に使用するパスワード", aria: { describedby: "random_set_password" }  %>
   </div>
 
   <div>
-    <%= form.label :dict, style: "display: block" %>
-    <%= form.text_field :dict %>
-  </div>
-
-  <div>
-    <%= form.label :edit_pass, style: "display: block" %>
-    <%= form.text_field :edit_pass %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit "作成", class: "btn btn-outline-primary" %>
   </div>
 <% end %>

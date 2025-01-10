@@ -1,5 +1,5 @@
 class RandomSetsController < ApplicationController
-  before_action :set_random_set, only: %i[ show edit update destroy ]
+  # before_action :set_random_set, only: %i[ show edit update destroy ]
 
   # GET /random_sets or /random_sets.json
   def index
@@ -12,6 +12,7 @@ class RandomSetsController < ApplicationController
 
   # GET /random_sets/1 or /random_sets/1.json
   def show
+    @random_set = RandomSet.find(params[:id])
   end
 
   # GET /random_sets/new
@@ -69,6 +70,6 @@ class RandomSetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def random_set_params
-      params.require(:random_set).permit(:name, :dict, :data)
+      params.require(:random_set).permit(:name, :dict, :data, :password)
     end
 end
