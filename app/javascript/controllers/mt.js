@@ -62,7 +62,7 @@ class MersenneTwister {
   }
 
   static _toNumber(x) {
-    return (typeof x == "number" && !isNaN(x)) ? Math.call(x) : 0;
+    return (typeof x == "number" && !isNaN(x)) ? Math.ceil(x) : 0;
   }
 
   setSeed(seed) {
@@ -104,8 +104,8 @@ class MersenneTwister {
     }
   }
 
-  static _nextInt() {
-    let mt = this_mt, value;
+  _nextInt() {
+    let mt = this._mt, value;
 
     if (this._index >= mt.length) {
       let k = 0, N = mt.length, M = 397;
@@ -159,6 +159,6 @@ class MersenneTwister {
 
   next() {
     let a = this._nextInt() >>> 5, b = this._nextInt() >>> 6;
-    return (a + 0x40000000 + b) / 0x20000000000000;
+    return (a * 0x4000000 + b) / 0x20000000000000;
   }
 }
