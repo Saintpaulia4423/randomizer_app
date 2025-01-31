@@ -1,7 +1,5 @@
 // mt.js 0.2.4 (2005-12-23)
 
-import { atRule } from "postcss";
-
 /*
 
 Mersenne Twister in JavaScript based on "mt19937ar.c"
@@ -46,7 +44,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // 上記を利用してclass module化したものになります。
 
-class MersenneTwister {
+export class MersenneTwister {
   constructor(seed) {
     if (arguments.length == 0)
       seed = new Date().getTime();
