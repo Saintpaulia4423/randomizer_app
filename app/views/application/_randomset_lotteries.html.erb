@@ -1,6 +1,9 @@
 <%# 最上位行 %>
 <div class="row">
-  <div class="col-4 mt-auto">
+  <% if @random_set.present? %>
+    <div class="col-1 mt-auto"></div>
+  <% end %>
+  <div class="col-3 mt-auto">
     <%= sort_link(@search, :reality, class: "btn btn-primary" ) %>
   </div>
   <div class="col-4 mt-auto">
@@ -13,5 +16,9 @@
 <br>
 <%# 本体部 %>
 <ul class="list-unstyled">
-  <%= render @lotteries %>
+  <% if @lotteries.empty? %>
+    <li>登録がありません</li>
+  <% else %>
+    <%= render @lotteries %>
+  <% end %>
 </ul>

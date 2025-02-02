@@ -1,13 +1,31 @@
 <%= turbo_frame_tag lottery do %>
   <li>
     <div class="row border-bottom">
-      <div class="col-4 mt-auto">
+      <% if @random_set.present? %>
+        <div class="col-1">
+          <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>">
+        </div>
+      <% end %>
+
+      <div class="col-3 mt-auto">
         <%= get_realityname(lottery.reality) %>
       </div>
       <div class="col-4 mt-auto">
         <%= lottery.name %>
       </div>
-      <div class="col-4 mt-auto"></div>
+      <% if @random_set.present? %>
+        <div class="col-4 mt-auto">
+          <%= lottery.dict %>
+          <span type="hidden" id="lottery-<%= lottery.id %>"></span>
+          <input type="hidden" id="hiddenLottery-<%= lottery.id %>" value="<%= @lottery_json %>">
+          <button id="lotteryButton-<%= lottery.id%>" >クリック！</button>
+          <script>
+            document.getElementById("lotteryButton-<%= lottery.id %>").addEventListener("click", function() {
+              alert(document.getElementById("hiddenLottery-<%= lottery.id %>").value)
+            });
+          </script>
+        </div>
+      <% end %>
     </div>
   </li>
 <% end %>

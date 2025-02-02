@@ -4,6 +4,7 @@ import { MersenneTwister } from "mt";
 class RandomizerResult {
   constructor() {
     this.randomizeResult = "";
+    this.cache = "";
   }
 
   initialize() {
@@ -14,16 +15,31 @@ class RandomizerResult {
       this.initialize();
     }
   }
-  setText(x) {
+  reset() {
     this.chkElement();
-    this.randomizeResult.innerText += x;
+    this.randomizeResult = "";
+    this.cache = "";
+  }
+  refresh() {
+    this.chkElement();
+    this.randomizeResult.innerText = this.cache;
+  }
+
+  setText(string) {
+    this.chkElement();
+    this.cache = this.randomizeResult.innerText + string;
   }
 }
 
+// Xrandom方式の乱数精製
 class Xrandom {
   constructor(seed1 = new Date(), seed2 = 198101012) {
     this.state1 = seed1;
     this.state2 = seed2;
+  }
+
+  chkSeed() {
+    return this.state1;
   }
 
   next() {
@@ -52,38 +68,64 @@ class Xrandom {
   }
 }
 
+// Randomizer本体部
 export class Randomizer {
   constructor() {
     this.metw = new MersenneTwister();
     this.rd = new Xrandom();
+    this.result = new RandomizerResult();
+    this.min = 0;
+    this.max = 0;
   }
 
-  setSeed(x) {
-    this.metw.setSeed(x);
+  setSeed(seed) {
+    this.metw.setSeed(seed);
+    this.rd.setSeed(seed);
   }
   chkSeed() {
-    seedValue = document.getElementById("randomSeed")
-    if (seedValue != "")
-      this.setSeed(seedValue)
+    seed = this.rd.chkSeed();
+    this.metw.setSeed(seed);
+    return seed;
+  }
+  setRange(min = 0, max = 0) {
+    this.min = min;
+    this.max = max;
   }
 
-  getRandomMt(count = 1) {
+  calRange(range) {
+    if (typeof range !== "object") {
+      throw new TypeError("引数はオブジェクト（配列）のみになります。");
+    }
+    this.setRange(0, range.length - 1);
+  }
+  correction(input) {
+    return Math.round(input * (this.max - this.min) + this.min);
+  }
+
+  anyNextMt(count = 1) {
     let results = [];
-    for (let i = 0; i <= count; i++)
-      results.push(this.metw.next());
+    for (let i = 0; i < count; i++)
+      results.push(this.nextMt());
     return results;
   }
-  getRandomXs(count = 1) {
+  anyNextXs(count = 1) {
     let results = [];
-    for (let i = 0; i <= count; i++)
-      results.push(this.rd.next());
+    for (let i = 0; i < count; i++)
+      results.push(this.nextXs());
     return results;
   }
+
   nextMt() {
-    return this.metw.next();
+    return this.correction(this.metw.next());
   }
   nextXs() {
-    return this.rd.next();
+    return this.correction(this.rd.next());
   }
 
+  setResult(string) {
+    this.result.setText(string);
+  }
+  refresh() {
+    this.result.refresh();
+  }
 }

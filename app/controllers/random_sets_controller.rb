@@ -13,6 +13,13 @@ class RandomSetsController < ApplicationController
   # GET /random_sets/1 or /random_sets/1.json
   def show
     @random_set = RandomSet.find(params[:id])
+    # ModおよびValiant用
+    if @random_set.parent.present?
+      @parent_set = RandomSet.find(@random_set.parent)
+    end
+    @search = @random_set.lotteries.ransack(params[:q])
+    @search.sorts = "reality desc" if @search.sorts.empty?
+    @lotteries = @search.result
   end
 
   # GET /random_sets/new
