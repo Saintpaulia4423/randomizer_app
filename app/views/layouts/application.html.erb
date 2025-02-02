@@ -18,16 +18,13 @@
   </head>
 
   <body>
-    <div class="vh-100 container-fluid">
+    <div class="vh-100 container-fluid p-0">
       <div class="row">
-        <div class="col ps-0 position-fixed side-bar">
+        <div class="col-xs ps-0 position-fixed side-bar">
           <%= render "sidebar" %>
         </div>
-      </div>
-      <div class="row">
-        <div class="col side-bar"></div>
-        
-        <div class="col my-4">
+        <div class="col-xs side-bar"></div>
+        <div class="col my-4 main-body">
           <%= render "flash" %>
           <%= yield %>
         </div>
