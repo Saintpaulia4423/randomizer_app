@@ -18,13 +18,12 @@
   </head>
 
   <body>
-    <div class="vh-100 container-fluid p-0">
-      <div class="row">
-        <div class="col-xs ps-0 position-fixed side-bar">
-          <%= render "sidebar" %>
-        </div>
-        <div class="col-xs side-bar"></div>
-        <div class="col my-4 main-body">
+    <div class="w-100 p-0">
+      <div class="row ps-0 position-fixed header">
+        <%= render "header" %>
+      </div>
+      <div class="row w-100  d-flex justify-content-center container-fluid py-5">
+        <div class="col m-4 main-body py-6">
           <%= render "flash" %>
           <%= yield %>
         </div>

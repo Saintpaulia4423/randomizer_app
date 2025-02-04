@@ -1,7 +1,15 @@
-.side-bar {
-  width: 20vw;
+.vertical-line {
+  border-right: 1px solid #CCC;
+  height: 25px;
+  margin: 0 10px;
+}
+
+.header {
+  z-index: 1000;
+  width: 100vw;
 }
 
 .main-body {
-  width: 80vw;
+  width: 100%;
+  max-width: 2048px;
 }
