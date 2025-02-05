@@ -3,7 +3,14 @@
     <div class="row border-bottom">
       <% if @random_set.present? %>
         <div class="col-1">
-          <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>">
+          <% if lottery.default_check == true then %>
+            <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' checked>
+          <% else %>
+            <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' >
+          <% end %>
+          <% if lottery.default_pickup == true then %>
+            <span class="bi bi-stars "></span>
+          <% end %>
         </div>
       <% end %>
 
@@ -16,14 +23,6 @@
       <% if @random_set.present? %>
         <div class="col-4 mt-auto">
           <%= lottery.dict %>
-          <span type="hidden" id="lottery-<%= lottery.id %>"></span>
-          <input type="hidden" id="hiddenLottery-<%= lottery.id %>" value="<%= @lottery_json %>">
-          <button id="lotteryButton-<%= lottery.id%>" >クリック！</button>
-          <script>
-            document.getElementById("lotteryButton-<%= lottery.id %>").addEventListener("click", function() {
-              alert(document.getElementById("hiddenLottery-<%= lottery.id %>").value)
-            });
-          </script>
         </div>
       <% end %>
     </div>

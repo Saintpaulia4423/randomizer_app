@@ -19,7 +19,7 @@ class RandomSetsController < ApplicationController
     end
     @search = @random_set.lotteries.ransack(params[:q])
     @search.sorts = "reality desc" if @search.sorts.empty?
-    @lotteries = @search.result
+    @lotteries = @search.result.select(:id, :name, :dict, :reality, :default_check, :default_pickup)
   end
 
   # GET /random_sets/new
