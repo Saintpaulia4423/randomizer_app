@@ -1,26 +1,21 @@
 <%# 最上位行 %>
 <%= turbo_frame_tag "random_set_lotteries" do %>
-  <div class="row">
-    <% if @random_set.present? %>
-      <div class="col-1 mt-auto"></div>
-    <% end %>
-    <div class="col-3 mt-auto">
-      <%= sort_link(@search, :reality, class: "btn btn-primary", data: { turbo_frame: "random_set_lotteries" } ) %>
-    </div>
-    <div class="col-4 mt-auto">
-      <%= sort_link(@search, :name, class: "btn btn-primary", data: { turbo_frame: "random_set_lotteries" } ) %>
-    </div>
-    <%# blank %>
-    <div class="col-4 mt-auto">
-    </div>
-  </div>
-  <br>
-  <%# 本体部 %>
-  <ul class="list-unstyled">
-    <% if @lotteries.empty? %>
-      <li>登録がありません</li>
-    <% else %>
-      <%= render @lotteries %>
-    <% end %>
-  </ul>
+  <% if @lotteries.empty? %>
+    <p>登録がありません</p>
+  <% else %>
+    <table id="lotteriesTable" class="table table-hover table-striped table-sm" data-controller="table-sort">
+      <thead>
+        <tr>
+          <th data-sort="checkbox" data-action="click->table-sort#checkboxSort" data-table-sort-target="tableHeader"><input class="form-check-input" type="checkbox" checked></th>
+          <th data-sort="string" data-action="click->table-sort#pickupSort" data-table-sort-target="tableHeader"><span class="bi bi-stars"></span></th>
+          <th data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Reality</th>
+          <th data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Name</th>   
+          <th>dict</th>     
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <%= render @lotteries %>
+      </tbody>
+    </table>
+  <% end %>
 <% end %>

@@ -1,30 +1,19 @@
-<%= turbo_frame_tag lottery do %>
-  <li>
-    <div class="row border-bottom" id="Lottery-<%= lottery.id %>">
-      <% if @random_set.present? %>
-        <div class="col-1">
-          <% if lottery.default_check == true then %>
-            <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' checked>
-          <% else %>
-            <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' >
-          <% end %>
-          <% if lottery.default_pickup == true then %>
-            <span class="bi bi-stars "></span>
-          <% end %>
-        </div>
-      <% end %>
-
-      <div class="col-3 mt-auto">
-        <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>
-      </div>
-      <div class="col-4 mt-auto">
-        <%= lottery.name %>
-      </div>
-      <% if @random_set.present? %>
-        <div class="col-4 mt-auto">
-          <%= lottery.dict %>
-        </div>
-      <% end %>
-    </div>
-  </li>
-<% end %>
+<tr>
+  <td>
+    <% if lottery.default_check == true then %>
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' checked>
+    <% else %>
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" name="Lotteries" value='<%= lottery.to_json %>' >
+    <% end %>
+  </td>
+  <td>
+    <% if lottery.default_pickup == true then %>
+      <span class="bi bi-stars "></span>
+    <% end %>
+  </td>
+  <td>
+    <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>
+  </td>
+  <td><%= lottery.name %></td>
+  <td><%= lottery.dict %></td>
+</tr>
