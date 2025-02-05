@@ -1,6 +1,6 @@
 <%= turbo_frame_tag lottery do %>
   <li>
-    <div class="row border-bottom">
+    <div class="row border-bottom" id="Lottery-<%= lottery.id %>">
       <% if @random_set.present? %>
         <div class="col-1">
           <% if lottery.default_check == true then %>
@@ -15,7 +15,7 @@
       <% end %>
 
       <div class="col-3 mt-auto">
-        <%= get_realityname(lottery.reality) %>
+        <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>
       </div>
       <div class="col-4 mt-auto">
         <%= lottery.name %>

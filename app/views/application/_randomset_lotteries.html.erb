@@ -1,24 +1,26 @@
 <%# 最上位行 %>
-<div class="row">
-  <% if @random_set.present? %>
-    <div class="col-1 mt-auto"></div>
-  <% end %>
-  <div class="col-3 mt-auto">
-    <%= sort_link(@search, :reality, class: "btn btn-primary" ) %>
+<%= turbo_frame_tag "random_set_lotteries" do %>
+  <div class="row">
+    <% if @random_set.present? %>
+      <div class="col-1 mt-auto"></div>
+    <% end %>
+    <div class="col-3 mt-auto">
+      <%= sort_link(@search, :reality, class: "btn btn-primary", data: { turbo_frame: "random_set_lotteries" } ) %>
+    </div>
+    <div class="col-4 mt-auto">
+      <%= sort_link(@search, :name, class: "btn btn-primary", data: { turbo_frame: "random_set_lotteries" } ) %>
+    </div>
+    <%# blank %>
+    <div class="col-4 mt-auto">
+    </div>
   </div>
-  <div class="col-4 mt-auto">
-    <%= sort_link(@search, :name, class: "btn btn-primary" ) %>
-  </div>
-  <%# blank %>
-  <div class="col-4 mt-auto">
-  </div>
-</div>
-<br>
-<%# 本体部 %>
-<ul class="list-unstyled">
-  <% if @lotteries.empty? %>
-    <li>登録がありません</li>
-  <% else %>
-    <%= render @lotteries %>
-  <% end %>
-</ul>
+  <br>
+  <%# 本体部 %>
+  <ul class="list-unstyled">
+    <% if @lotteries.empty? %>
+      <li>登録がありません</li>
+    <% else %>
+      <%= render @lotteries %>
+    <% end %>
+  </ul>
+<% end %>

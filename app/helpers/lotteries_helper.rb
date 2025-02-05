@@ -1,6 +1,8 @@
 module LotteriesHelper
   def get_realityname(realiry_int)
     case realiry_int
+    when 0
+      "★０"
     when 1
       "★１"
     when 2
@@ -49,6 +51,42 @@ module LotteriesHelper
       "SSR"
     when 205
       "UR"
+
+    when 300
+      "♠"
+    when 301
+      "♦"
+    when 302
+      "♥"
+    when 303
+      "♣"
+    when 304
+      "⚔"
+    when 305
+      "🏆"
+    when 306
+      "〇"
+    when 307
+      "◎"
+    when 308
+      "△"
+    when 309
+      "▽"
+    when 310
+      "□"
+    when 311
+      "◇"
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    when 3
+    
     end
   end
 end

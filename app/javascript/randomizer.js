@@ -5,6 +5,7 @@ class RandomizerResult {
   constructor() {
     this.randomizeResult = "";
     this.cache = "";
+    this.objectList;
   }
 
   initialize() {
@@ -27,19 +28,26 @@ class RandomizerResult {
 
   setText(string) {
     this.chkElement();
-    this.cache = this.randomizeResult.innerText + string;
+    this.cache = this.cache + string;
+  }
+  addContent(object) {
+
   }
 }
 
 // Xrandom方式の乱数精製
 class Xrandom {
-  constructor(seed1 = new Date(), seed2 = 198101012) {
+  constructor(seed1 = new Date().getTime(), seed2 = 198101012) {
     this.state1 = seed1;
     this.state2 = seed2;
   }
 
   chkSeed() {
     return this.state1;
+  }
+  setSeed(seed) {
+    this.seed1 = seed;
+    this.seed2 = seed;
   }
 
   next() {
@@ -82,8 +90,8 @@ export class Randomizer {
     this.metw.setSeed(seed);
     this.rd.setSeed(seed);
   }
-  chkSeed() {
-    seed = this.rd.chkSeed();
+  getSeed() {
+    let seed = this.rd.chkSeed();
     this.metw.setSeed(seed);
     return seed;
   }
@@ -127,5 +135,8 @@ export class Randomizer {
   }
   refresh() {
     this.result.refresh();
+  }
+  viewStatus() {
+    return this.result.cache;
   }
 }
