@@ -17,23 +17,19 @@ export default class extends Controller {
 
     this.sortTable(columnIndex, type, sortOrder);
     header.dataset.sortOrder = sortOrder;
+    this.setSortIcon(header, sortOrder);
   }
 
   // checkbox用のソート処理
-  checkboxSort() {
+  checkboxSort(event) {
     const header = event.currentTarget;
     const columnIndex = this.tableHeaderTargets.indexOf(header);
     const checkStatus = this.checkboxHeaderTarget;
     let type = header.dataset.sort;
 
-    const sortOrder = checkStatus.checked === true ? "decs" : "asc"
+    const sortOrder = checkStatus.checked === true ? "asc" : "decs"
 
     this.sortTable(columnIndex, type, sortOrder);
-  }
-
-  // pickup用のソート処理
-  pickupSort() {
-
   }
 
   // ソート基部
@@ -47,13 +43,17 @@ export default class extends Controller {
       const cellB = b.children[columnIndex];
 
       if (type === 'number') {
-        let cell1 = cellA.innerText;
-        let cell2 = cellB.innerText;
-        return (parseFloat(cell1) - parseFloat(cell2)) * multiplier;
+        let cell1 = cellA.children[0].dataset.value;
+        let cell2 = cellB.children[0].dataset.value;
+        return (cell2 - cell1) * multiplier;
       } else if (type === "checkbox") {
-        let cell1 = cellA.children[columnIndex].checked === true ? 1 : -1;
-        let cell2 = cellB.children[columnIndex].checked === true ? 1 : -1;
-        return (cell1 - cell2) * multiplier
+        let cell1 = cellA.children[0].checked === true ? 1 : -1;
+        let cell2 = cellB.children[0].checked === true ? 1 : -1;
+        return (cell1 - cell2) * multiplier;
+      } else if (type === "pickup") {
+        let cell1 = cellA.children.length;
+        let cell2 = cellB.children.length;
+        return (cell2 - cell1) * multiplier;
       } else {
         let cell1 = cellA.innerText;
         let cell2 = cellB.innerText;
@@ -65,4 +65,12 @@ export default class extends Controller {
     rows.forEach(row => tbody.appendChild(row));
   }
 
+  // ソート中のアイコンを追加（単一のみ）
+  setSortIcon(header, sortOrder) {
+    this.tableHeaderTargets.forEach(target => {
+      target.classList.remove("asc", "desc");
+    })
+
+    header.classList.add(sortOrder);
+  }
 }

@@ -13,3 +13,20 @@
   width: 100%;
   max-width: 2048px;
 }
+
+th.sortable {
+  cursor: pointer;
+}
+
+th.sortable::after {
+  content: ' ';
+  margin-left: 5px;
+}
+
+th.sortable.asc::after {
+  content: '▲';
+}
+
+th.sortable.desc::after {
+  content: '▼';
+}
