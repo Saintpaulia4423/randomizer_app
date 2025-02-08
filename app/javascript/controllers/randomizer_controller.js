@@ -3,16 +3,17 @@ import { Randomizer } from "randomizer"
 
 // Connects to data-controller="random-sets"
 export default class extends Controller {
+  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries"];
   connect() {
     this.randomizer = new Randomizer();
-    this.targetNum = document.getElementById("anyDrawNumber");
+    this.targetNum = this.specifiedNumberTarget;
     this.seedCache;
     this.lotteries = [];
   }
 
   chkParameter() {
     // シード値
-    let seed = document.getElementById("randomSeed");
+    let seed = this.seedTarget;
     let seedNum = Number(seed.value);
     if (seedNum == "") {
       seed.value = this.randomizer.getSeed();
@@ -24,42 +25,52 @@ export default class extends Controller {
 
     // 乱数精製方式
     let selectPattern;
-    let radios = document.querySelectorAll("input[name=randomizerSwitched]");
+    let radios = this.randomizerSwitchTargets;
     radios.forEach(radio => {
       if (radio.checked) {
         selectPattern = radio.value;
       }
     });
 
+    this.randomizer.setMode(selectPattern);
     return selectPattern;
   }
   setLotteriesAll() {
-    let array = document.querySelectorAll("input[name=Lotteries]");
+    let array = this.lotteriesTargets;
+    this.resetLottery();
     array.forEach(lottery => {
       this.setLottery(lottery);
     });
+    this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLotteriesChecked() {
-    let array = document.querySelectorAll("input[name=Lotteries]");
+    let array = this.lotteriesTargets;
+    this.resetLottery();
     array.forEach(lottery => {
       if (lottery.checked) {
         this.setLottery(lottery);
       }
     });
+    this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLotteriesUnChecked() {
-    let array = document.querySelectorAll("input[name=Lotteries]");
+    let array = this.lotteriesTargets;
+    this.resetLottery();
     array.forEach(lottery => {
       if (!lottery.checked) {
         this.setLottery(lottery);
       }
     });
+    this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLottery(lotteryObject) {
     let json = JSON.parse(lotteryObject.value);
     if (!this.lotteries[json.reality])
       this.lotteries[json.reality] = [];
     this.lotteries[json.reality].push(json)
+  }
+  resetLottery() {
+    this.lotteries = [];
   }
 
   draw(count = 0) {
@@ -71,14 +82,10 @@ export default class extends Controller {
 
   oneDraw() {
     this.setLotteriesAll();
-    switch (this.chkParameter()) {
-      case "MersseneTwister":
-        this.randomizer.setResult(this.randomizer.nextMt().string);
-        break;
-      case "Xrandom":
-        this.randomizer.setResult(this.randomizer.nextXs().string);
-        break;
-    }
+    console.log(this.randomizer.next(this.chkParameter()));
+
+    console.log(this.lotteries)
+    console.log(this.lotteries.length)
   }
   tenDraw() {
     let array = [];
@@ -106,14 +113,15 @@ export default class extends Controller {
     this.setLotteriesChecked();
     this.chkParameter();
   }
-  checkedDrawToTarget() {
+  checkedDrawTarget() {
     this.setLotteriesChecked();
     this.chkParameter();
   }
   uncheckedSpecifiedDraw() {
     this.setLotteriesUnChecked();
     this.chkParameter();
-
+    console.log(this.lotteries.length)
+    console.log(this.lotteries.forEach(element => { console.log(element + ":" + element.length) }))
   }
   uncheckedDrawToTarget() {
     this.setLotteriesUnChecked();
@@ -125,9 +133,9 @@ export default class extends Controller {
   }
 
   chooseTarget() {
-
+    console.log("テスト");
   }
-  resetTartget() {
+  resetTarget() {
 
   }
 
@@ -136,5 +144,9 @@ export default class extends Controller {
   }
   resetPickup() {
 
+  }
+
+  resetResult() {
+    console.log("リセット！");
   }
 }

@@ -3,109 +3,116 @@
 
 <%# random_set情報 %>
 <%= turbo_frame_tag "random_set" do %>
-  <div class="card mt-3">
-    <div class="card-header">
-      <div class="d-flex">
-        <div class="col-8">
-          <i class="bi bi-journal">詳細情報</i>
-        </div>
-        <div class="col-4 mt-auto d-flex justify-content-end">
-          <%= link_to "編集", edit_random_set_path(@random_set),
-            class: "btn btn-secondary",
-            data: { turbo_frame: "modal" } 
-          %>
-        </div>
-      </div>
-    </div>
-    <div class="card-body mt-3">
-      <%= turbo_frame_tag "random_set_info" do %>
-        <div class="row mt-auto">
-          <p>セット名称：<%= @random_set.name %></p>
-          <% if @random_set.dict.present? %>
-            <p>セット説明：<%= @random_set.dict %></p>
-          <% end %>
-          <%# ModおよびValiant用 %>
-          <% if @random_set.parent.present? %>
-            <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
-  <%= turbo_frame_tag "random_set_lotteries" do %>
-    <%# ランダマイザー機能 %>
+  <div data-controller="randomizer">
     <div class="card mt-3">
       <div class="card-header">
-        <i class="bi bi-dice-3-fill">ランダマイザー</i>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-6">
-            <ul class="list-unstyled" data-controller="randomizer">
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#oneDraw">１回引く</button></li>
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#tenDraw">１０回引く</button></li>
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#specifiedDraw">全てから指定数引く</button></li>
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#drawToTarget">指定の物が出るまで引く</button></li>
-              <br>
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#checkedSpecifiedDraw">チェックされているものから指定数引く</button></li>
-              <li><button class="btn btn-primary mb-1" data-aciton="click->randomizer#checkedDrawToTarget">チェックされているものから指定の物が出るまで引く</button></li>
-              <br>
-              <li><button class="btn btn-primary mb-1" data-action="click->randomizer#uncheckedSpecifiedDraw">非チェックから指定数引く</button></li>
-              <li><button class="btn btn-primary mb-1" data-aciton="click->randomizer#uncheckedDrawToTarget">非チェックから指定の物が出るまで引く</button></li>
-            </ul>
+        <div class="d-flex">
+          <div class="col-8">
+            <i class="bi bi-journal">詳細情報</i>
           </div>
-          <div class="col-6">
-            <div class="card">
-              <div class="card-header">
-                <i class="bi bi-wrench-adjustable">ランダマイザー設定</i>
-              </div>
-              <div class="card-body">
-                <div class="input-group mb-4">
-                  <label for="randomSeed" class="input-group-text">シード値</label>
-                  <input id="randomSeed" name="randomSeed" type="number" class="form-control" placeholder="未設定時は自動生成" />
+          <div class="col-4 mt-auto d-flex justify-content-end">
+            <%= link_to "編集", edit_random_set_path(@random_set),
+              class: "btn btn-secondary",
+              data: { turbo_frame: "modal" } 
+            %>
+          </div>
+        </div>
+      </div>
+      <div class="card-body mt-3">
+        <%= turbo_frame_tag "random_set_info" do %>
+          <div class="row mt-auto">
+            <div class="col">
+              <p>セット名称：<%= @random_set.name %></p>
+              <% if @random_set.dict.present? %>
+                <p>セット説明：<%= @random_set.dict %></p>
+              <% end %>
+              <%# ModおよびValiant用 %>
+              <% if @random_set.parent.present? %>
+                <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
+              <% end %>
+            </div>
+            <div class="col">
+              <p>test</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= turbo_frame_tag "random_set_lotteries" do %>
+      <%# ランダマイザー機能 %>
+      <div class="card mt-3">
+        <div class="card-header">
+          <i class="bi bi-dice-3-fill">ランダマイザー</i>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <ul class="list-unstyled">
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#oneDraw">１回引く</button></li>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#tenDraw">１０回引く</button></li>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#specifiedDraw">全てから指定数引く</button></li>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#drawToTarget">指定の物が出るまで引く</button></li>
+                <br>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#checkedSpecifiedDraw">チェックされているものから指定数引く</button></li>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#checkedDrawTarget">チェックされているものから指定の物が出るまで引く</button></li>
+                <br>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#uncheckedSpecifiedDraw">非チェックから指定数引く</button></li>
+                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#uncheckedDrawToTarget">非チェックから指定の物が出るまで引く</button></li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <div class="card">
+                <div class="card-header">
+                  <i class="bi bi-wrench-adjustable">ランダマイザー設定</i>
                 </div>
-                <div class="input-group mb-4">
-                  <label for="anyDrawNumber" class="input-group-text">指定数</label>
-                  <input id="anyDrawNumber" name="anyDrawNumber" type="number" class="form-control" placeholder="正数のみ有効、マイナスは無効" value=1 />
-                </div>
-                <div class="card mb-1">
-                  <div class="card-header">
-                    <i class="bi bi-disc-fill">疑似乱数生成方式</i>
+                <div class="card-body">
+                  <div class="input-group mb-4">
+                    <label for="randomSeed" class="input-group-text">シード値</label>
+                    <input id="randomSeed" data-randomizer-target="seed" name="randomSeed" type="number" class="form-control" placeholder="未設定時は自動生成" />
                   </div>
-                  <div class="card-body">
-                    <div class="form-check">
-                      <label for="checkMT" class="from-check-label">メルセンヌツイスタ</label>
-                      <input id="checkMT" name="randomizerSwitched" type="radio" class="form-check-input" value="MersseneTwister" checked>
+                  <div class="input-group mb-4">
+                    <label for="anyDrawNumber" class="input-group-text">指定数</label>
+                    <input id="anyDrawNumber" data-randomizer-target="specifiedNumber" name="anyDrawNumber" type="number" class="form-control" placeholder="正数のみ有効、マイナスは無効" value=1 />
+                  </div>
+                  <div class="card mb-1">
+                    <div class="card-header">
+                      <i class="bi bi-disc-fill">疑似乱数生成方式</i>
                     </div>
-                    <div class="form-check">
-                      <label for="checkXrandom" class="form-check-label">Xrandom<small>（若干高速）</small></label>
-                      <input id="checkXrandom" name="randomizerSwitched" type="radio" class="form-check-input" value="Xrandom">
-                    </div>
-                  </div>
-                </div>
-                <div class="card mb-1">
-                  <div class="card-header">
-                    <i class="bi bi-hammer">特殊設定</i>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-6 text-center">
-                        <button class="btn btn-secondary" data-aciton="click->randomizer#chooseTarget"><span class="bi bi-hand-index-fill"></span>指定引の設定</button>
+                    <div class="card-body">
+                      <div class="form-check">
+                        <label for="checkMT" class="from-check-label">メルセンヌツイスタ</label>
+                        <input id="checkMT" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="MersseneTwister" checked>
                       </div>
-                      <div class="col text-center">
-                        <button class="btn btn-warning" data-action="click->randomizer#resetTarget">リセット</button>
+                      <div class="form-check">
+                        <label for="checkXrandom" class="form-check-label">Xrandom<small>（若干高速）</small></label>
+                        <input id="checkXrandom" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="Xrandom">
                       </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-6 text-center">
-                        <button class="btn btn-secondary" data-action="click->randomizer#settingPickup"><span class="bi bi-stars"></span>ピックアップ設定</button>
+                  </div>
+                  <div class="card mb-1">
+                    <div class="card-header">
+                      <i class="bi bi-hammer">特殊設定</i>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-6 text-center">
+                          <button class="btn btn-secondary" data-action="click->randomizer#chooseTarget"><span class="bi bi-hand-index-fill"></span>指定引の設定</button>
+                        </div>
+                        <div class="col text-center">
+                          <button class="btn btn-warning" data-action="click->randomizer#resetTarget">リセット</button>
+                        </div>
                       </div>
-                      <div class="col text-center">
-                        <button class="btn btn-warning" data-aciton="click->randomizer#resetPickup">リセット</button>
+                      <hr>
+                      <div class="row">
+                        <div class="col-6 text-center">
+                          <button class="btn btn-secondary" data-action="click->randomizer#settingPickup"><span class="bi bi-stars"></span>ピックアップ設定</button>
+                        </div>
+                        <div class="col text-center">
+                          <button class="btn btn-warning" data-action="click->randomizer#resetPickup">リセット</button>
+                        </div>
                       </div>
-                    <div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,28 +120,35 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <%# 結果表示 %>
-    <div class="card mt-3">
-      <div class="card-header">
-        <i class="bi bi-dice-3">結果表示</i>
+      <%# 結果表示 %>
+      <div class="card mt-3">
+        <div class="card-header">
+          <div class="row">
+            <div class="col">
+              <i class="bi bi-dice-3">結果表示</i>
+            </div>
+            <div class="col d-flex justify-content-end">
+              <button class="btn btn-danger" data-action="click->randomizer#resetResult">結果リセット</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body text-wrap">
+          <p id="result" class="text-wrap"></p>
+        </div>
       </div>
-      <div class="card-body text-wrap">
-        <p id="result" class="text-wrap"></p>
-      </div>
-    </div>
 
-    <%# 要素確認 %>
-    <div class="card mt-3">
-      <div class="card-header">
-        <i class="bi bi-database">セット内容</i>
+      <%# 要素確認 %>
+      <div class="card mt-3">
+        <div class="card-header">
+          <i class="bi bi-database">セット内容</i>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <%= render "randomset_lotteries" %>
+          </ul>
+        </div>
       </div>
-      <div class="card-body">
-        <ul class="list-unstyled">
-          <%= render "randomset_lotteries" %>
-        </ul>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 <% end %>

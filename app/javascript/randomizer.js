@@ -84,6 +84,8 @@ export class Randomizer {
     this.result = new RandomizerResult();
     this.min = 0;
     this.max = 0;
+    this.lotteries = [];
+    this.randomCalicurationMode = "MersseneTwister";
   }
 
   setSeed(seed) {
@@ -95,39 +97,61 @@ export class Randomizer {
     this.metw.setSeed(seed);
     return seed;
   }
+  setLotteriesArray(lotteries) {
+    this.lotteries = lotteries;
+  }
   setRange(min = 0, max = 0) {
     this.min = min;
     this.max = max;
   }
+  setMode(mode) {
+    switch (mode) {
+      case "MersseneTwister":
+      case "Xrandom":
+        this.randomCalicurationMode = mode;
+        break;
+      default:
+        console.log("randomizer setMode:Parameter Rejected [input:" + mode + "]");
+    }
+  }
 
+  calRate() {
+
+  }
   calRange(range) {
     if (typeof range !== "object") {
       throw new TypeError("引数はオブジェクト（配列）のみになります。");
     }
-    this.setRange(0, range.length - 1);
+    // forEachにより要素なしを除外してlengthを計算。
+    let temp;
+    range.forEach(element => { temp++; });
+    this.setRange(0, temp - 1);
   }
   correction(input) {
     return Math.round(input * (this.max - this.min) + this.min);
   }
 
-  anyNextMt(count = 1) {
+  anyNext(count = 1) {
     let results = [];
     for (let i = 0; i < count; i++)
-      results.push(this.nextMt());
-    return results;
-  }
-  anyNextXs(count = 1) {
-    let results = [];
-    for (let i = 0; i < count; i++)
-      results.push(this.nextXs());
+      results.push(this.next());
     return results;
   }
 
-  nextMt() {
-    return this.correction(this.metw.next());
+  next(mode = this.randomCalicurationMode) {
+    switch (mode) {
+      case "MersseneTwister":
+        return this.correction(this.metw.next());
+      case "Xrandom":
+        return this.correction(this.rd.next());
+    }
   }
-  nextXs() {
-    return this.correction(this.rd.next());
+  nextRange(max = this.max, min = this.min) {
+    let beforeMax = this.max;
+    let beforeMin = this.min;
+    this.setRange(min, max);
+    this.next();
+    this.setRange(beforeMin, beforeMax);
   }
 
   setResult(string) {
