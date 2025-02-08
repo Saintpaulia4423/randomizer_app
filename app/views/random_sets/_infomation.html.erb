@@ -1,0 +1,25 @@
+<%= turbo_frame_tag "random_set_infomation" do %>
+  <div class="card">
+    <div class="card-header">
+      <i class="bi bi-bar-chart">セット設定</i>
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush d-flex">
+        <li class="list-group-item" data-controller="tooltip" data-tooltip="<%= get_Infomaion_conversion(@random_set.data["type"] + "-tip") %>">
+          抽選タイプ：<%= get_Infomaion_conversion(@random_set.data["type"]) %>
+        </li>
+        <li class="list-group-item col" data-controller="tooltip" data-tooltip="<%= get_Infomaion_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
+          ピックアップ抽選方式：<%= get_Infomaion_conversion(@random_set.data["pickup"]["type"]) %>
+        </li>
+      </ul>
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-eyedropper">レアリティ抽選率</i>
+          <% @random_set.data %>
+        </div>
+        <div class="card-body">
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

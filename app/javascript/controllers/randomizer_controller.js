@@ -3,7 +3,7 @@ import { Randomizer } from "randomizer"
 
 // Connects to data-controller="random-sets"
 export default class extends Controller {
-  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries"];
+  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "randomizerParmerter"];
   connect() {
     this.randomizer = new Randomizer();
     this.targetNum = this.specifiedNumberTarget;
@@ -34,6 +34,9 @@ export default class extends Controller {
 
     this.randomizer.setMode(selectPattern);
     return selectPattern;
+  }
+  setSeed() {
+    this.randomizer.setSeed(Number(this.seedTarget.value));
   }
   setLotteriesAll() {
     let array = this.lotteriesTargets;
@@ -136,7 +139,8 @@ export default class extends Controller {
     console.log("テスト");
   }
   resetTarget() {
-
+    this.randomizer.setRange(50, 100);
+    console.log(this.randomizer.next())
   }
 
   settingPickup() {

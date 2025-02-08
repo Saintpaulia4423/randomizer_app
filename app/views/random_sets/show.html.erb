@@ -32,7 +32,7 @@
               <% end %>
             </div>
             <div class="col">
-              <p>test</p>
+              <%= render "infomation" %>
             </div>
           </div>
         <% end %>
@@ -69,7 +69,8 @@
                 <div class="card-body">
                   <div class="input-group mb-4">
                     <label for="randomSeed" class="input-group-text">シード値</label>
-                    <input id="randomSeed" data-randomizer-target="seed" name="randomSeed" type="number" class="form-control" placeholder="未設定時は自動生成" />
+                    <input id="randomSeed" data-randomizer-target="seed" name="randomSeed" type="number" class="form-control" placeholder="未設定時は自動生成" data-controller="tooltip" data-tooltip="変更されると自動的にシード値の再設定が行われます。"/>
+                    <button class="btn btn-primary" data-action="click->randomizer#setSeed" data-controller="tooltip" data-tooltip="現在の値でシード値を再設定します。これにより、シード値のリセットが行われます。">決定</button>
                   </div>
                   <div class="input-group mb-4">
                     <label for="anyDrawNumber" class="input-group-text">指定数</label>
@@ -81,11 +82,11 @@
                     </div>
                     <div class="card-body">
                       <div class="form-check">
-                        <label for="checkMT" class="from-check-label">メルセンヌツイスタ</label>
+                        <label for="checkMT" class="from-check-label" data-controller="tooltip" data-tooltip="近年において一般的に広く使われる方式">メルセンヌツイスタ</label>
                         <input id="checkMT" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="MersseneTwister" checked>
                       </div>
                       <div class="form-check">
-                        <label for="checkXrandom" class="form-check-label">Xrandom<small>（若干高速）</small></label>
+                        <label for="checkXrandom" class="form-check-label" data-controller="tooltip" data-tooltip="排他的論理和とビットシフトのみの高速な処理">Xrandom</label>
                         <input id="checkXrandom" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="Xrandom">
                       </div>
                     </div>

@@ -17,9 +17,8 @@ class RandomSetsController < ApplicationController
     if @random_set.parent.present?
       @parent_set = RandomSet.find(@random_set.parent)
     end
-    @search = @random_set.lotteries.ransack(params[:q])
-    @search.sorts = "reality desc" if @search.sorts.empty?
-    @lotteries = @search.result.select(:id, :name, :dict, :reality, :default_check, :default_pickup)
+    @lotteries = @random_set.lotteries.select(:id, :name, :dict, :reality, :default_check, :default_pickup)
+    @random_set_parameter = @random_set.data
   end
 
   # GET /random_sets/new

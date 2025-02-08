@@ -37,7 +37,8 @@ class RandomizerResult {
 
 // Xrandom方式の乱数精製
 class Xrandom {
-  constructor(seed1 = new Date().getTime(), seed2 = 198101012) {
+  DEFALUT_SEED2 = 108101012;
+  constructor(seed1 = new Date().getTime(), seed2 = this.DEFALUT_SEED2) {
     this.state1 = seed1;
     this.state2 = seed2;
   }
@@ -47,7 +48,7 @@ class Xrandom {
   }
   setSeed(seed) {
     this.seed1 = seed;
-    this.seed2 = seed;
+    this.seed2 = this.DEFALUT_SEED2;
   }
 
   next() {
@@ -150,8 +151,17 @@ export class Randomizer {
     let beforeMax = this.max;
     let beforeMin = this.min;
     this.setRange(min, max);
-    this.next();
+    let result = this.next();
     this.setRange(beforeMin, beforeMax);
+    return result;
+  }
+  nextRangeAndSpecify(count = 1, max = this.max, min = this.min) {
+    let beforeMax = this.max;
+    let beforeMin = this.min;
+    this.setRange(min, max);
+    let result = this.anyNext(count);
+    this.setRange(beforeMin, beforeMax);
+    return result;
   }
 
   setResult(string) {
