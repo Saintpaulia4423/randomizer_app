@@ -7,8 +7,8 @@
     <div class="card mt-3">
       <div class="card-header">
         <div class="d-flex">
-          <div class="col-8">
-            <i class="bi bi-journal">詳細情報</i>
+          <div class="col-8 d-flex align-items-center">
+            <i class="bi bi-journal">セット情報</i>
           </div>
           <div class="col-4 mt-auto d-flex justify-content-end">
             <%= link_to "編集", edit_random_set_path(@random_set),
@@ -24,13 +24,19 @@
             <div class="col">
               <p>セット名称：<%= @random_set.name %></p>
               <% if @random_set.dict.present? %>
-                <p>セット説明：<%= @random_set.dict %></p>
+                <div class="col">
+                  <p>セット説明：<%= @random_set.dict %></p>
+                </div>
               <% end %>
               <%# ModおよびValiant用 %>
               <% if @random_set.parent.present? %>
-                <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
+                <div class="col">
+                  <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
+                </div>
               <% end %>
             </div>
+          </div>
+          <div class="row mt-auto">
             <div class="col">
               <%= render "infomation" %>
             </div>
@@ -126,11 +132,11 @@
       <div class="card mt-3">
         <div class="card-header">
           <div class="row">
-            <div class="col">
+            <div class="col d-flex align-items-center">
               <i class="bi bi-dice-3">結果表示</i>
             </div>
             <div class="col d-flex justify-content-end">
-              <button class="btn btn-danger" data-action="click->randomizer#resetResult">結果リセット</button>
+              <button class="btn btn-danger btn-small" data-action="click->randomizer#resetResult">結果リセット</button>
             </div>
           </div>
         </div>

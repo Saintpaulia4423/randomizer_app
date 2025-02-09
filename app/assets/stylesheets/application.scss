@@ -1,3 +1,5 @@
+@import 'bootstrap/scss/bootstrap';
+
 .vertical-line {
   border-right: 1px solid #CCC;
   height: 25px;
@@ -29,4 +31,10 @@ th.sortable.asc::after {
 
 th.sortable.desc::after {
   content: '▼';
+}
+
+.btn-small {
+  --bs-btn-padding-y: 0.25em;
+  --bs-btn-padding-x: 0.5em;
+  --bs-btn-font-size: 0.75em;
 }

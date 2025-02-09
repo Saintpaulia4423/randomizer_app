@@ -4,22 +4,53 @@
       <i class="bi bi-bar-chart">セット設定</i>
     </div>
     <div class="card-body">
-      <ul class="list-group list-group-flush d-flex">
-        <li class="list-group-item" data-controller="tooltip" data-tooltip="<%= get_Infomaion_conversion(@random_set.data["type"] + "-tip") %>">
-          抽選タイプ：<%= get_Infomaion_conversion(@random_set.data["type"]) %>
-        </li>
-        <li class="list-group-item col" data-controller="tooltip" data-tooltip="<%= get_Infomaion_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
-          ピックアップ抽選方式：<%= get_Infomaion_conversion(@random_set.data["pickup"]["type"]) %>
-        </li>
-      </ul>
-      <div class="card">
-        <div class="card-header">
-          <i class="bi bi-eyedropper">レアリティ抽選率</i>
-          <% @random_set.data %>
+      <% if @random_set.data.present? %>
+        <div class="row" data-setcheck="true">
+          <div class="col-4">
+            <ul class="list-group list-group-flush d-flex">
+              <li class="list-group-item">
+                抽選タイプ：
+                <span data-controller="tooltip" data-tooltip="<%= get_infomaion_conversion(@random_set.data["type"] + "-tip") %>">
+                  <%= get_infomaion_conversion(@random_set.data["type"]) %>
+                </span>
+              </li>
+              <li class="list-group-item">
+                ピックアップ抽選方式：
+                <span data-controller="tooltip" data-tooltip="<%= get_infomaion_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
+                  <%= get_infomaion_conversion(@random_set.data["pickup"]["type"]) %>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col d-flex align-items-center">
+                    <i class="bi bi-eyedropper"><span data-controller="tooltip" data-tooltip="設定されていないレアリティは余ってる確率を等分します。">レアリティ抽選率</span></i>
+                  </div>
+                  <div class="col d-flex justify-content-end">              
+                    <button class="btn btn-primary btn-small" data-action="randomizer#addRealityPick">追加</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <% @random_set.data["pickup"]["gainrate"].each_with_index do |reality, index| %>
+                  <% if reality.present? %>
+                    <div class="input-group">
+                      <span class="input-group-text"><%= get_realityname(index) %></span>
+                      <input type="number" class="form-control" value=<%= reality %> step="0.1" name="reality-<%= index %>" data-target="realityPickRate">
+                      <span class="input-group-text">%</span>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-        </div>
-      </div>
+      <% else %>
+        <span data-setcheck="false">設定がありません</span>
+      <% end %>
     </div>
   </div>
 <% end %>
