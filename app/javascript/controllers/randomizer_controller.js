@@ -13,15 +13,13 @@ export default class extends Controller {
 
   chkParameter() {
     // シード値
-    let seed = this.seedTarget;
-    let seedNum = Number(seed.value);
-    if (seedNum == "") {
-      seed.value = this.randomizer.getSeed();
-      this.randomizer.setSeed(seedNum);
-      this.seedCache = seed.value;
-    } else if (seedNum != this.seedCache) {
-      this.randomizer.setSeed(seedNum);
-      this.seedCache = seedNum;
+    if (Number(this.seedTarget.value) == "") {
+      this.seedTarget.value = this.randomizer.getSeed();
+      this.randomizer.setSeed(Number(this.seedTarget.value));
+      this.seedCache = this.seedTarget.value;
+    } else if (this.seedTarget.value != this.seedCache) {
+      this.randomizer.setSeed(Number(this.seedTarget.value));
+      this.seedCache = this.seedTarget.value;
     }
 
     // 乱数精製方式
