@@ -36,9 +36,10 @@ class RandomizerResult {
 }
 
 // Xrandom方式の乱数精製
-class Xrandom {
-  DEFALUT_SEED2 = 108101012;
-  constructor(seed1 = new Date().getTime(), seed2 = this.DEFALUT_SEED2) {
+class XorShift {
+  DEFAULT_SEED2 = 108101012;
+  constructor(seed1 = new Date().getTime(), seed2 = this.DEFAULT_SEED2) {
+    console.log("Xrandom connect")
     this.state1 = seed1;
     this.state2 = seed2;
   }
@@ -47,8 +48,8 @@ class Xrandom {
     return this.state1;
   }
   setSeed(seed) {
-    this.seed1 = seed;
-    this.seed2 = this.DEFALUT_SEED2;
+    this.state1 = seed;
+    this.state2 = this.DEFAULT_SEED2;
   }
 
   next() {
@@ -81,7 +82,7 @@ class Xrandom {
 export class Randomizer {
   constructor() {
     this.metw = new MersenneTwister();
-    this.rd = new Xrandom();
+    this.rd = new XorShift();
     this.result = new RandomizerResult();
     this.min = 0;
     this.max = 0;
@@ -94,9 +95,7 @@ export class Randomizer {
     this.rd.setSeed(seed);
   }
   getSeed() {
-    let seed = this.rd.chkSeed();
-    this.metw.setSeed(seed);
-    return seed;
+    return this.rd.chkSeed();
   }
   setLotteriesArray(lotteries) {
     this.lotteries = lotteries;
@@ -108,7 +107,7 @@ export class Randomizer {
   setMode(mode) {
     switch (mode) {
       case "MersseneTwister":
-      case "Xrandom":
+      case "XorShift":
         this.randomCalicurationMode = mode;
         break;
       default:
@@ -143,7 +142,7 @@ export class Randomizer {
     switch (mode) {
       case "MersseneTwister":
         return this.correction(this.metw.next());
-      case "Xrandom":
+      case "XorShift":
         return this.correction(this.rd.next());
     }
   }
