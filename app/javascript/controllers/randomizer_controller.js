@@ -17,6 +17,7 @@ export default class extends Controller {
     let seedNum = Number(seed.value);
     if (seedNum == "") {
       seed.value = this.randomizer.getSeed();
+      this.randomizer.setSeed(seedNum);
       this.seedCache = seed.value;
     } else if (seedNum != this.seedCache) {
       this.randomizer.setSeed(seedNum);
@@ -97,7 +98,7 @@ export default class extends Controller {
       case "MersseneTwister":
         array = this.randomizer.anyNextMt(10);
         break;
-      case "Xrandom":
+      case "XorShift":
         array = this.randomizer.anyNextXs(10);
         break;
     }
@@ -115,6 +116,9 @@ export default class extends Controller {
   checkedSpecifiedDraw() {
     this.setLotteriesChecked();
     this.chkParameter();
+    this.randomizer.setRange(0, 100)
+    for (let i = 0; i <= 10; i++)
+      console.log(this.randomizer.next());
   }
   checkedDrawTarget() {
     this.setLotteriesChecked();
