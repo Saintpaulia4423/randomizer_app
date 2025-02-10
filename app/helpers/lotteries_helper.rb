@@ -1,26 +1,11 @@
 module LotteriesHelper
+  def get_realityname_list()
+    return (0..20).to_a + (100..107).to_a + (200..205).to_a + (300..311).to_a
+  end
   def get_realityname(realiry_int)
     case realiry_int
-      when 0
-        "★０"
-      when 1
-        "★１"
-      when 2
-        "★２"
-      when 3
-        "★３"
-      when 4
-        "★４"
-      when 5
-        "★５"
-      when 6
-        "★６"
-      when 7
-        "★７"
-      when 8
-        "★８"
-      when 9
-        "★９"
+      when 0..20
+        "★" + realiry_int.to_s
 
       when 100
         "コモン"
@@ -76,16 +61,6 @@ module LotteriesHelper
         "□"
       when 311
         "◇"
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
-      when 3
       
     end
   end
