@@ -18,7 +18,6 @@ class RandomSetsController < ApplicationController
       @parent_set = RandomSet.find(@random_set.parent)
     end
     @lotteries = @random_set.lotteries.select(:id, :name, :dict, :reality, :default_check, :default_pickup)
-    @random_set_parameter = @random_set.data
   end
 
   # GET /random_sets/new

@@ -1,7 +1,7 @@
 <tr>
   <td>
     <% if lottery.default_check == true then %>
-      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-ranodmizer-target="lotteries" name="Lotteries" value='<%= lottery.to_json %>' checked>
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" name="Lotteries" value='<%= lottery.to_json %>' checked>
     <% else %>
       <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" name="Lotteries" value='<%= lottery.to_json %>' >
     <% end %>

@@ -6,7 +6,7 @@
     <div class="card-body">
       <% if @random_set.data.present? %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
-          <div class="col-8">
+          <div class="col-md-8">
             <ul class="list-group list-group-flush d-flex">
               <li class="list-group-item">
                 抽選タイプ：
@@ -22,7 +22,7 @@
               </li>
             </ul>
           </div>
-          <div class="col">
+          <div class="col-md">
             <div class="card">
               <div class="card-header">
                 <div class="row">
@@ -36,14 +36,12 @@
               </div>
               <div class="card-body" data-info-target="realityList">
                 <%# レアリティリスト %>
-                <% @random_set.data["rate"].each_with_index do |reality, index| %>
-                  <% if reality.present? %>
-                    <div class="input-group">
-                      <span class="input-group-text" data-info-target="selectedReality" data-value=<%= index %>><%= get_realityname(index) %></span>
-                      <input type="number" class="form-control" value=<%= reality %> step="0.1" name="reality-<%= index %>" data-randomizer-target="realityPickRate">
-                      <span class="input-group-text">%</span>
-                    </div>
-                  <% end %>
+                <% @random_set.data["rate"].each do |element| %>
+                  <div class="input-group">
+                    <span class="input-group-text" data-info-target="selectReality" data-value=<%= element["reality"] %>><%= get_realityname(element["reality"]) %></span>
+                    <input type="number" class="form-control" value=<%= element["value"] %> step="0.1" name="reality-<%= element["reality"] %>" data-randomizer-target="realityPickRate" data-reality=<%= element["reality"] %>>
+                    <span class="input-group-text">%</span>
+                  </div>
                 <% end %>
               </div>
             </div>
