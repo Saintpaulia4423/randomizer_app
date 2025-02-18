@@ -47,12 +47,12 @@ export default class extends Controller {
         let cell2 = cellB.children[0].dataset.value;
         return (cell2 - cell1) * multiplier;
       } else if (type === "checkbox") {
-        let cell1 = cellA.children[0].checked === true ? 1 : -1;
-        let cell2 = cellB.children[0].checked === true ? 1 : -1;
+        let cell1 = cellA.children[0].checked === true ? -1 : 1;
+        let cell2 = cellB.children[0].checked === true ? -1 : 1;
         return (cell1 - cell2) * multiplier;
       } else if (type === "pickup") {
-        let cell1 = cellA.children.length;
-        let cell2 = cellB.children.length;
+        let cell1 = cellA.children[0].classList.length;
+        let cell2 = cellB.children[0].classList.length;
         return (cell2 - cell1) * multiplier;
       } else {
         let cell1 = cellA.innerText;
