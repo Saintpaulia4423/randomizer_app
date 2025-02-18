@@ -38,7 +38,7 @@
                 <%# レアリティリスト %>
                 <% @random_set.data["rate"].each do |element| %>
                   <div class="input-group">
-                    <span class="input-group-text" data-info-target="selectReality" data-value=<%= element["reality"] %>><%= get_realityname(element["reality"]) %></span>
+                    <span class="input-group-text" data-info-target="selectedReality" data-value=<%= element["reality"] %>><%= get_realityname(element["reality"]) %></span>
                     <input type="number" class="form-control" value=<%= element["value"] %> step="0.1" name="reality-<%= element["reality"] %>" data-randomizer-target="realityPickRate" data-reality=<%= element["reality"] %>>
                     <span class="input-group-text">%</span>
                   </div>

@@ -32,12 +32,14 @@ export default class extends Controller {
     // _infomation.html.erbよりレアリティリストの内容から抽出。
     let html = `
       <span class="input-group-text" data-info-target="selectedReality" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
-      <input type="number" class="form-control" value=` + value + ` step="0.1" name="reality-` + index + `" data-randomizer-target="realityPickRate">
+      <input type="number" class="form-control" value=` + value + ` step="0.1" name="reality-` + index + `" data-randomizer-target="realityPickRate" data-reality=` + index + `>
       <span class="input-group-text">%</span>
     `
     const addhtml = document.createElement("div");
     addhtml.setAttribute("class", "input-group")
     addhtml.innerHTML = html;
     this.realityListTarget.appendChild(addhtml);
+    this.toast.hide();
+    this.modal.hide();
   }
 }
