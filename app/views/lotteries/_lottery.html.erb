@@ -1,14 +1,16 @@
-<tr>
+<tr data-randomizer-target="lottery">
   <td>
     <% if lottery.default_check == true then %>
-      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" name="Lotteries" value='<%= lottery.to_json %>' checked>
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" value='<%= lottery.to_json %>' checked>
     <% else %>
-      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" name="Lotteries" value='<%= lottery.to_json %>' >
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" value='<%= lottery.to_json %>' >
     <% end %>
   </td>
-  <td>
+  <td data-controller="pickup-flip" data-action="dblclick->pickup-flip#flip">
     <% if lottery.default_pickup == true then %>
-      <span class="bi bi-stars "></span>
+      <span class="bi bi-stars" data-pickup-id=<%= lottery.id %>></span>
+    <% else %>
+      <span data-pickup-id=<%= lottery.id %>></span>
     <% end %>
   </td>
   <td>
