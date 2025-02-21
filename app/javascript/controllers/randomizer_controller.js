@@ -3,7 +3,7 @@ import { Randomizer } from "randomizer"
 
 // Connects to data-controller="random-sets"
 export default class extends Controller {
-  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "randomizerParmerter"];
+  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery", "randomizerParmerter", "resultTable", "realityPickRate", "pickUpRate", "pickupedLottery", "realityTranslation"];
   connect() {
     this.randomizer = new Randomizer();
     this.targetNum = this.specifiedNumberTarget;
@@ -11,7 +11,8 @@ export default class extends Controller {
     this.lotteries = [];
   }
 
-  chkParameter() {
+  // randomizer実行前初期化処理
+  setupParameter() {
     // シード値
     if (Number(this.seedTarget.value) == "") {
       this.seedTarget.value = this.randomizer.getSeed();
@@ -30,13 +31,28 @@ export default class extends Controller {
         selectPattern = radio.value;
       }
     });
-
     this.randomizer.setMode(selectPattern);
+
+    // resultターゲット情報の提供
+    this.randomizer.setResultTable(this.resultTableTarget);
+
+    // レアリティ情報の提供
+    this.randomizer.setPickRate(this.realityPickRateTargets);
+    this.randomizer.setRealityTranslation(this.realityTranslationTargets);
+    this.randomizer.chkPickRate();
+
+    // ピックアップ情報の提供
+    this.randomizer.setPickupList(this.pickUpRateTargets);
+    this.randomizer.chkPickupList();
+
     return selectPattern;
   }
+
+  // get・setter処理群
   setSeed() {
     this.randomizer.setSeed(Number(this.seedTarget.value));
   }
+  // lotteries情報セット処理群
   setLotteriesAll() {
     let array = this.lotteriesTargets;
     this.resetLottery();
@@ -49,7 +65,7 @@ export default class extends Controller {
     let array = this.lotteriesTargets;
     this.resetLottery();
     array.forEach(lottery => {
-      if (lottery.checked) {
+      if (lottery.children[0].children[0].checked) {
         this.setLottery(lottery);
       }
     });
@@ -59,22 +75,28 @@ export default class extends Controller {
     let array = this.lotteriesTargets;
     this.resetLottery();
     array.forEach(lottery => {
-      if (!lottery.checked) {
+      if (!lottery.children[0].children[0].checked) {
         this.setLottery(lottery);
       }
     });
     this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLottery(lotteryObject) {
-    let json = JSON.parse(lotteryObject.value);
-    if (!this.lotteries[json.reality])
-      this.lotteries[json.reality] = [];
-    this.lotteries[json.reality].push(json)
+    // チェックボックス　ピックアップ 指定引 reality name dict
+    let json = {};
+    json.id = Number(lotteryObject.children[1].children[0].dataset.pickupId);
+    json.reality = Number(lotteryObject.children[3].children[0].dataset.value);
+    json.pickup = lotteryObject.children[1].children[0].className.includes("bi-stars");
+    json.target = lotteryObject.children[2].children[0].className.includes("bi-hand-index-fill");
+    json.name = lotteryObject.children[4].innerText;
+    json.dict = lotteryObject.children[5].innerText;
+    this.lotteries.push(json);
   }
   resetLottery() {
     this.lotteries = [];
   }
 
+  // ドロー処理群
   draw(count = 0) {
     if (this.lotteries === "") {
       console.log("error:not set lotteries data.");
@@ -84,15 +106,22 @@ export default class extends Controller {
 
   oneDraw() {
     this.setLotteriesAll();
-    console.log(this.randomizer.next(this.chkParameter()));
-
-    console.log(this.lotteries)
-    console.log(this.lotteries.length)
+    this.setupParameter();
+    let nextValue = this.randomizer.next();
+    // console.log(nextValue)
+    let lot = this.randomizer.getLottery(nextValue);
+    // console.log(lot);
+    this.randomizer.setResult(lot);
+    // this.randomizer.testRandomizerResult(lot);
+    this.randomizer.result.calResultAccessory();
+    console.log(this.randomizer.result.cache);
+    this.randomizer.result.testConvert();
+    // console.log(this.randomizer.result.convert())
   }
   tenDraw() {
     let array = [];
     this.setLotteriesAll();
-    switch (this.chkParameter()) {
+    switch (this.setupParameter()) {
       case "MersseneTwister":
         array = this.randomizer.anyNextMt(10);
         break;
@@ -104,39 +133,38 @@ export default class extends Controller {
   }
   specifiedDraw() {
     this.setLotteriesAll();
-    this.chkParameter();
+    this.setupParameter();
     console.log(this.lotteries[1].length)
   }
   drawToTarget() {
     this.setLotteriesAll();
-    this.chkParameter();
+    this.setupParameter();
   }
   checkedSpecifiedDraw() {
     this.setLotteriesChecked();
-    this.chkParameter();
+    this.setupParameter();
     this.randomizer.setRange(0, 100)
     for (let i = 0; i <= 10; i++)
       console.log(this.randomizer.next());
   }
   checkedDrawTarget() {
     this.setLotteriesChecked();
-    this.chkParameter();
+    this.setupParameter();
   }
   uncheckedSpecifiedDraw() {
     this.setLotteriesUnChecked();
-    this.chkParameter();
-    console.log(this.lotteries.length)
-    console.log(this.lotteries.forEach(element => { console.log(element + ":" + element.length) }))
+    this.setupParameter();
   }
   uncheckedDrawToTarget() {
     this.setLotteriesUnChecked();
-    this.chkParameter();
+    this.setupParameter();
     console.log("test");
 
     this.randomizer.setResult('<p value={name: "test"}>test</p>');
     this.randomizer.refresh();
   }
 
+  // 指定引・ピックアップ処理群
   chooseTarget() {
     console.log("テスト");
   }
@@ -145,14 +173,9 @@ export default class extends Controller {
     console.log(this.randomizer.next())
   }
 
-  settingPickup() {
-
-  }
-  resetPickup() {
-
-  }
-
+  // 結果表示部処理群
   resetResult() {
-    console.log("リセット！");
+    this.randomizer.resetResult();
   }
+
 }

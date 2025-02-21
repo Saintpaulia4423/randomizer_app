@@ -53,10 +53,15 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-6">
+            <div class="col-md">
               <ul class="list-unstyled">
-                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#oneDraw">１回引く</button></li>
-                <li><button class="btn btn-primary mb-1" data-action="click->randomizer#tenDraw">１０回引く</button></li>
+                <li>
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-primary mb-1" data-action="click->randomizer#oneDraw">１回引く</button>
+                    <button class="btn btn-primary mb-1" data-action="click->randomizer#tenDraw">１０回引く</button>
+                    <button class="btn btn-primary mb-1" data-aciton="click->randomizer#onehundredDraw">１００回引く</button> 
+                  </div>
+                </li>
                 <li><button class="btn btn-primary mb-1" data-action="click->randomizer#specifiedDraw">全てから指定数引く</button></li>
                 <li><button class="btn btn-primary mb-1" data-action="click->randomizer#drawToTarget">指定の物が出るまで引く</button></li>
                 <br>
@@ -67,7 +72,7 @@
                 <li><button class="btn btn-primary mb-1" data-action="click->randomizer#uncheckedDrawToTarget">非チェックから指定の物が出るまで引く</button></li>
               </ul>
             </div>
-            <div class="col-6">
+            <div class="col-md">
               <div class="card">
                 <div class="card-header">
                   <i class="bi bi-wrench-adjustable">ランダマイザー設定</i>
@@ -97,30 +102,6 @@
                       </div>
                     </div>
                   </div>
-                  <div class="card mb-1">
-                    <div class="card-header">
-                      <i class="bi bi-hammer">特殊設定</i>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-6 text-center">
-                          <button class="btn btn-secondary" data-action="click->randomizer#chooseTarget"><span class="bi bi-hand-index-fill"></span>指定引の設定</button>
-                        </div>
-                        <div class="col text-center">
-                          <button class="btn btn-warning" data-action="click->randomizer#resetTarget">リセット</button>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                        <div class="col-6 text-center">
-                          <button class="btn btn-secondary" data-action="click->randomizer#settingPickup"><span class="bi bi-stars"></span>ピックアップ設定</button>
-                        </div>
-                        <div class="col text-center">
-                          <button class="btn btn-warning" data-action="click->randomizer#resetPickup">リセット</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -141,7 +122,18 @@
           </div>
         </div>
         <div class="card-body text-wrap">
-          <p id="result" class="text-wrap"></p>
+          <table class="table table-hover table-striped table-sm" data-controller="table-sort" data-randomizer-target="resultTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Reality</th>
+                <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Name</th>   
+                <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット数</th>     
+                <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット割合</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            </tbody>
+          </table>
         </div>
       </div>
 

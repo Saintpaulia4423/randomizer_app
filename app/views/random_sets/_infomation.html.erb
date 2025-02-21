@@ -88,7 +88,7 @@
             <div class="input-group">
               <select class="form-select" style="width: -10%;" data-info-target="selectReality">
                 <% get_realityname_list().each do |i| %>
-                  <option value=<%= i %> data-info-target="realityTranslation"><%= get_realityname(i) %></option>
+                  <option value=<%= i %> data-info-target="realityTranslation" data-randomizer-target="realityTranslation"><%= get_realityname(i) %></option>
                 <% end %>
               </select>
               <input class="form-control" type="number" step="0.1" value=0 data-info-target="value">

@@ -1,17 +1,20 @@
-<tr data-randomizer-target="lottery">
+<tr data-randomizer-target="lotteries">
   <td>
     <% if lottery.default_check == true then %>
-      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" value='<%= lottery.to_json %>' checked>
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" checked>
     <% else %>
-      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>" data-randomizer-target="lotteries" value='<%= lottery.to_json %>' >
+      <input type="checkbox" class="form-check-input" id="chkLottery-<%= lottery.id %>">
     <% end %>
   </td>
-  <td data-controller="pickup-flip" data-action="dblclick->pickup-flip#flip">
+  <td data-controller="flip" data-action="dblclick->flip#flip">
     <% if lottery.default_pickup == true then %>
-      <span class="bi bi-stars" data-pickup-id=<%= lottery.id %>></span>
+      <span class="bi bi-stars" data-icon="bi-stars" data-pickup-id=<%= lottery.id %>></span>
     <% else %>
-      <span data-pickup-id=<%= lottery.id %>></span>
+      <span data-pickup-id=<%= lottery.id %> data-icon="bi-stars"></span>
     <% end %>
+  </td>
+  <td data-controller="flip" data-action="dblclick->flip#flip">
+    <span data-icon="bi-hand-index-fill"></span>
   </td>
   <td>
     <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>
