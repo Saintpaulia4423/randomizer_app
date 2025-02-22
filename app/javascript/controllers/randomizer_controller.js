@@ -1,14 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
+import { Toast } from "bootstrap";
 import { Randomizer } from "randomizer"
 
 // Connects to data-controller="random-sets"
 export default class extends Controller {
   static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery", "randomizerParmerter", "resultTable", "realityPickRate", "pickUpRate", "pickupedLottery", "realityTranslation"];
+  TARGET_DRAW_DEAD_POINT = 10000000;
   connect() {
     this.randomizer = new Randomizer();
     this.targetNum = this.specifiedNumberTarget;
     this.seedCache;
     this.lotteries = [];
+    this.toast = new Toast(document.getElementById("toast"));
   }
 
   // randomizer実行前初期化処理
@@ -97,48 +100,47 @@ export default class extends Controller {
   }
 
   // ドロー処理群
-  draw(count = 0) {
-    if (this.lotteries === "") {
-      console.log("error:not set lotteries data.");
-      return -1
-    }
-  }
-
   oneDraw() {
     this.setLotteriesAll();
     this.setupParameter();
-    let nextValue = this.randomizer.next();
-    // console.log(nextValue)
-    let lot = this.randomizer.getLottery(nextValue);
-    // console.log(lot);
-    this.randomizer.setResult(lot);
-    // this.randomizer.testRandomizerResult(lot);
-    this.randomizer.result.calResultAccessory();
-    console.log(this.randomizer.result.cache);
-    this.randomizer.result.testConvert();
-    // console.log(this.randomizer.result.convert())
+    this.randomizer.setResult(this.randomizer.next());
+    this.randomizer.writeResult();
   }
-  tenDraw() {
-    let array = [];
+  anyDraw(event) {
     this.setLotteriesAll();
-    switch (this.setupParameter()) {
-      case "MersseneTwister":
-        array = this.randomizer.anyNextMt(10);
-        break;
-      case "XorShift":
-        array = this.randomizer.anyNextXs(10);
-        break;
-    }
-    console.log(array);
+    this.setupParameter();
+    this.randomizer.setResult(this.randomizer.anyNext(event.currentTarget.dataset.count));
+    this.randomizer.writeResult();
   }
   specifiedDraw() {
     this.setLotteriesAll();
     this.setupParameter();
-    console.log(this.lotteries[1].length)
+    this.randomizer.setResult(this.randomizer.anyNext(this.specifiedNumberTarget.value));
+    this.randomizer.writeResult();
   }
   drawToTarget() {
     this.setLotteriesAll();
     this.setupParameter();
+    const targetLotteriesList = this.lotteries.filter(element => element.target)
+    if (targetLotteriesList == "") {
+      this.viewToast("指定引き対象が存在しません。選択してから実行してください。", "指定引きエラー");
+      return -1;
+    }
+    let loop = 0;
+    for (let i = 1; loop == 0; i++) {
+      if (i >= this.TARGET_DRAW_DEAD_POINT) {
+        this.viewToast("指定引きを実行しましたが、" + this.TARGET_DRAW_DEAD_POINT.toLocaleString() + "回までに発見されませんでした。", "指定引きエラー");
+        loop = -1;
+      }
+      let lotNumber = this.randomizer.next();
+      let lot = this.randomizer.getLottery(lotNumber);
+      this.randomizer.setResult(lotNumber);
+      if (targetLotteriesList.some(element => element.name == lot.name)) {
+        this.viewToast("指定引きが完了しました。試行回数：" + i.toLocaleString(), "指定引き成功");
+        loop = 1;
+      }
+    }
+    this.randomizer.writeResult();
   }
   checkedSpecifiedDraw() {
     this.setLotteriesChecked();
@@ -177,5 +179,12 @@ export default class extends Controller {
   resetResult() {
     this.randomizer.resetResult();
   }
+  viewToast(message, title = "info") {
+    const header = document.getElementById("toastHeader");
+    const body = document.getElementById("toastBody");
 
+    header.innerText = title;
+    body.innerText = message;
+    this.toast.show();
+  }
 }

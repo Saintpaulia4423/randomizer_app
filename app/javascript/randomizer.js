@@ -44,9 +44,20 @@ class RandomizerResult {
     }
   }
 
+
   // テキスト処理
   setText(string) {
     this.cache = this.cache + string;
+  }
+  // 仮想テーブルに書き込み、または数量の増加。
+  setCache(object) {
+    let cacheIndex = this.cache.findIndex(element => element.id == object.id);
+    if (cacheIndex == -1) {
+      object.value = 1;
+      this.cache.push(object);
+    } else {
+      this.cache[cacheIndex].value++;
+    }
   }
   // resultTable用に変換を行う。
   convert(object, target = this.objectList.children[1]) {
@@ -70,16 +81,7 @@ class RandomizerResult {
     nCRaChild.dataset.value = ratioValue;
     nCRaChild.innerText = ratioValue + "%";
   }
-
-  setCache(object) {
-    let cacheIndex = this.cache.findIndex(element => element.id == object.id);
-    if (cacheIndex == -1) {
-      object.value = 1;
-      this.cache.push(object);
-    } else {
-      this.cache[cacheIndex].value++;
-    }
-  }
+  // ヒット割合の計算
   calResultAccessory() {
     if (this.cache == "") {
       console.error("randomizer Result Error:キャッシュ情報が書き込まれる前に計算が実行されました。");
@@ -90,6 +92,12 @@ class RandomizerResult {
       this.cache[index].ratio = (element.value / this.sum).toPrecision(this.RATIO_POINT);
     });
   }
+  // 
+  writeResult() {
+    this.calResultAccessory();
+    this.refresh();
+    this.cache.map(element => this.convert(element));
+  }
 
   // test用処理
   testSetResult(input) {
@@ -98,10 +106,6 @@ class RandomizerResult {
   testResult(input) {
     console.log(input)
     // console.log(this.testInput);
-  }
-  testConvert(input) {
-    this.refresh();
-    this.cache.map(element => this.convert(element));
   }
 }
 
@@ -112,6 +116,8 @@ class XorShift {
     console.log("Xrandom connect")
     this.state1 = seed1;
     this.state2 = seed2;
+    this.state3 = 123456789;
+    this.state4 = 232139941;
   }
 
   chkSeed() {
@@ -123,12 +129,13 @@ class XorShift {
   }
 
   next() {
-    let s1 = this.state1;
-    let s2 = this.state2;
-    this.state1 = s2;
-    s1 ^= s1 << 23;
-    this.state2 = s1 ^ s2 ^ (s1 >> 17) ^ (s2 >> 26);
-    return (this.state2 + s2) / 0xFFFFFFFF;
+    let result = (this.state1 ^ (this.state1 << 11));
+    this.state1 = this.state2;
+    this.state2 = this.state3;
+    this.state3 = this.state4;
+
+    this.state4 = (this.state4 ^ (this.state4 >> 19)) ^ (result ^ (result >> 8));
+    return (this.state4) / 0x7FFFFFFF;
   }
 
   nextInt() {
@@ -303,7 +310,6 @@ export class Randomizer {
       if (!Number.isInteger(rate)) {
         unmatchNumber = this.nextRange(this.subProbability + this.sumProbability, this.sumProbability, "float");
       }
-      console.log("ummatch:" + unmatchNumber)
       let unmatchRates = this.unmatchedList.map(element => {
         return rate;
       });
@@ -386,7 +392,12 @@ export class Randomizer {
     this.result.setResultTarget(object);
   }
   setResult(object) {
-    this.result.setCache(object);
+    if (Array.isArray(object)) {
+      object.map(element => this.getLottery(element)).map(element => this.result.setCache(element));
+    } else {
+      this.result.setCache(this.getLottery(object));
+    }
+    return
   }
   refresh() {
     this.result.refresh();
@@ -399,6 +410,9 @@ export class Randomizer {
   }
   setRealityTranslation(List) {
     this.result.setTranslation(List);
+  }
+  writeResult() {
+    this.result.writeResult();
   }
 
   // test用処理
