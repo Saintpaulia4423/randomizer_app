@@ -3,10 +3,10 @@ import { Toast } from "bootstrap"
 
 // Connects to data-controller="info"
 export default class extends Controller {
-  static targets = ["infoModal", "toast", "toastTitle", "toastMessage", "selectReality", "selectedReality", "value", "realityTranslation", "realityList", "pickupList", "selectedPickup"];
+  static targets = ["infoModal", "selectReality", "selectedReality", "value", "realityTranslation", "realityList", "pickupList", "selectedPickup"];
   connect() {
     this.modal = new bootstrap.Modal(this.infoModalTarget);
-    this.toast = new Toast(this.toastTarget);
+    this.toast = new Toast(document.getElementById("toast"));
     this.switch = "";
   }
   addRealityModal() {
@@ -55,8 +55,11 @@ export default class extends Controller {
       this.addPickupHTML(this.selectRealityTarget.value, this.valueTarget.value);
   }
   viewToast(message, title = "Warning") {
-    this.toastMessageTarget.innerText = message;
-    this.toastTitleTarget.innerText = title;
+    const header = document.getElementById("toastHeader");
+    const body = document.getElementById("toastBody");
+
+    header.innerText = title;
+    body.innerText = message;
     this.toast.show();
   }
   addRealityHTML(index, value) {
