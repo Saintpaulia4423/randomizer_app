@@ -8,13 +8,13 @@
   </td>
   <td data-controller="flip" data-action="dblclick->flip#flip">
     <% if lottery.default_pickup == true then %>
-      <span class="bi bi-stars" data-icon="bi-stars" data-pickup-id=<%= lottery.id %>></span>
+      <span class="bi bi-stars" data-pickup-id=<%= lottery.id %>></span>
     <% else %>
-      <span data-pickup-id=<%= lottery.id %> data-icon="bi-stars"></span>
+      <span class="bi bi-stars filp-opacity" data-pickup-id=<%= lottery.id %>></span>
     <% end %>
   </td>
   <td data-controller="flip" data-action="dblclick->flip#flip">
-    <span data-icon="bi-hand-index-fill"></span>
+    <span class="bi-hand-index-fill filp-opacity"></span>
   </td>
   <td>
     <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>

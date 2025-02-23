@@ -95,8 +95,8 @@ export default class extends Controller {
     let json = {};
     json.id = Number(lotteryObject.children[1].children[0].dataset.pickupId);
     json.reality = Number(lotteryObject.children[3].children[0].dataset.value);
-    json.pickup = lotteryObject.children[1].children[0].className.includes("bi-stars");
-    json.target = lotteryObject.children[2].children[0].className.includes("bi-hand-index-fill");
+    json.pickup = lotteryObject.children[1].children[0].className.includes("flip-opacity");
+    json.target = lotteryObject.children[2].children[0].className.includes("flip-opacity");
     json.name = lotteryObject.children[4].innerText;
     json.dict = lotteryObject.children[5].innerText;
     this.lotteries.push(json);
