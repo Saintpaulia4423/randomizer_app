@@ -72,6 +72,9 @@ export default class extends Controller {
         this.setLottery(lottery);
       }
     });
+    if (this.lotteries == "") {
+      throw new Error("チェックされたデータがありません。");
+    }
     this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLotteriesUnChecked() {
@@ -82,6 +85,9 @@ export default class extends Controller {
         this.setLottery(lottery);
       }
     });
+    if (this.lotteries == "") {
+      throw new Error("チェックされてないデータがありません。");
+    }
     this.randomizer.setLotteriesArray(this.lotteries);
   }
   setLottery(lotteryObject) {
@@ -121,6 +127,52 @@ export default class extends Controller {
   drawToTarget() {
     this.setLotteriesAll();
     this.setupParameter();
+    this.targetDraw();
+    this.randomizer.writeResult();
+  }
+  checkedSpecifiedDraw() {
+    try {
+      this.setLotteriesChecked();
+      this.setupParameter();
+      this.randomizer.setResult(this.randomizer.anyNext(this.specifiedNumberTarget.value));
+      this.randomizer.writeResult();
+    } catch (e) {
+      this.viewToast(e);
+    }
+  }
+  checkedDrawTarget() {
+    try {
+      this.setLotteriesChecked();
+      this.setupParameter();
+      this.targetDraw();
+      this.randomizer.writeResult();
+    } catch (e) {
+      this.viewToast(e);
+
+    }
+  }
+  uncheckedSpecifiedDraw() {
+    try {
+      this.setLotteriesUnChecked();
+      this.setupParameter();
+      this.randomizer.setResult(this.randomizer.anyNext(this.specifiedNumberTarget.value));
+      this.randomizer.writeResult();
+    } catch (e) {
+      this.viewToast(e);
+    }
+  }
+  uncheckedDrawToTarget() {
+    try {
+      this.setLotteriesUnChecked();
+      this.setupParameter();
+      this.targetDraw();
+      this.randomizer.writeResult();
+    } catch (e) {
+      this.viewToast(e);
+    }
+  }
+  // 指定引き用処理
+  targetDraw() {
     const targetLotteriesList = this.lotteries.filter(element => element.target)
     if (targetLotteriesList == "") {
       this.viewToast("指定引き対象が存在しません。選択してから実行してください。", "指定引きエラー");
@@ -140,30 +192,6 @@ export default class extends Controller {
         loop = 1;
       }
     }
-    this.randomizer.writeResult();
-  }
-  checkedSpecifiedDraw() {
-    this.setLotteriesChecked();
-    this.setupParameter();
-    this.randomizer.setRange(0, 100)
-    for (let i = 0; i <= 10; i++)
-      console.log(this.randomizer.next());
-  }
-  checkedDrawTarget() {
-    this.setLotteriesChecked();
-    this.setupParameter();
-  }
-  uncheckedSpecifiedDraw() {
-    this.setLotteriesUnChecked();
-    this.setupParameter();
-  }
-  uncheckedDrawToTarget() {
-    this.setLotteriesUnChecked();
-    this.setupParameter();
-    console.log("test");
-
-    this.randomizer.setResult('<p value={name: "test"}>test</p>');
-    this.randomizer.refresh();
   }
 
   // 指定引・ピックアップ処理群
