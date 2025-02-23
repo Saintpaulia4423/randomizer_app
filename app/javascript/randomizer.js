@@ -51,6 +51,10 @@ class RandomizerResult {
   }
   // 仮想テーブルに書き込み、または数量の増加。
   setCache(object) {
+    if (typeof object == "undefined") {
+      console.error("randomizer Result Error:不正な値をセットしようとしました。 インプット:" + object);
+      return -1;
+    }
     let cacheIndex = this.cache.findIndex(element => element.id == object.id);
     if (cacheIndex == -1) {
       object.value = 1;
@@ -329,7 +333,7 @@ export class Randomizer {
     if (hitLotteries.length == 1) {
       return hitLotteries[0];
     } else {
-      return hitLotteries[this.nextRange(hitLotteries.length - 1)];
+      return hitLotteries[this.nextRange(hitLotteries.length, 0, "integer") - 1];
     }
   }
 
@@ -347,10 +351,10 @@ export class Randomizer {
     this.setRange(0, temp - 1);
   }
   correction(input, mode = "") {
-    if (this.floatCheck || mode == "float") {
+    if ((this.floatCheck && mode == "") || mode == "float") {
       return input * (this.max - this.min) + this.min;
     } else {
-      return Math.round(input * (this.max - this.min) + this.min);
+      return Math.ceil(input * (this.max - this.min) + this.min);
     }
   }
 
