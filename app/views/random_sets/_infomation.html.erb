@@ -58,13 +58,13 @@
             <ul class="list-group list-group-flush d-flex">
               <li class="list-group-item">
                 抽選タイプ：
-                <span data-controller="tooltip" data-tooltip="<%= get_infomaion_conversion(@random_set.data["type"] + "-tip") %>">
+                <span data-controller="tooltip" data-randomizer-target="lotStyle" data-style=<%= @random_set.data["type"] %> data-tooltip="<%= get_infomaion_conversion(@random_set.data["type"] + "-tip") %>">
                   <%= get_infomaion_conversion(@random_set.data["type"]) %>
                 </span>
               </li>
               <li class="list-group-item">
                 ピックアップ抽選方式：
-                <span data-controller="tooltip" data-tooltip="<%= get_infomaion_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
+                <span data-controller="tooltip" data-randomizer-target="pickupStyle" data-style=<%= @random_set.data["pickup"]["type"] %> data-tooltip="<%= get_infomaion_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
                   <%= get_infomaion_conversion(@random_set.data["pickup"]["type"]) %>
                 </span>
               </li>

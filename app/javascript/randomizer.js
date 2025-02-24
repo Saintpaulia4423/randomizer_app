@@ -177,6 +177,8 @@ export class Randomizer {
     this.sumProbability;
     this.subProbability;
     this.floatCheck = false;
+    this.lotStyle;
+    this.pickupStyle;
   }
 
   // get・setter処理群
@@ -218,6 +220,25 @@ export class Randomizer {
         this.floatCheck = true;
       return { reality: Number(element.dataset.reality), value: Number(element.value) }
     });
+  }
+  setStyles(lotStyle, pickupStyle) {
+    switch (lotStyle) {
+      case "box":
+      case "mix":
+        this.lotStyle = lotStyle;
+        break;
+      default:
+        throw new Error("規定されていない抽選タイプが設定されています。");
+    }
+    switch (pickupStyle) {
+      case "pre":
+      case "percent-ave":
+      case "percent-fix":
+        this.pickupStyle = pickupStyle;
+        break;
+      default:
+        throw new Error("規定されていないピックアップ抽選方式が設定されています。");
+    }
   }
 
   // pickrateとlotteriesの照合と確率計算
@@ -330,10 +351,39 @@ export class Randomizer {
 
     // 計算の結果
     let hitLotteries = this.lotteries.filter(element => element.reality == resultReality.reality);
+    hitLotteries = this.getPickupLottery(hitLotteries);
     if (hitLotteries.length == 1) {
       return hitLotteries[0];
     } else {
       return hitLotteries[this.nextRange(hitLotteries.length, 0, "integer") - 1];
+    }
+  }
+  // ピックアップ抽選処理。
+  // ピックアップ時はピックアップのリストのみ。すり抜け時はピックアップを除いたリストを返す。
+  // percent-ave,fixは改めて考えましたがpreとほぼ同一のため、残存しています。
+  getPickupLottery(rawLotteries) {
+    if (!this.pickupList.length) {
+      return rawLotteries;
+    }
+
+    let filteredPickupList = rawLotteries.reduce((accumulator, element) => {
+      if (element.pickup) {
+        accumulator.pickup.push(element);
+      } else {
+        accumulator.unpickup.push(element);
+      }
+      return accumulator;
+    }, { pickup: [], unpickup: [] });
+    if (!filteredPickupList.pickup) {
+      return rawLotteries;
+    }
+
+    let pickupValue = this.pickupList[0].value
+    let pickSelect = this.nextRange(Math.ceil(pickupValue / 100) * 100, 0, "integer") - 1;
+    if (pickSelect >= pickupValue) {
+      return filteredPickupList.pickup;
+    } else {
+      return filteredPickupList.unpickup;
     }
   }
 

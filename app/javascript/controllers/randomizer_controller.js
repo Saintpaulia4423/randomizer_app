@@ -4,7 +4,9 @@ import { Randomizer } from "randomizer"
 
 // Connects to data-controller="random-sets"
 export default class extends Controller {
-  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery", "randomizerParmerter", "resultTable", "realityPickRate", "pickUpRate", "pickupedLottery", "realityTranslation"];
+  static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery",
+    "randomizerParmerter", "resultTable", "realityPickRate", "pickUpRate", "pickupedLottery",
+    "realityTranslation", "lotStyle", "pickupStyle"];
   TARGET_DRAW_DEAD_POINT = 10000000;
   connect() {
     this.randomizer = new Randomizer();
@@ -47,6 +49,14 @@ export default class extends Controller {
     // ピックアップ情報の提供
     this.randomizer.setPickupList(this.pickUpRateTargets);
     this.randomizer.chkPickupList();
+
+    // スタイル情報の提供
+    try {
+      this.randomizer.setStyles(this.lotStyleTarget.dataset.style, this.pickupStyleTarget.dataset.style);
+    } catch (e) {
+      this.viewToast("想定されていない設定です。再度編集から実施しなおしてください。");
+      throw new Error("セットアップ失敗");
+    }
 
     return selectPattern;
   }
