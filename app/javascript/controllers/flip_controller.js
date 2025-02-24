@@ -4,6 +4,6 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   flip(event) {
     let target = event.currentTarget.children[0];
-    target.classList.toggle("filp-opacity");
+    target.classList.toggle("flip-opacity");
   }
 }
