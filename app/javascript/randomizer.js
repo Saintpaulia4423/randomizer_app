@@ -113,11 +113,10 @@ class RandomizerResult {
   }
 }
 
-// Xrandom方式の乱数精製
+// XorShift方式の乱数精製
 class XorShift {
   DEFAULT_SEED2 = 108101012;
   constructor(seed1 = new Date().getTime(), seed2 = this.DEFAULT_SEED2) {
-    console.log("Xrandom connect")
     this.state1 = seed1;
     this.state2 = seed2;
     this.state3 = 123456789;
@@ -159,11 +158,33 @@ class XorShift {
   }
 }
 
+// 線形合同方式
+// 方式はC++V11であるMINSTD方式。
+class LCGs {
+  DEFAULT_MULTIPLIER = 48271;
+  DEFALUT_INCREMENT = 0;
+  DEFALUT_MODULUS = Math.pow(2, 31) - 1;
+  constructor(seed = new Date().getTime()) {
+    this.seed = seed;
+    this.multiplier = this.DEFAULT_MULTIPLIER;
+    this.increment = this.DEFALUT_INCREMENT;
+    this.mod = this.DEFALUT_MODULUS;
+  }
+  setSeed(seed) {
+    this.seed = seed;
+  }
+  next() {
+    this.seed = (this.multiplier * this.seed + this.increment) % this.mod;
+    return this.seed / 0x7FFFFFFF;
+  }
+}
+
 // Randomizer本体部
 export class Randomizer {
   constructor() {
     this.metw = new MersenneTwister();
     this.rd = new XorShift();
+    this.liner = new LCGs();
     this.result = new RandomizerResult();
     this.min = 0;
     this.max = 0;
@@ -200,6 +221,8 @@ export class Randomizer {
     switch (mode) {
       case "MersseneTwister":
       case "XorShift":
+      case "LinearCGs":
+      case "MathRandom":
         this.randomCalicurationMode = mode;
         break;
       default:
@@ -422,6 +445,10 @@ export class Randomizer {
         return this.correction(this.metw.next(), correctionMode);
       case "XorShift":
         return this.correction(this.rd.next(), correctionMode);
+      case "LinearCGs":
+        return this.correction(this.liner.next(), correctionMode);
+      case "MathRandom":
+        return this.correction(Math.random(), correctionMode);
     }
   }
   nextRange(max = this.max, min = this.min, mode = "") {

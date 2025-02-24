@@ -100,6 +100,14 @@
                         <label for="checkXorShift" class="form-check-label" data-controller="tooltip" data-tooltip="排他的論理和とビットシフトのみの高速な処理">XorShift</label>
                         <input id="checkXorShift" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="XorShift">
                       </div>
+                      <div class="form-check">
+                        <label for="checkLCGs" class="form-check-label" data-controller="tooltip" data-tooltip="非推奨。最小メモリで高速に演算しますが、偶数奇数が交互に発生する問題があります。">線形合同方式</label>
+                        <input id="checkLCGs" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="LinearCGs">
+                      </div>
+                      <div class="form-check">
+                        <label for="checkMathRandom" class="form-check-label" data-controller="tooltip" data-tooltip="線形合同方式などの個々のJavascript実装に依存します。Seed設定無効">Math.Random</label>
+                        <input id="checkMathRandom" data-randomizer-target="randomizerSwitch" name="randomizerSwitched" type="radio" class="form-check-input" value="MathRandom">
+                      </div>
                     </div>
                   </div>
                 </div>
