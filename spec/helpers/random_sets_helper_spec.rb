@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe RandomSetsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "get_infomation_conversionの各種テスト" do
+    context "入力された情報が返ってくること" do
+      it "type情報" do
+        expect(get_infomation_conversion("mix").is_a?(String)).to eq(true)
+        expect(get_infomation_conversion("box").is_a?(String)).to eq(true)
+      end
+    end
+  end
 end

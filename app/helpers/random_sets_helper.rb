@@ -1,6 +1,6 @@
 module RandomSetsHelper
   # data要素の表示用
-  def get_infomaion_conversion(string)
+  def get_infomation_conversion(string)
     case string
       # type
       when "mix"
