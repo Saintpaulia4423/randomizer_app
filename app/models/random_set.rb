@@ -11,26 +11,25 @@ class RandomSet < ApplicationRecord
   end
 
   # セッション情報の記録
-  def remember(digest)
-    self.session = RandomSet.new_token
+  def remember
+    session = RandomSet.new_token
     update_attribute(:session_digest, RandomSet.digest(session))
-    remember_digest
+    session_digest
   end
 
   # セッション情報の破棄
   def forget
-    update_attribute(:session, nil)
+    update_attribute(:session_digest, nil)
   end
 
   # セッション情報の照合
   def session_check(session_password)
     return false if session_password.blank?
-    BCrypt::Password.new(session_digest).is_password?(session_password)
+    BCrypt::Password.new(password_digest).is_password?(session_password)
   end
 
   class << self
 
-    private
       # 新たなトークンを与える
       def new_token
         SecureRandom.urlsafe_base64

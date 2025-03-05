@@ -57,7 +57,7 @@ export default class extends Controller {
       } else {
         let cell1 = cellA.innerText;
         let cell2 = cellB.innerText;
-        return cell1.localeCompare(cell2) * multiplier;
+        return cell1.localeCompare(cell2, undefined, { numeric: true }) * multiplier;
       }
     });
 
