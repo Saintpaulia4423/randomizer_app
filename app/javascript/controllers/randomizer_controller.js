@@ -194,10 +194,8 @@ export default class extends Controller {
         this.viewToast("指定引きを実行しましたが、" + this.TARGET_DRAW_DEAD_POINT.toLocaleString() + "回までに発見されませんでした。", "指定引きエラー");
         loop = -1;
       }
-      let lotNumber = this.randomizer.next();
-      let lot = this.randomizer.getLottery(lotNumber);
-      this.randomizer.setResult(lotNumber);
-      if (targetLotteriesList.some(element => element.name == lot.name)) {
+      let result = this.randomizer.setResult(this.randomizer.next())
+      if (targetLotteriesList.some(element => element.name == result.name)) {
         this.viewToast("指定引きが完了しました。試行回数：" + i.toLocaleString(), "指定引き成功");
         loop = 1;
       }

@@ -389,6 +389,7 @@ export class Randomizer {
       return rawLotteries;
     }
 
+    // ピックアップ対象と非対象を分離
     let filteredPickupList = rawLotteries.reduce((accumulator, element) => {
       if (element.pickup) {
         accumulator.pickup.push(element);
@@ -397,7 +398,8 @@ export class Randomizer {
       }
       return accumulator;
     }, { pickup: [], unpickup: [] });
-    if (!filteredPickupList.pickup) {
+    // 分離結果、片方のリストが存在しない場合は、元の値で返す。
+    if (!filteredPickupList.pickup.length || !filteredPickupList.unpickup.length) {
       return rawLotteries;
     }
 
@@ -474,11 +476,14 @@ export class Randomizer {
   }
   setResult(object) {
     if (Array.isArray(object)) {
-      object.map(element => this.getLottery(element)).map(element => this.result.setCache(element));
+      let lots = object.map(element => this.getLottery(element))
+      lots.map(element => this.result.setCache(element));
+      return lots
     } else {
-      this.result.setCache(this.getLottery(object));
+      let lot = this.getLottery(object)
+      this.result.setCache(lot);
+      return lot
     }
-    return
   }
   refresh() {
     this.result.refresh();
