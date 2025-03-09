@@ -9,6 +9,15 @@ RSpec.describe "RandomSets", type: :system do
     let!(:another_set) { FactoryBot.create(:random_set, name: "Another_test", dict: "in dict") }
     let!(:util_lot) { FactoryBot.create(:lottery, :with_pickup, :with_dict, random_set_id: set.id) }
     let!(:another_set_5lots) { FactoryBot.create_list(:lottery, 5, random_set_id: another_set.id) }
+
+    # 各種確認において利用される定数
+    # セット内容
+    let(:target_lot) { all("tr[data-randomizer-target=lotteries]") }
+    # 結果確認
+    let(:result_table) { "table[data-randomizer-target=resultTable]" }
+    # 大量のドロー
+    let(:draw_lots_num) { 999 }
+
     describe "index" do
       before(:each) do
         visit random_sets_path
@@ -121,9 +130,6 @@ RSpec.describe "RandomSets", type: :system do
         visit random_set_path(set.id)
       end
       describe "randomizerの確認" do
-        let(:result_table) { "table[data-randomizer-target=resultTable]" }
-        let(:draw_lots_num) { 999 }
-        let(:target_lot) { all("tr[data-randomizer-target=lotteries]") }
         describe "draw機能の確認" do
           # lotが一つのため、結果は固定
           it "drawによりresultの値が変更されるか" do
@@ -166,7 +172,8 @@ RSpec.describe "RandomSets", type: :system do
               # 全てから指定数引く
               find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
               within result_table do
-                expect(page).to have_content(draw_lots_num)
+                value = all("td")[2].text
+                expect(value).to have_content(draw_lots_num)
               end
             end
           end
@@ -272,30 +279,42 @@ RSpec.describe "RandomSets", type: :system do
             end
 
             context "チェックの対象が存在しない場合の確認" do
-              let(:err_message_checkless) { "チェックされたデータがありません" }
-              it "チェックなしの場合、エラーメッセージが出る" do
-                find(:xpath, "//button[@data-action='click->randomizer#checkedSpecifiedDraw']").click
-                expect(page).to have_content(err_message_checkless)
-                within target_lot[0] do
-                  all("td[data-controller=flip]")[1].double_click
+              context "全てチェックなしパターン" do
+                let(:err_message_checkless) { "チェックされたデータがありません" }
+                
+                it "指定数引きでエラーメッセージが出る" do
+                  find(:xpath, "//button[@data-action='click->randomizer#checkedSpecifiedDraw']").click
+                  expect(page).to have_content(err_message_checkless)
                 end
-                find(:xpath, "//button[@data-action='click->randomizer#checkedDrawTarget']").click
-                expect(page).to have_content(err_message_checkless)
+                it "指定物引きでエラーメッセージが出る" do
+                  within target_lot[0] do
+                    all("td[data-controller=flip]")[1].double_click
+                    expect(page).to_not have_css("span.bi-hand-index-fill.flip-opacity")
+                  end
+                  find(:xpath, "//button[@data-action='click->randomizer#checkedDrawTarget']").click
+                  expect(page).to have_content(err_message_checkless)
+                end
               end
-              let(:err_message_uncheckless) { "チェックされてないデータがありません" }
-              it "チェックありの場合、エラーメッセージが出る。" do
-                visit random_set_path(set.id)
-                find("#chkLottery-#{util_lot.id}").click
-                sleep 0.3
-                find(:xpath, "//button[@data-action='click->randomizer#uncheckedSpecifiedDraw']").click
-                within "div.toast" do
+              context "全てチェックありパターン" do
+                before(:each) do
+                  visit random_set_path(set.id)
+                  find("#chkLottery-#{util_lot.id}").check
+                end
+                let(:err_message_uncheckless) { "チェックされてないデータがありません" }
+                it "指定数引きでエラーメッセージが出る。" do
+                  puts find("#chkLottery-#{util_lot.id}").checked?
+                  expect(find("#chkLottery-#{util_lot.id}")).to be_checked
+                  find(:xpath, "//button[@data-action='click->randomizer#uncheckedSpecifiedDraw']").click
                   expect(page).to have_content(err_message_uncheckless)
                 end
-                within target_lot[0] do
-                  all("td[data-controller=flip]")[1].double_click
-                end
-                find(:xpath, "//button[@data-action='click->randomizer#uncheckedDrawToTarget']").click
-                within "div.toast" do
+                it "指定物引きでエラーメッセージが出る" do
+                  puts find("#chkLottery-#{util_lot.id}").checked?
+                  expect(find("#chkLottery-#{util_lot.id}")).to be_checked
+                  within target_lot[0] do
+                    all("td[data-controller=flip]")[1].double_click
+                    expect(page).to_not have_css("span.bi-hand-index-fill.flip-opacity")
+                  end
+                  find(:xpath, "//button[@data-action='click->randomizer#uncheckedDrawToTarget']").click
                   expect(page).to have_content(err_message_uncheckless)
                 end
               end
@@ -315,6 +334,311 @@ RSpec.describe "RandomSets", type: :system do
             find(:xpath, "//button[@data-action='click->randomizer#oneDraw']").click
             value = find("#randomSeed").value
             expect(value.to_i).to eq(seed)
+          end
+          it "シードを設定したとき、同じようにドローされる" do
+            visit random_set_path(another_set.id)
+            find("[data-count='100']").click
+            result = 0
+            within result_table do
+              result = all("td")[2].text.to_i
+            end
+            find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+            within result_table do
+              within "tbody.table-group-divider" do
+                expect(page).to have_content("")
+              end
+            end
+            find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
+            find("[data-count='100']").click
+            within result_table do
+              expect(result).to eq all("td")[2].text.to_i
+            end
+          end
+        end
+        describe "各種乱数機能の検証" do
+          context "メルセンヌツイスタ" do
+            before do
+              choose("checkMT")
+            end
+            it "通常通り引けるか" do
+              find(:xpath, "//button[@data-action='click->randomizer#oneDraw']").click
+              within result_table do
+                expect(page).to have_content(util_lot.name)
+              end
+            end
+            it "シードが固定できるか" do
+              visit random_set_path(another_set.id)
+              choose("checkMT")
+              find("[data-count='100']").click
+              result = 0
+              within result_table do
+                result = all("td")[2].text.to_i
+              end
+              find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+              find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
+              find("[data-count='100']").click
+              within result_table do
+                expect(result).to eq all("td")[2].text.to_i
+              end                
+            end
+          end
+          context "XorShift " do
+            before do
+              choose("checkXorShift")
+            end
+            it "通常通り引けるか" do
+              find(:xpath, "//button[@data-action='click->randomizer#oneDraw']").click
+              within result_table do
+                expect(page).to have_content(util_lot.name)
+              end
+            end
+            it "シードが固定できるか" do
+              visit random_set_path(another_set.id)
+              choose("checkXorShift")
+              find("[data-count='100']").click
+              result = 0
+              within result_table do
+                result = all("td")[2].text.to_i
+              end
+              find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+              find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
+              find("[data-count='100']").click
+              within result_table do
+                expect(result).to eq all("td")[2].text.to_i
+              end                
+            end
+          end
+          context "線形合同方式" do
+            before do
+              choose("checkLCGs")
+            end
+            it "通常通り引けるか" do
+              find(:xpath, "//button[@data-action='click->randomizer#oneDraw']").click
+              within result_table do
+                expect(page).to have_content(util_lot.name)
+              end
+            end
+            it "シードが固定できるか" do
+              visit random_set_path(another_set.id)
+              choose("checkLCGs")
+              find("[data-count='100']").click
+              result = 0
+              within result_table do
+                result = all("td")[2].text.to_i
+              end
+              find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+              find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
+              find("[data-count='100']").click
+              within result_table do
+                expect(result).to eq all("td")[2].text.to_i
+              end                
+            end
+          end
+          context "Math.Random（シード固定不可のため、一部テストなし）" do
+            before do
+              choose("checkMathRandom")
+            end
+            it "通常通り引けるか" do
+              find(:xpath, "//button[@data-action='click->randomizer#oneDraw']").click
+              within result_table do
+                expect(page).to have_content(util_lot.name)
+              end
+            end
+          end
+        end
+        describe "レアリティ抽選率について" do
+          let!(:add_lot) { FactoryBot.create(:lottery, name: "add_lot_with_set", reality: 1, random_set_id: set.id) }
+          let!(:add_lot_no_set) { FactoryBot.create(:lottery, name: "add_lot_no_set", reality: 3, random_set_id: set.id) }
+          before do
+            visit random_set_path(set.id)
+          end
+          describe "レアリティ抽選率の確認" do
+            context "非常に低い確率で失敗する（確率論的に80%＜5%となる可能性はゼロではない）" do
+              it "基本的に高確率のものを引いているか（失敗可能性あり）" do
+                fill_in "anyDrawNumber", with: draw_lots_num * 10
+                find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+                high_rate_num = -1
+                low_rate_num = -1
+                within result_table do
+                  results = all("tr")
+                  results.each do |element|
+                    result_lot = element.all("td")
+                    next if result_lot.empty?
+                    case result_lot[1].text
+                      when util_lot.name
+                        high_rate_num = result_lot[2].text.to_i
+                      when add_lot.name
+                        low_rate_num = result_lot[2].text.to_i
+                    end
+                  end
+                end
+                expect(high_rate_num).to_not eq -1
+                expect(low_rate_num).to_not eq -1
+                expect(high_rate_num).to be > low_rate_num
+              end
+              it "未設定のものも引けるか（失敗可能性あり）" do
+                fill_in "anyDrawNumber", with: draw_lots_num * 10
+                find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+                high_rate_num = -1
+                low_rate_num = -1
+                within result_table do
+                  results = all("tr")
+                  results.each do |element|
+                    result_lot = element.all("td")
+                    next if result_lot.empty?
+                    case result_lot[1].text
+                      when util_lot.name
+                        high_rate_num = result_lot[2].text.to_i
+                      when add_lot_no_set.name
+                        low_rate_num = result_lot[2].text.to_i
+                    end
+                  end
+                end
+                expect(high_rate_num).to_not eq -1
+                expect(low_rate_num).to_not eq -1
+                expect(high_rate_num).to be > low_rate_num
+              end
+            end
+          end
+          describe "一時的なレアリティ追加についての確認" do
+            # add_lot_no_setのレアリティのもの
+            let(:add_reality) { "★3" }
+            before do
+              find(:xpath, "//button[@data-action='info#addRealityModal']").click
+              within ".modal" do
+                select add_reality
+                # 大きな値を入れる
+                fill_in "addReality", with: 10000
+                click_button "追加"
+              end
+            end
+            it "新規のレアリティの追加ができるか" do
+              within find("div[data-info-target=realityList]") do
+                expect(page).to have_content(add_reality)
+              end
+            end
+            it "追加したレアリティにより確率が大きく変わるか（失敗する可能性あり）" do
+              fill_in "anyDrawNumber", with: draw_lots_num * 10
+              find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+              within result_table do
+                results = all("tr")
+                results.each do |element|
+                  result_lot = element.all("td")
+                  next if result_lot.empty?
+                  case result_lot[1].text
+                    when add_lot_no_set.name
+                      high_rate_num = result_lot[2].text.to_i
+                    when util_lot.name
+                      low_rate_num = result_lot[2].text.to_i
+                  end
+                end
+              end
+            end
+          end
+          describe "ピックアップ抽選率の確認" do
+            let!(:add_lot_default_pickup) { FactoryBot.create(:lottery, :with_pickup, name: "add_lot_with_pickup", random_set_id: set.id)}
+            before do
+              visit random_set_path(set.id)
+            end
+            describe "ピックアップ抽選についての確認" do
+              it "ピックアップされたものが特に抽選されるか（失敗する可能性あり）" do
+                fill_in "anyDrawNumber", with: draw_lots_num * 10
+                # 有意に大きくするためピックアップ比率90:10とする
+                fill_in "pick-#{add_lot_default_pickup.reality}", with: 90
+                find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+                within result_table do
+                  results = all("tr")
+                  results.each do |element|
+                    result_lot = element.all("td")
+                    next if result_lot.empty?
+                    case result_lot[1].text
+                      when add_lot_default_pickup.name
+                        high_rate_num = result_lot[2].text.to_i
+                      when util_lot.name
+                        low_rate_num = result_lot[2].text.to_i
+                    end
+                  end
+                end
+              end
+              context "一時追加についての確認" do
+                let!(:add_lot_for_add_pickup) { FactoryBot.create(:lottery, :with_pickup, name: "add_lot_reality_1_with_pickup", reality: 1, random_set_id: set.id) }
+                let!(:add_lot_for_add_nopickup) { FactoryBot.create(:lottery, name: "add_lot_reality_1_with_pickup", reality: 1, random_set_id: set.id) }
+                let(:add_reality) { "★1" }
+                before do
+                  visit random_set_path(set.id)
+                  # ピックアップの確認のため、レアリティを増加
+                  fill_in "reality-#{add_lot_for_add_pickup.reality}", with: 10000
+                  find(:xpath, "//button[@data-action='info#addPickupModal']").click
+                  # modal fadeの待機時間
+                  sleep 1
+                  within ".modal" do
+                    select add_reality
+                    # 大きな値を入れる
+                    fill_in "addReality", with: 90
+                    find(:xpath, "//button[@data-action='click->info#add']").click
+                  end
+                end
+                it "ピックアップを追加できるか" do
+                  within find("div[data-info-target=pickupList]") do
+                    expect(page).to have_content(add_reality)
+                  end
+                end
+                it "追加したピックアップにより正常に動作するか" do
+                  expect(page).to have_css("div.modal", visible: false)
+                  fill_in "anyDrawNumber", with: draw_lots_num * 10
+                  find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+                  within result_table do
+                    results = all("tr")
+                    results.each do |element|
+                      result_lot = element.all("td")
+                      next if result_lot.empty?
+                      case result_lot[1].text
+                        when add_lot_for_add_pickup.name
+                          high_rate_num = result_lot[2].text.to_i
+                        when add_lot_for_add_nopickup.name
+                          low_rate_num = result_lot[2].text.to_i
+                      end
+                    end
+                  end
+                end  
+              end
+            end
+          end
+        end
+      end
+      describe "showページの表示の確認" do
+        let!(:nodata_set) { FactoryBot.create(:random_set, data: [] ) }
+        context "情報が存在する場合の確認" do
+          before do
+            visit random_set_path(another_set.id)
+          end
+          it "表示内容の確認" do
+            expect(page).to have_content(another_set.name)
+            expect(page).to have_content(another_set.dict)
+            within find("div[data-info-target=realityList]") do
+              expect(page).to have_content("★#{another_set.data["rate"][0]["reality"]}")
+              expect(find_field("reality-#{another_set.data["rate"][0]["reality"]}").value).to have_content(another_set.data["rate"][0]["value"])
+              expect(page).to have_content("★#{another_set.data["rate"][1]["reality"]}")
+              expect(find_field("reality-#{another_set.data["rate"][1]["reality"]}").value).to have_content(another_set.data["rate"][1]["value"])
+              expect(page).to have_content("★#{another_set.data["rate"][2]["reality"]}")
+              expect(find_field("reality-#{another_set.data["rate"][2]["reality"]}").value).to have_content(another_set.data["rate"][2]["value"])
+            end
+            within find("div[data-info-target=pickupList]") do
+              expect(page).to have_content("★#{another_set.data["pickup"]["gainrate"][0]["reality"]}")
+              expect(find_field("pick-#{another_set.data["pickup"]["gainrate"][0]["reality"]}").value).to have_content(another_set.data["pickup"]["gainrate"][0]["value"])
+            end
+          end
+        end
+        context "情報が存在しない場合の確認" do
+          before do
+            visit random_set_path(nodata_set.id)
+          end
+          it "表示内容の確認" do
+            nodata_message_in_info = "設定がありません。編集にて設定を追加してください。"
+            nodata_message_in_lotteries = "登録がありません"
+            expect(page).to have_content(nodata_set.name)
+            expect(page).to have_content(nodata_message_in_info)
+            expect(page).to have_content(nodata_message_in_lotteries)
           end
         end
       end

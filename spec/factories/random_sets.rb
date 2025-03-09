@@ -15,7 +15,7 @@ FactoryBot.define do
         pickup: {
           type: "pre",
           gainrate: [
-            { reality: 2, value: 50 }
+            { reality: 0, value: 50 }
           ],
           valuefix: []
         },

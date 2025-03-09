@@ -115,12 +115,14 @@ class RandomizerResult {
 
 // XorShift方式の乱数精製
 class XorShift {
-  DEFAULT_SEED2 = 108101012;
-  constructor(seed1 = new Date().getTime(), seed2 = this.DEFAULT_SEED2) {
+  DEFAULT_SEED1 = 108101012;
+  DEFAULT_SEED2 = 123456789;
+  DEFAULT_SEED3 = 232139941;
+  constructor(seed1 = new Date().getTime(), seed2 = this.DEFAULT_SEED1) {
     this.state1 = seed1;
     this.state2 = seed2;
-    this.state3 = 123456789;
-    this.state4 = 232139941;
+    this.state3 = this.DEFAULT_SEED2;
+    this.state4 = this.DEFAULT_SEED3;
   }
 
   chkSeed() {
@@ -128,7 +130,9 @@ class XorShift {
   }
   setSeed(seed) {
     this.state1 = seed;
-    this.state2 = this.DEFAULT_SEED2;
+    this.state2 = this.DEFAULT_SEED1;
+    this.state3 = this.DEFAULT_SEED2;
+    this.state4 = this.DEFAULT_SEED3;
   }
 
   next() {
@@ -206,6 +210,7 @@ export class Randomizer {
   setSeed(seed) {
     this.metw.setSeed(seed);
     this.rd.setSeed(seed);
+    this.liner.setSeed(seed);
   }
   getSeed() {
     return this.rd.chkSeed();
