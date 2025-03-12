@@ -17,7 +17,7 @@ class RandomSetsController < ApplicationController
     if @random_set.parent.present?
       @parent_set = RandomSet.find(@random_set.parent)
     end
-    @lotteries = @random_set.lotteries.select(:id, :name, :dict, :reality, :default_check, :default_pickup)
+    @lotteries = @random_set.lotteries.select(:id, :name, :dict, :reality, :default_check, :default_pickup, :value)
   end
 
   # GET /random_sets/new

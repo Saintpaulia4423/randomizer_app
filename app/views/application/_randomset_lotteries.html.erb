@@ -12,12 +12,17 @@
           <th class="sortable" data-sort="pickup" data-action="click->table-sort#sort" data-table-sort-target="tableHeader" data-controller="tooltip" data-tooltip="ピックアップの設定です。ダブルクリックで切り替えることが行えます。">
             <span class="bi bi-stars"></span>
           </th>
-          <th class="sortable" data-sort="pickup" data-action="click->table-sort#sort" data-table-sort-target="tableHeader" data-controller="tooltip" data-tooltip="指定引の設定です。ダブルクリックで切り替えることができます。">
-            <span class="bi bi-hand-index-fill"></span>
-          </th>
-          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Reality</th>
-          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Name</th>   
-          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">dict</th>     
+          <% if defined?(@random_set) != nil %>
+            <th class="sortable" data-sort="pickup" data-action="click->table-sort#sort" data-table-sort-target="tableHeader" data-controller="tooltip" data-tooltip="指定引の設定です。ダブルクリックで切り替えることができます。">
+              <span class="bi bi-hand-index-fill"></span>
+            </th>
+          <% end %>
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">レアリティ</th>
+          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">名前</th>   
+          <% if defined?(@random_set) != nil %>
+            <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">個数</th>
+          <% end %>
+          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">内容</th>     
         </tr>
       </thead>
       <tbody class="table-group-divider">

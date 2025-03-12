@@ -1,0 +1,26 @@
+<div class="card mt-3">
+  <div class="card-header">
+    <div class="row">
+      <div class="col d-flex align-items-center">
+        <i class="bi bi-dice-3">結果表示</i>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <button class="btn btn-danger btn-small" data-action="click->randomizer#resetResult">結果リセット</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body text-wrap">
+    <table class="table table-hover table-striped table-sm" data-controller="table-sort" data-randomizer-target="resultTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Reality</th>
+          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Name</th>   
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット数</th>     
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット割合</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+      </tbody>
+    </table>
+  </div>
+</div>

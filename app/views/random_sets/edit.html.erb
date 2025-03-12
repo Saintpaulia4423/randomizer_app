@@ -1,12 +1,3 @@
-<% content_for :title, "Editing random set" %>
-
-<h1>Editing random set</h1>
-
-<%= render "form", random_set: @random_set %>
-
-<br>
-
-<div>
-  <%= link_to "Show this random set", @random_set %> |
-  <%= link_to "Back to random sets", random_sets_path %>
-</div>
+<%= render "modal", title: "編集" do %>
+  <div>test</div>
+<% end %>

@@ -28,7 +28,7 @@ class LotteriesController < ApplicationController
   end
 
   def show
-    @lottery = current_set.lotteries.find[:id].select(:id, :name, :dict, :reality, :default_check, :default_pickup)
+    @lottery = current_set.lotteries.find[:id].select(:id, :name, :dict, :reality, :default_check, :default_pickup, :value)
   end
 
   def edit

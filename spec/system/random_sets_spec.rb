@@ -298,6 +298,7 @@ RSpec.describe "RandomSets", type: :system do
               context "全てチェックありパターン" do
                 before(:each) do
                   visit random_set_path(set.id)
+                  sleep 1
                   find("#chkLottery-#{util_lot.id}").check
                 end
                 let(:err_message_uncheckless) { "チェックされてないデータがありません" }
@@ -342,6 +343,7 @@ RSpec.describe "RandomSets", type: :system do
             within result_table do
               result = all("td")[2].text.to_i
             end
+            sleep 1
             find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
             within result_table do
               within "tbody.table-group-divider" do
@@ -505,6 +507,7 @@ RSpec.describe "RandomSets", type: :system do
             let(:add_reality) { "★3" }
             before do
               find(:xpath, "//button[@data-action='info#addRealityModal']").click
+              sleep 1
               within ".modal" do
                 select add_reality
                 # 大きな値を入れる
