@@ -116,8 +116,8 @@ RSpec.describe "RandomSets", type: :system do
             elements = all("tr")
             expect(elements[5]).to have_content(another_set_5lots[4].name)
             expect(elements[1]).to have_content(another_set_5lots[0].name)
-            elements[0].all("th")[4].click
-            elements[0].all("th")[4].click
+            elements[0].all("th")[3].click
+            elements[0].all("th")[3].click
             elements = all("tr")
             expect(elements[5]).to have_content(another_set_5lots[0].name)
             expect(elements[1]).to have_content(another_set_5lots[4].name)
@@ -376,6 +376,7 @@ RSpec.describe "RandomSets", type: :system do
               within result_table do
                 result = all("td")[2].text.to_i
               end
+              sleep 1
               find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
               find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
               find("[data-count='100']").click

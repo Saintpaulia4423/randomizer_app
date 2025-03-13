@@ -16,7 +16,7 @@ RSpec.describe "Lotteries", type: :request do
       it "lottery_with_dictが正しく全て表示されている。" do
         target_lottery = Nokogiri::HTML(response.body).css("[data-randomizer-target=lotteries]")[0]
         test_pickup = target_lottery.css("span[data-value=0]").children.text
-        test_name = target_lottery.css("td")[-2].text
+        test_name = target_lottery.css("td")[-3].text
         test_dict = target_lottery.css("td")[-1].text
 
         expect(test_pickup).to include("★0")

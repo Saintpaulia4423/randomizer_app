@@ -13,7 +13,7 @@
       <span class="bi bi-stars flip-opacity" data-pickup-id=<%= lottery.id %>></span>
     <% end %>
   </td>
-  <% if defined?(@random_set) != nil %>
+  <% if defined?(@random_set) != nil && params[:action] == "show" then %>
     <td data-controller="flip" data-action="dblclick->flip#flip">
       <span class="bi-hand-index-fill flip-opacity"></span>
     </td>
@@ -22,7 +22,7 @@
     <span data-value=<%= lottery.reality %>><%= get_realityname(lottery.reality) %></span>
   </td>
   <td><%= lottery.name %></td>
-  <% if defined?(@random_set) != nil %>
+  <% if defined?(@random_set) != nil then %>
     <td><%= lottery.value %></td>
   <% end %>
   <td><%= lottery.dict %></td>

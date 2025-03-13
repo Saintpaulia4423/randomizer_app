@@ -10,10 +10,11 @@ export default class extends Controller {
   TARGET_DRAW_DEAD_POINT = 10000000;
   connect() {
     this.randomizer = new Randomizer();
-    this.targetNum = this.specifiedNumberTarget;
+    this.targetNum;
     this.seedCache;
     this.lotteries = [];
     this.toast = new Toast(document.getElementById("toast"));
+    console.log("connect")
   }
 
   // randomizer実行前初期化処理
@@ -27,6 +28,8 @@ export default class extends Controller {
       this.randomizer.setSeed(Number(this.seedTarget.value));
       this.seedCache = this.seedTarget.value;
     }
+    // 指定数
+    this.targetNum = this.specifiedNumberTarget;
 
     // 乱数精製方式
     let selectPattern;

@@ -7,7 +7,7 @@ class Lottery < ApplicationRecord
 
   # 検索設定
   def
-    self.ransackable_attributes(auth_object = nil) ["name", "id", "reality", "created_at", "updated_at"]
+    self.ransackable_attributes(auth_object = nil) ["name", "id", "reality", "created_at", "updated_at", "default_check", "default_pickup", "dict"]
   end
   
 end

@@ -5,30 +5,60 @@
         <i class="bi bi-journal">セット情報</i>
       </div>
       <div class="col-4 mt-auto d-flex justify-content-end">
-        <%= link_to "編集", edit_random_set_path(@random_set),
-          class: "btn btn-secondary",
-          data: { turbo_frame: "modal" } 
-        %>
+        <% if params[:action] == "edit" %>
+          <%= link_to "ランダマイザーへ", random_set_path(@random_set),
+            class: "btn btn-primary",
+            data: { turbo_frame: "random_set" }
+          %>
+        <% else %>
+          <% if logged_in? %>
+            <%= link_to "編集モードへ", edit_random_set_path(@random_set),
+              class: "btn btn-primary",
+              data: { turbo_frame: "random_set" } %>
+          <% else %>
+            <%= link_to "編集", login_path(@random_set),
+              class: "btn btn-secondary",
+              data: { turbo_frame: "modal" } 
+            %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>
   <div class="card-body mt-3">
     <%= turbo_frame_tag "random_set_info" do %>
       <div class="row mt-auto">
-        <div class="col">
-          <p>セット名称：<%= @random_set.name %></p>
-          <% if @random_set.dict.present? %>
-            <div class="col">
-              <p>セット説明：<%= @random_set.dict %></p>
-            </div>
-          <% end %>
-          <%# ModおよびValiant用 %>
-          <% if @random_set.parent.present? %>
-            <div class="col">
-              <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
-            </div>
-          <% end %>
-        </div>
+        <% if params[:action] == "show" %>
+          <div class="col">
+            <p>セット名称：<%= @random_set.name %></p>
+            <% if @random_set.dict.present? %>
+              <div class="col">
+                <p>セット説明：<%= @random_set.dict %></p>
+              </div>
+            <% end %>
+            <%# ModおよびValiant用 %>
+            <% if @random_set.parent.present? %>
+              <div class="col">
+                <%= link_to @parent_set.name, random_set_lottery_path(@parent_set), class: "btn btn-outline-secondary", data: { turbo_frame: "random_set" } %>
+              </div>
+            <% end %>
+          </div>
+        <% elsif params[:action] == "edit" %>
+          <div class="col mb-3">
+            <%= form_with model: @random_set do |f| %>
+              <div class="input-group mb-3">
+                <%= f.label :name, class: "input-group-text" %>
+                <%= f.text_field :name, class: "form-control" %>
+              </div>
+              <div class="input-group mb-3">
+                <%= f.label :dict, class: "input-group-text" %>
+                <%= f.text_area :dict, class: "form-control" %>
+              </div>
+
+              <%= f.submit "更新", class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <div class="row mt-auto">
         <div class="col">

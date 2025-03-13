@@ -1,7 +1,7 @@
 <%= form_with(model: random_set) do |form| %>
   <% if random_set.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(random_set.errors.count, "error") %> prohibited this random_set from being saved:</h2>
+      <h4><%= pluralize(random_set.errors.count, "error") %> prohibited this random_set from being saved:</h4>
 
       <ul>
         <% random_set.errors.each do |error| %>

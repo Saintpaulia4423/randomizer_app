@@ -1,0 +1,29 @@
+<%= turbo_frame_tag "edit_lottery" do %>
+  <div class="row">
+    <div class="col-1 mt-auto">
+      <%= sort_link(@search, :default_check) do %>
+        checkbox
+      <% end %>
+    </div>
+    <div class="col-1 mt-auto">
+      <%= sort_link(@search, :default_pickup) %>
+    </div>
+    <div class="col-1 mt-auto">
+      <%= sort_link(@search, :reality) %>
+    </div>
+    <div class="col-3 mt-auto">
+      <%= sort_link(@search, :name) %>
+    </div>
+    <div class="col-1 mt-auto">
+      <%= sort_link(@search, :value) %>
+    </div>
+    <div class="col-5 mt-auto">
+      <%= sort_link(@search, :dict) %>
+    </div>
+  </div>
+  <div id="lotteries">
+    <% @lotteries.each do |lottery| %>
+      <%= render partial: "lotteries/edit_lottery", locals: { lottery: lottery } %>
+    <% end %>
+  </div>
+<% end %>
