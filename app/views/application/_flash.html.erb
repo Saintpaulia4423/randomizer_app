@@ -1,7 +1,7 @@
 <%# 通常時 %>
 <% if flash.notice %>
   <div class="mb-2 toast hide border-primary" data-controller="toast" data-toast-target="infoToast">
-    <div class="toast-header text-primary">
+    <div class="toast-header text-primary bg-through">
       <strong class="me-auto">
         <span class="bi bi-check-circle">
           成功
@@ -17,7 +17,7 @@
 <%# 失敗時 %>
 <% if flash.alert %>
   <div class="mb-2 toast hide border-danger" data-controller="toast" data-toast-target="infoToast">
-    <div class="toast-header text-danger">
+    <div class="toast-header text-danger bg-through">
       <strong class="me-auto">
         <span class="bi bi-exclamation-circle">
           失敗

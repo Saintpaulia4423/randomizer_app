@@ -3,4 +3,12 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   include ApplicationHelper
   include SessionHelper
+  def check_loggin?
+    puts current_set_session
+    if current_set_session.nil?
+      redirect_to root_path
+    else
+      true
+    end
+  end
 end

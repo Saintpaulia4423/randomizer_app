@@ -9,6 +9,7 @@ module SessionHelper
 
   # セッションの検証を行い、RandomSetに登録されているセッションと合致していればパススルー
   def current_set_session
+    get_random_set()
     if (session_token = session[:session_token])
       if @random_set && session[:session_token] == @random_set.session_digest
         @current_set = @random_set

@@ -1,24 +1,36 @@
 <%= turbo_frame_tag "edit_lottery" do %>
-  <div class="row">
+  <div class="row border-bottom">
     <div class="col-1 mt-auto">
-      <%= sort_link(@search, :default_check) do %>
-        checkbox
+      <strong>
+        <%= sort_link(@search, :default_check, class: "text-decoration-none text-black") do %>
+          Check
+        <% end %>
+      </strong>
+    </div>
+    <div class="col-1 mt-auto">
+      <%= sort_link(@search, :default_pickup, class: "text-decoration-none text-black") do %>
+        <span class="bi bi-stars">
       <% end %>
     </div>
     <div class="col-1 mt-auto">
-      <%= sort_link(@search, :default_pickup) %>
-    </div>
-    <div class="col-1 mt-auto">
-      <%= sort_link(@search, :reality) %>
+      <strong>
+        <%= sort_link(@search, :reality, class: "text-decoration-none text-black") %>
+      </strong>
     </div>
     <div class="col-3 mt-auto">
-      <%= sort_link(@search, :name) %>
+      <strong>
+        <%= sort_link(@search, :name, class: "text-decoration-none text-black") %>
+      </strong>
     </div>
     <div class="col-1 mt-auto">
-      <%= sort_link(@search, :value) %>
+      <strong>
+        <%= sort_link(@search, :value, class: "text-decoration-none text-black") %>
+      </strong>
     </div>
     <div class="col-5 mt-auto">
-      <%= sort_link(@search, :dict) %>
+      <strong>
+        <%= sort_link(@search, :dict, class: "text-decoration-none text-black") %>
+      </strong>
     </div>
   </div>
   <div id="lotteries">

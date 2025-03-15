@@ -1,4 +1,4 @@
-<% provide(:submit_button, "作成") %>
+<% provide(:submit_button, "更新") %>
 <%= turbo_stream.replace "form_lottery" do %>
   <%= render "form", locals: { lottery: @lottery } %>
 <% end %>

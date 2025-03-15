@@ -35,17 +35,24 @@ class LotteriesController < ApplicationController
   end
 
   def edit
-    @action_path = edit_random_set_path
+    @action_path = random_set_lottery_path
   end
 
   def update
-    
+    respond_to do |format|
+      if @lottery.update(lottery_params)
+        format.turbo_stream { flash.now.notice = @lottery.name.to_s + "は更新されました。" }
+        format.html { redirect_to edit_random_set_path, notice: @lottery.name.to_s + "は更新されました。" }
+      else
+        @action_path = random_set_lottery_path
+        puts "miss lot"
+        format.turbo_stream { render "edit", status: :unprocessable_entity }
+        format.html { render "edit", status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
-    if logged_in?
-      flash.now.notice = "test"
-    end
     # テスト実装のため削除なし
     # @lottery.destroy!
     flash.now.notice = "削除しました"
@@ -54,9 +61,6 @@ class LotteriesController < ApplicationController
   private
     def check_lottery
       @lottery = Lottery.find(params[:id])
-    end
-    def check_loggin?
-      current_set_session.nil? ? true : false
     end
 
     def lottery_params

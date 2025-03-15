@@ -1,3 +1,4 @@
+<% provide(:submit_button, "作成") %>
 <%= render "modal", title: "セットの追加" do %>
-  <%= render "form", lottery: @lottery %>
+  <%= render "form", locals: { lottery: @lottery } %>
 <% end %>

@@ -42,3 +42,30 @@ th.sortable.desc::after {
 .flip-opacity {
   opacity: 10%;
 }
+
+.bg-through {
+  background-color: rgba($color: #FFF, $alpha: 0);
+}
+
+.field_with_errors {
+  flex: auto;
+  display: flex;
+
+  .form-control {
+    border-color: red;
+  }
+
+  &:first-child {
+    flex-grow: 0;
+  }
+
+  &:nth-child(2) {
+    flex-grow: 2;
+  }
+}
+
+.bi {
+  &.color-blue {
+    color: #0d6efd;
+  }
+}

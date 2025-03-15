@@ -1,5 +1,5 @@
 class RandomSetsController < ApplicationController
-  # before_action :set_random_set, only: %i[ show edit update destroy ]
+  before_action :check_loggin?, only: [ :edit ]
 
   # GET /random_sets or /random_sets.json
   def index
