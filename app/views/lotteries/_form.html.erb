@@ -1,0 +1,36 @@
+<%= turbo_frame_tag @lottery do %>
+  <%= form_with(model: @lottery, url: @action_path, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
+    <%= render "form_flash", object: f.object %>
+    <div class="input-group mb-3">
+      <%= f.label :name, class: "input-group-text" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+    <div class="input-group mb-3">
+      <%= f.label :dict, class: "input-group-text" %>
+      <%= f.text_area :dict, class: "form-control" %>
+    </div>
+    <div class="input-group mb-3">
+      <%= f.label :reality, class: "input-group-text" %>
+      <%= f.select :reality, get_realityname_list.map { |list| [get_realityname(list), list] }, {}, class: "form-select" %>
+    </div>
+    <div class="input-group mb-3">
+      <%= f.label :value, class: "input-group-text" %>
+      <%= f.number_field :value, class: "form-control" %>
+    </div>
+    <div class="row mx-1 mb-3">
+      <div class="form-check from-switch col">
+        <%= f.label :default_check, class: "form-check-label" %>
+        <%= f.check_box :default_check, class: "form-check-input" %>
+      </div>
+      <div class="form-check form-switch col" data-controller="flip" data-action="click->flip#linkedCheckbox">
+        <span class="form-check-label flip-opacity bi bi-stars"></span>
+        <%= f.label :default_pickup %>
+        <%= f.check_box :default_pickup, class: "form-check-input" %>
+      </div>
+    </div>
+
+    <%= f.hidden_field :origin_id, value: params[:random_set_id] %>
+
+    <%= f.submit "更新", class: "btn btn-primary" %>
+  <% end %>
+<% end %>

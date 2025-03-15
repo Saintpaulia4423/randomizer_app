@@ -1,66 +1,65 @@
 class LotteriesController < ApplicationController
-  before_action :check_lottery, only: %i[ edit update destroy ]
+  before_action :get_random_set, only: [ :new, :create, :edit, :update, :destroy, :index, :show ]
+  before_action :check_lottery, only: [ :edit, :update, :destroy ]
+  before_action :check_loggin?, only: [ :create, :update, :destroy ]
 
   def new
-    @lottery = Lottery.new
+    @lottery = Lottery.new()
+    @action_path = random_set_lotteries_path
   end
 
   def create
-    @lottery = current_set.lotteries.build(lottery_params)
-
+    @lottery = @random_set.lotteries.build(lottery_params)
     respond_to do |format|
       if @lottery.save
-        format.html { redirect_to @lottery, notice: "要素を追加しました。" }
-        format.json { render :show, status: :created, location: @lottery }
-      else 
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @lottery.errors, status: :unprocessable_entity }
+        format.turbo_stream { flash.now.notice = "作成しました。" }
+        format.html { redirect_to edit_random_set_path, notice: "作成しました。" }
+        # format.html { render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set)) }
+        # flash.now.notice = "作成しました。"
+      else
+        flash.now.alert = "失敗しました。"
+        # @seamera.empty?
+        @action_path = random_set_lotteries_path
+        format.turbo_stream { render "new", status: :unprocessable_entity }
+        format.html { render "new", status: :unprocessable_entity }
       end
     end
   end
 
   def index
-    @search = current_set.lotteries.ransack(params[:q])
+    @search = @random_set.lotteries.ransack(params[:q])
     @search.sorts = "reality desc" if @search.sorts.empty?
     @lotteries = @search.result
 
-    @random_set_title = current_set.name
-  end
-
-  def show
-    @lottery = current_set.lotteries.find[:id].select(:id, :name, :dict, :reality, :default_check, :default_pickup, :value)
+    @random_set_title = @random_set.name
   end
 
   def edit
+    @action_path = edit_random_set_path
   end
 
   def update
-    respond_to do |format|
-      if @lottery.update(lottery_params)
-        format.html { redirect_to @lottery, notice: "要素を更新しました。" }
-        format.json { render :show, status: :ok, location: @lottery }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @lottery.errors, status: :unprocessable_entity }
-      end
-    end
+    
   end
 
   def destroy
-    @lottery.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to lottery_path, status: :see_other, notice: "要素を削除しました。" }
-      format.json { head :no_content }
+    if logged_in?
+      flash.now.notice = "test"
     end
+    # テスト実装のため削除なし
+    # @lottery.destroy!
+    flash.now.notice = "削除しました"
   end
 
   private
     def check_lottery
       @lottery = Lottery.find(params[:id])
     end
+    def check_loggin?
+      current_set_session.nil? ? true : false
+    end
 
     def lottery_params
-      params.require(:lottery).permit(:name, :dict, :reality, :defalt_check)
+      params.require(:lottery).permit(:name, :dict, :reality, :default_check, :default_pickup, :value, :origin_id)
     end
 end

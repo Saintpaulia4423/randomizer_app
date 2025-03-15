@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   resources :random_sets do
-    resources :lotteries, only: [:new, :create, :index, :show, :edit, :update]
+    resources :lotteries, only: [:new, :create, :index, :edit, :update, :destroy]
   end
   get "/login/:random_set", to: "session#new", as: "login"
-  post "/login/:random_set", to: "session#create", as: "login_create"
+  post "/login/:random_set", to: "session#create", as: "create_login"
   delete "/logout/:random_set", to: "session#destroy", as: "logout"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

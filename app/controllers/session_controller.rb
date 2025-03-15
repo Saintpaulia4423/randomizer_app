@@ -6,15 +6,19 @@ class SessionController < ApplicationController
 
   def create
     @current_set = RandomSet.find(params[:random_set])
-      if @current_set&.authenticate(params[:password])
-        reset_session
-        remember(@current_set)
-        log_in @current_set
-        render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set))
-      else
-        flash[:warning] = "パスワードが異なります"
-        render turbo_stream: turbo_stream.action(:redirect, random_set_path(@current_set))
+    if @current_set&.authenticate(params[:password])
+      reset_session
+      remember(@current_set)
+      log_in @current_set
+      render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set))
+    else
+      respond_to do |format|
+        format.turbo_stream { flash.now.alert = "パスワードが異なります" }
+        format.html { render "new", status: :unprocessable_entity }
+        # flash[:warning] = "パスワードが異なります"
+        # render turbo_stream: turbo_stream.action(:redirect, random_set_path(@current_set))
       end
+    end
   end
 
   def destroy

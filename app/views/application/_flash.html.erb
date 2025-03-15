@@ -1,3 +1,31 @@
-<% flash.each do |message_type, message| %>
-  <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+<%# 通常時 %>
+<% if flash.notice %>
+  <div class="mb-2 toast hide border-primary" data-controller="toast" data-toast-target="infoToast">
+    <div class="toast-header text-primary">
+      <strong class="me-auto">
+        <span class="bi bi-check-circle">
+          成功
+        </span>
+      </strong>
+    </div>
+    <div class="toast-body">
+      <%= notice %>
+    </div>
+  </div>
+<% end %>
+
+<%# 失敗時 %>
+<% if flash.alert %>
+  <div class="mb-2 toast hide border-danger" data-controller="toast" data-toast-target="infoToast">
+    <div class="toast-header text-danger">
+      <strong class="me-auto">
+        <span class="bi bi-exclamation-circle">
+          失敗
+        </span>
+      </strong>
+    </div>
+    <div class="toast-body">
+      <%= alert %>
+    </div>
+  </div>
 <% end %>

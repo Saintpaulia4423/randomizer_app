@@ -9,6 +9,7 @@ export default class extends Controller {
   }
 
   close(event) {
+    console.log(event)
     if (event.detail.success) {
       this.modal.hide()
     }

@@ -24,11 +24,11 @@
       </div>
       <div class="row w-100  d-flex justify-content-center container-fluid py-5">
         <div class="col m-4 main-body py-6">
-          <%= render "flash" %>
           <%= yield %>
         </div>
       </div>
       <%= turbo_frame_tag "modal" %>
       <%= turbo_frame_tag "preview_modal" %>
+      <div id="flashes" class="position-fixed bottom-0 end-0 m-1"></div>
   </body>
 </html>

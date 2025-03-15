@@ -345,6 +345,7 @@ RSpec.describe "RandomSets", type: :system do
             end
             sleep 1
             find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+            sleep 1
             within result_table do
               within "tbody.table-group-divider" do
                 expect(page).to have_content("")
@@ -403,6 +404,7 @@ RSpec.describe "RandomSets", type: :system do
               within result_table do
                 result = all("td")[2].text.to_i
               end
+              sleep 1
               find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
               find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
               find("[data-count='100']").click

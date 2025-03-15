@@ -1,0 +1,4 @@
+<%= turbo_stream.replace "new_lottery" do %>
+  <%= render "form", locals: { lottery: @lottery, action_path: random_set_lotteries_path} %>
+<% end %>
+<%= turbo_stream.append "info_message", partial: "flash" %>

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag lottery do %>
-  <div class="row mt-auto border-bottom mx-0">
+  <div class="row mt-auto border-bottom d-flex align-items-center">
     <div class="col-1 form-check">
       <% if lottery.default_check then %>
         <input class="form-check-input" type="checkbox" checked disabled>
@@ -21,8 +21,21 @@
       <%= lottery.name %>
     </div>
     <div class="col-1">
+      <%= lottery.value %>
     </div>
-    <div class="col-5">
+    <div class="col-4">
+      <%= lottery.dict %>
+    </div>
+    <div class="col-1">
+      <%= link_to "編集", edit_random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
+        class: "btn btn-primary btn-small",
+        data: { turbo_frame: "modal" }
+      %>
+      <%= button_to "削除", random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
+        method: :delete,
+        class: "btn btn-danger btn-small",
+        form: { data: { turbo_confirm: "本当に削除しますか？" } }
+      %>
     </div>
   </div>
 <% end %>

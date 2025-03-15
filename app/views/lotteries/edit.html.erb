@@ -1,2 +1,3 @@
-<h1>Lotteries#edit</h1>
-<p>Find me in app/views/lotteries/edit.html.erb</p>
+<%= render "modal", title: @lottery.name + "の編集" do %>
+  <%= render "form", lottery: @lottery %>
+<% end %>
