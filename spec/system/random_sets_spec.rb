@@ -725,6 +725,21 @@ RSpec.describe "RandomSets", type: :system do
           expect(page).to have_content(name)
           expect(page).to have_content(dict)
         end
+        it "更新をリセットできるか" do
+          name = "unset_name"
+          dict = "unset_dict"
+          name_target = "input#random_set_name"
+          dict_target = "textarea#random_set_dict"
+          fill_in "random_set_name", with: name
+          fill_in "random_set_dict", with: dict
+          expect(find(name_target).value).to eq name
+          expect(find(dict_target).value).to eq dict
+          within "#random_set_edit_forms" do
+            click_link "リセット"
+          end
+          expect(find(name_target).value).to_not eq name
+          expect(find(dict_target).value).to_not eq dict
+        end
       end
       describe "lotteryの確認" do
         let!(:simple_lot) { FactoryBot.create(:lottery, random_set_id: set.id) }
