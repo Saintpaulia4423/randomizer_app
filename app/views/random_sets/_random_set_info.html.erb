@@ -1,32 +1,32 @@
-<div class="card mt-3">
-  <div class="card-header">
-    <div class="d-flex">
-      <div class="col-8 d-flex align-items-center">
-        <i class="bi bi-journal">セット情報</i>
-      </div>
-      <div class="col-4 mt-auto d-flex justify-content-end">
-        <% if params[:action] == "edit" %>
-          <%= link_to "ランダマイザーへ", random_set_path(@random_set),
-            class: "btn btn-primary",
-            data: { turbo_frame: "random_set" }
-          %>
-        <% else %>
-          <% if logged_in? %>
-            <%= link_to "編集モードへ", edit_random_set_path(@random_set),
+<%= turbo_frame_tag "random_set_info" do %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="col-8 d-flex align-items-center">
+          <i class="bi bi-journal">セット情報</i>
+        </div>
+        <div class="col-4 mt-auto d-flex justify-content-end">
+          <% if params[:action] == "edit" || params[:action] == "update" %>
+            <%= link_to "ランダマイザーへ", random_set_path(@random_set),
               class: "btn btn-primary",
-              data: { turbo_frame: "random_set" } %>
-          <% else %>
-            <%= link_to "編集", login_path(@random_set),
-              class: "btn btn-secondary",
-              data: { turbo_frame: "modal" } 
+              data: { turbo_frame: "random_set" }
             %>
+          <% else %>
+            <% if logged_in? %>
+              <%= link_to "編集モードへ", edit_random_set_path(@random_set),
+                class: "btn btn-primary",
+                data: { turbo_frame: "random_set" } %>
+            <% else %>
+              <%= link_to "編集", login_path(@random_set),
+                class: "btn btn-secondary",
+                data: { turbo_frame: "modal" } 
+              %>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="card-body mt-3">
-    <%= turbo_frame_tag "random_set_info" do %>
+    <div class="card-body mt-3">
       <div class="row mt-auto">
         <% if params[:action] == "show" %>
           <div class="col">
@@ -43,9 +43,10 @@
               </div>
             <% end %>
           </div>
-        <% elsif params[:action] == "edit" %>
+        <% elsif params[:action] == "edit" || params[:action] == "update" %>
           <div class="col mb-3">
             <%= form_with model: @random_set do |f| %>
+              <%= render "form_flash", object: f.object %>
               <div class="input-group mb-3">
                 <%= f.label :name, class: "input-group-text" %>
                 <%= f.text_field :name, class: "form-control" %>
@@ -56,6 +57,10 @@
               </div>
 
               <%= f.submit "更新", class: "btn btn-primary" %>
+              <%= link_to "リセット", edit_random_set_path(@random_set),
+                class: "btn btn-danger",
+                data: { turbo_stream: "edit" }
+              %>
             <% end %>
           </div>
         <% end %>
@@ -65,6 +70,6 @@
           <%= render "infomation" %>
         </div>
       </div>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>

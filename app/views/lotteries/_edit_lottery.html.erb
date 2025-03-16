@@ -1,5 +1,5 @@
 <%= turbo_frame_tag lottery do %>
-  <div class="row mt-auto border-bottom d-flex align-items-center">
+  <div class="row mt-auto border-bottom d-flex align-items-center p-1 <%= "bg-body-secondary" if index.even? %>">
     <div class="col-1 form-check">
       <% if lottery.default_check then %>
         <span class="bi bi-check-square-fill primary-text color-blue"></span>
@@ -20,21 +20,26 @@
     <div class="col-3">
       <%= lottery.name %>
     </div>
-    <div class="col-1">
-      <%= lottery.value %>
+    <div class="col-1 text-center">
+      <% if lottery.value == -1 %>
+        <span class="bi bi-infinity"></span>
+      <% else %>
+        <%= lottery.value %>
+      <% end %>
     </div>
     <div class="col-4">
       <%= lottery.dict %>
     </div>
-    <div class="col-1">
-      <%= link_to "編集", edit_random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
-        class: "btn btn-primary btn-small",
-        data: { turbo_frame: "modal" }
+    <div class="col-1 d-flex">
+      <%= link_to "", edit_random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
+        class: "btn btn-primary btn-small bi bi-pencil-square",
+        data: { turbo_frame: "modal", controller: "tooltip", tooltip: "編集" }
       %>
-      <%= button_to "削除", random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
+      <%= button_to "", random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
         method: :delete,
-        class: "btn btn-danger btn-small",
-        form: { data: { turbo_confirm: "本当に削除しますか？" } }
+        class: "btn btn-danger btn-small bi bi-fire",
+        form: { data: { turbo_confirm: "本当に削除しますか？" } },
+        data: { controller: "tooltip", tooltip: "削除" }
       %>
     </div>
   </div>

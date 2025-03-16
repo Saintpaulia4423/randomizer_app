@@ -8,12 +8,10 @@
           <i class="bi bi-database">セット内容</i>
         </div>
         <div class="col d-flex justify-content-end mt-auto">
-          <%= link_to new_random_set_lottery_path(random_set_id: @random_set.id),
-            class: "btn btn-primary btn-small",
-            data: { turbo_frame: "modal" } do
+          <%= link_to "", new_random_set_lottery_path(random_set_id: @random_set.id),
+            class: "btn btn-primary btn-small bi bi-plus-circle",
+            data: { turbo_frame: "modal", controller: "tooltip", tooltip: "追加" }
           %>
-            <i class="bi bi-dice-1"></i>登録
-          <% end %>
         </div>
       </div>
     </div>

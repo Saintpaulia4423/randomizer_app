@@ -14,11 +14,8 @@ class LotteriesController < ApplicationController
       if @lottery.save
         format.turbo_stream { flash.now.notice = "作成しました。" }
         format.html { redirect_to edit_random_set_path, notice: "作成しました。" }
-        # format.html { render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set)) }
-        # flash.now.notice = "作成しました。"
       else
         flash.now.alert = "失敗しました。"
-        # @seamera.empty?
         @action_path = random_set_lotteries_path
         format.turbo_stream { render "new", status: :unprocessable_entity }
         format.html { render "new", status: :unprocessable_entity }

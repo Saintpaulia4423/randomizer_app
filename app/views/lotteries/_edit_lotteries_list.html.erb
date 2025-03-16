@@ -34,8 +34,8 @@
     </div>
   </div>
   <div id="lotteries">
-    <% @lotteries.each do |lottery| %>
-      <%= render partial: "lotteries/edit_lottery", locals: { lottery: lottery } %>
+    <% @lotteries.each_with_index do |lottery, index| %>
+      <%= render partial: "lotteries/edit_lottery", locals: { lottery: lottery, index: index } %>
     <% end %>
   </div>
 <% end %>

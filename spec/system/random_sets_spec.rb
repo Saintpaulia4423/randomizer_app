@@ -298,8 +298,8 @@ RSpec.describe "RandomSets", type: :system do
               context "全てチェックありパターン" do
                 before(:each) do
                   visit random_set_path(set.id)
-                  sleep 1
                   find("#chkLottery-#{util_lot.id}").check
+                  sleep 1
                 end
                 let(:err_message_uncheckless) { "チェックされてないデータがありません" }
                 it "指定数引きでエラーメッセージが出る。" do

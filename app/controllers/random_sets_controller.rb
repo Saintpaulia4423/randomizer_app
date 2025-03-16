@@ -56,13 +56,16 @@ class RandomSetsController < ApplicationController
   # PATCH/PUT /random_sets/1 or /random_sets/1.json
   def update
     @random_set = RandomSet.find(params[:id])
+    @random_set.password = get_session_password()
     respond_to do |format|
       if @random_set.update(random_set_params)
-        format.html { redirect_to @random_set, notice: "Random set was successfully updated." }
-        format.json { render :show, status: :ok, location: @random_set }
+        puts "sucsess"
+        format.turbo_stream { flash.now.notice = @random_set.name.to_s + "を更新しました。" }
+        format.html { render "update" }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @random_set.errors, status: :unprocessable_entity }
+        flash.now.alert = "更新に失敗しました。"
+        format.turbo_stream { render "edit", status: :unprocessable_entity }
+        format.html { render "edit", status: :unprocessable_entity }
       end
     end
   end

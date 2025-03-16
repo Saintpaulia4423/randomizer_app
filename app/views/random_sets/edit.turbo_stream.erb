@@ -1,0 +1,4 @@
+<%= turbo_stream.append "info_form", partial: "flash" %>
+<%= turbo_stream.replace "random_set_info" do %>
+  <%= render "random_set_info" %>
+<% end %>

@@ -6,7 +6,7 @@ module RandomSetsHelper
       when "mix"
         "通常-独立"
       when "mix-tip"
-        "全ての抽選において、他の抽選結果が影響されません。"
+        "個数の影響を無視します。個数の影響を受けません。"
       when "box"
         "ボックスガチャ-当選排除"
       when "box-tip"
