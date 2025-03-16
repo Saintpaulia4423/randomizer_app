@@ -59,7 +59,6 @@ class RandomSetsController < ApplicationController
     @random_set.password = get_session_password()
     respond_to do |format|
       if @random_set.update(random_set_params)
-        puts "sucsess"
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "を更新しました。" }
         format.html { render "update" }
       else

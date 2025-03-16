@@ -3,7 +3,7 @@
     <% if logged_in? %>
       <p>既にログイン可能です</p>
     <% else %>
-      <%= form_with(model: @session, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
+      <%= form_with(model: @random_Set, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
         <div class="input-group">
           <%= f.password_field :password, class: "form-control" %>
 

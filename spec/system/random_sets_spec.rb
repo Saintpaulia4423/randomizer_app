@@ -650,6 +650,38 @@ RSpec.describe "RandomSets", type: :system do
       end
     end
     describe "new" do
+      describe "newページの確認" do
+        before do
+          visit new_random_set_path
+        end
+        it "作成ができるか" do
+          name = "test_head"
+          dict = "test_body"
+          password = "test_leg"
+          fill_in "random_set_name", with: name
+          fill_in "random_set_dict", with: dict
+          fill_in "random_set_password", with: password
+          click_button "作成"
+          expect(page).to have_content(name)
+          expect(page).to have_content(dict)
+        end
+        it "作成後、パスワードが合致するか" do
+          name = "test_head"
+          dict = "test_body"
+          password = "test_leg"
+          fill_in "random_set_name", with: name
+          fill_in "random_set_dict", with: dict
+          fill_in "random_set_password", with: password
+          click_button "作成"
+          expect(page).to have_content("セット情報")
+          click_link "編集"
+          expect(page).to have_content("編集パスワード入力")
+          fill_in "password", with: password
+          click_button "検証"
+          expect(page).to have_content("ランダマイザーへ")
+          expect(current_path).to eq edit_random_set_path(RandomSet.last.id)
+        end
+      end
     end
   end      
 end

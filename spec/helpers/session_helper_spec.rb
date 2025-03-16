@@ -1,15 +1,44 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the SessionHelper. For example:
-#
-# describe SessionHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe SessionHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "メソッド確認" do
+    let!(:set) { FactoryBot.create(:random_set) }    
+    let!(:lot) { FactoryBot.create(:lottery, random_set_id: set.id) }
+    describe "セッションについての確認" do
+      before do
+        allow(helper).to receive(:params).and_return({id: set.id})
+      end
+      context "logged_in?" do
+        it "そのままならfalseが返る" do
+          expect(helper.logged_in?).to eq false
+        end
+      end
+      context "get_random_set" do
+        it "同じものが取得されるか" do
+          helper.get_random_set
+          expect(helper.instance_variable_get(:@random_set)).to eq set
+        end
+      end
+      context "log_in" do
+        it "sessionにsession_tokenが書き込まれているか確認" do
+          helper.log_in(set)
+          expect(helper.session[:session_token]).to eq set.session_digest
+        end
+      end
+      context "remember" do
+        it "remmberで記憶されるか" do
+          helper.remember(set)
+          expect(helper.cookies[:session_token]).to_not eq ""
+          expect(helper.cookies[:password_token]).to_not eq ""
+        end
+      end
+      context "current_set_session" do
+        it "通常のログイン挙動によりログインされるか" do
+          helper.remember(set)
+          helper.log_in(set)
+          expect(helper.logged_in?).to eq true
+        end
+      end
+    end
+  end
 end
