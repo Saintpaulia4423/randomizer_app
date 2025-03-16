@@ -299,7 +299,7 @@ RSpec.describe "RandomSets", type: :system do
                 before(:each) do
                   visit random_set_path(set.id)
                   find("#chkLottery-#{util_lot.id}").check
-                  sleep 1
+                  # sleep 1
                 end
                 let(:err_message_uncheckless) { "チェックされてないデータがありません" }
                 it "指定数引きでエラーメッセージが出る。" do
@@ -753,7 +753,38 @@ RSpec.describe "RandomSets", type: :system do
             expect(page).to_not have_css("flip-opacity")
             click_button "更新"
           end
+          expect(page).to have_content("#{Lottery.find(simple_lot.id).name}は更新されました")
           within "turbo-frame[id=lottery_#{simple_lot.id}]" do
+            expect(page).to have_content(c_name)
+            expect(page).to have_content(c_dict)
+            expect(page).to have_content(c_value)
+            expect(page).to have_content(c_reality)
+            expect(page).to_not have_css("color-blue")
+            expect(page).to_not have_css("flip-opacity")
+          end
+        end
+        it "削除できるか" do
+          expect(page).to have_content(simple_lot.name)
+          find("#lottery_delete_#{simple_lot.id}").click
+          page.accept_alert
+          expect(page).to have_content("削除しました")
+          expect(page).to_not have_content(simple_lot.name)
+        end
+        it "追加できるか" do
+          expect(page).to_not have_content(c_name)
+          find(".bi.bi-plus-circle").click
+          within ".modal" do
+            fill_in "lottery_name", with: c_name
+            fill_in "lottery_dict", with: c_dict
+            fill_in "lottery_value", with: c_value
+            select c_reality
+            find("#lottery_default_check").check
+            find("#lottery_default_pickup").check
+            expect(page).to_not have_css("flip-opacity")
+            click_button "作成"
+          end
+          expect(page).to have_content("作成しました")
+          within "turbo-frame[id=lottery_#{Lottery.last.id}]" do
             expect(page).to have_content(c_name)
             expect(page).to have_content(c_dict)
             expect(page).to have_content(c_value)
