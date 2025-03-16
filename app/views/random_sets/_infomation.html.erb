@@ -4,7 +4,7 @@
       <i class="bi bi-bar-chart">セット設定</i>
     </div>
     <div class="card-body">
-      <% if @random_set.data.present? %>
+      <% if chk_parameter(@random_set) %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
           <div class="col-md">
             <div class="card">
@@ -20,7 +20,7 @@
               </div>
               <div class="card-body" data-info-target="realityList">
                 <%# レアリティリスト %>
-                <% @random_set.data["rate"].each do |realityRate| %>
+                <% @random_set.rate.each do |realityRate| %>
                   <div class="input-group">
                     <span class="input-group-text" data-info-target="selectedReality" data-value=<%= realityRate["reality"] %>><%= get_realityname(realityRate["reality"]) %></span>
                     <input type="number" class="form-control" value=<%= realityRate["value"] %> step="0.1" name="reality-<%= realityRate["reality"] %>" data-randomizer-target="realityPickRate" data-reality=<%= realityRate["reality"] %>>
@@ -44,10 +44,10 @@
               </div>
               <div class="card-body" data-info-target="pickupList">
                 <%# ピックアップリスト %>
-                <% @random_set.data["pickup"]["gainrate"].each do |pickRate| %>
+                <% @random_set.pickup_rate.each do |pickRate| %>
                   <div class="input-group">
                     <span class="input-group-text" data-info-target="selectedPickup" data-value=<%= pickRate["reality"] %>><%= get_realityname(pickRate["reality"]) %></span>
-                    <input type="number" class="form-control" value=<%= pickRate["value"] %> name="pick-<%= pickRate["reality"] %>" data-randomizer-target="pickUpRate" data-reality=<%= pickRate["reality"]%>>
+                    <input type="number" class="form-control" value=<%= pickRate["value"] %> name="pick-<%= pickRate["reality"] %>" data-randomizer-target="pickUpRate" data-reality=<%= pickRate["reality"] %>>
                     <span class="input-group-text">%</span>
                   </div>
                 <% end %>
@@ -56,18 +56,23 @@
           </div>
           <div class="col-md">
             <ul class="list-group list-group-flush d-flex">
-              <li class="list-group-item">
-                抽選タイプ：
-                <span data-controller="tooltip" data-randomizer-target="lotStyle" data-style=<%= @random_set.data["type"] %> data-tooltip="<%= get_infomation_conversion(@random_set.data["type"] + "-tip") %>">
-                  <%= get_infomation_conversion(@random_set.data["type"]) %>
-                </span>
-              </li>
-              <li class="list-group-item">
-                ピックアップ抽選方式：
-                <span data-controller="tooltip" data-randomizer-target="pickupStyle" data-style=<%= @random_set.data["pickup"]["type"] %> data-tooltip="<%= get_infomation_conversion(@random_set.data["pickup"]["type"] + "-tip") %>">
-                  <%= get_infomation_conversion(@random_set.data["pickup"]["type"]) %>
-                </span>
-              </li>
+              <% if params[:action] == "show" then %>
+                <li class="list-group-item">
+                  抽選タイプ：
+                  <span data-controller="tooltip" data-randomizer-target="lotStyle" data-style=<%= @random_set.pick_type %> data-tooltip="<%= get_infomation_conversion(@random_set.pick_type + "-tip") %>">
+                    <%= get_infomation_conversion(@random_set.pick_type) %>
+                  </span>
+                </li>
+                <li class="list-group-item">
+                  ピックアップ抽選方式：
+                  <span data-controller="tooltip" data-randomizer-target="pickupStyle" data-style=<%= @random_set.pickup_type %> data-tooltip="<%= get_infomation_conversion(@random_set.pickup_type + "-tip") %>">
+                    <%= get_infomation_conversion(@random_set.pickup_type) %>
+                  </span>
+                </li>
+              <% else %>
+                <li class="list-group-item">
+                </li>
+              <% end %>
             </ul>
           </div>
         </div>

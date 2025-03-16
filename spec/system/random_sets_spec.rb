@@ -613,7 +613,7 @@ RSpec.describe "RandomSets", type: :system do
         end
       end
       describe "showページの表示の確認" do
-        let!(:nodata_set) { FactoryBot.create(:random_set, data: [] ) }
+        let!(:nodata_set) { FactoryBot.create(:random_set, rate: [], pickup_rate: [] ) }
         context "情報が存在する場合の確認" do
           before do
             visit random_set_path(another_set.id)
@@ -622,16 +622,16 @@ RSpec.describe "RandomSets", type: :system do
             expect(page).to have_content(another_set.name)
             expect(page).to have_content(another_set.dict)
             within find("div[data-info-target=realityList]") do
-              expect(page).to have_content("★#{another_set.data["rate"][0]["reality"]}")
-              expect(find_field("reality-#{another_set.data["rate"][0]["reality"]}").value).to have_content(another_set.data["rate"][0]["value"])
-              expect(page).to have_content("★#{another_set.data["rate"][1]["reality"]}")
-              expect(find_field("reality-#{another_set.data["rate"][1]["reality"]}").value).to have_content(another_set.data["rate"][1]["value"])
-              expect(page).to have_content("★#{another_set.data["rate"][2]["reality"]}")
-              expect(find_field("reality-#{another_set.data["rate"][2]["reality"]}").value).to have_content(another_set.data["rate"][2]["value"])
+              expect(page).to have_content("★#{another_set.rate[0]["reality"]}")
+              expect(find_field("reality-#{another_set.rate[0]["reality"]}").value).to have_content(another_set.rate[0]["value"])
+              expect(page).to have_content("★#{another_set.rate[1]["reality"]}")
+              expect(find_field("reality-#{another_set.rate[1]["reality"]}").value).to have_content(another_set.rate[1]["value"])
+              expect(page).to have_content("★#{another_set.rate[2]["reality"]}")
+              expect(find_field("reality-#{another_set.rate[2]["reality"]}").value).to have_content(another_set.rate[2]["value"])
             end
             within find("div[data-info-target=pickupList]") do
-              expect(page).to have_content("★#{another_set.data["pickup"]["gainrate"][0]["reality"]}")
-              expect(find_field("pick-#{another_set.data["pickup"]["gainrate"][0]["reality"]}").value).to have_content(another_set.data["pickup"]["gainrate"][0]["value"])
+              expect(page).to have_content("★#{another_set.pickup_rate[0]["reality"]}")
+              expect(find_field("pick-#{another_set.pickup_rate[0]["reality"]}").value).to have_content(another_set.pickup_rate[0]["value"])
             end
           end
         end

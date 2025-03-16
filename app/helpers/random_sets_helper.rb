@@ -24,4 +24,13 @@ module RandomSetsHelper
         "単純当選率上昇-固定"
     end
   end
+  def chk_parameter(set)
+    if set.pick_type.present? \
+        && set&.rate != [] \
+        && set&.pickup_rate != []
+      true
+    else
+      false
+    end
+  end
 end

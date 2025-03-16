@@ -2,6 +2,10 @@ class RandomSet < ApplicationRecord
   has_many :lotteries
   validates :name, presence: :true, length: {minimum:3, maximum:255}
   validates :password, presence: :ture
+  validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
+  validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }
+  validate :rate_pickup_rate_with_array_into_fixed_hash
+
 
   has_secure_password
 
@@ -41,4 +45,35 @@ class RandomSet < ApplicationRecord
         BCrypt::Password.create(string, cost: cost)
       end
   end 
+  private
+    def rate_pickup_rate_with_array_into_fixed_hash
+      # rate,pickup_rateはArrayであること。
+      unless rate.is_a?(Array) || pickup_rate.is_a?(Array)
+        return
+      end
+
+      rate.each_with_index do |item, index|
+        check_into_fixed_hash(:rate, item, index)
+      end
+
+      pickup_rate.each_with_index do |item, index|
+        check_into_fixed_hash(:pickup_rate, item, index)
+      end
+    end
+    # 判定
+    def check_into_fixed_hash(symbol, item, index)
+      # そもそも何も入っていなければなし
+      if item == []
+        return
+      end
+      unless item.is_a?(Hash) && item.key?("reality") && item.key?("value")
+        errors.add(symbol, "Itme index #{index} is invalid: Must include keys reality and value")
+        return
+      end
+
+      unless item["reality"].is_a?(Numeric) && item["value"].is_a?(Numeric)
+        errors.add(symbol, "Item index #{index} is invalid: Only values")
+        return
+      end
+    end
 end

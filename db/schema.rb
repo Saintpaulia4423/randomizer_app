@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_15_122949) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_16_051913) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_15_122949) do
     t.string "edit_pass"
     t.string "session_digest"
     t.string "password_digest"
+    t.string "pick_type", default: "mix"
+    t.jsonb "rate", default: []
+    t.jsonb "pickup_rate", default: []
+    t.string "pickup_type", default: "pre"
+    t.jsonb "value_list", default: []
   end
 
   add_foreign_key "lotteries", "random_sets"
