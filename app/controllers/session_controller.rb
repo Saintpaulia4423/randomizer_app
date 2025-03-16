@@ -1,22 +1,23 @@
 class SessionController < ApplicationController
   def new
-    @random_set = RandomSet.find(params[:random_set])
-    # @session = @random_set
+    @random_set = RandomSet.find(params[:random_set_id])
   end
 
   def create
-    @current_set = RandomSet.find(params[:random_set])
-    if @current_set&.authenticate(params[:password])
+    @current_set = RandomSet.find(params[:random_set_id])
+    if session[:set_id] = @current_set.id && @current_set&.authenticate(params[:session][:password])
       reset_session
       remember(@current_set)
       log_in @current_set
       render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set))
     else
       respond_to do |format|
-        format.turbo_stream { flash.now.alert = "パスワードが異なります" }
+        message = "パスワードが異なります"
+        if params[:session][:password].blank?
+          message = "パスワードを入力してください"
+        end
+        format.turbo_stream { flash.now.alert = message }
         format.html { render "new", status: :unprocessable_entity }
-        # flash[:warning] = "パスワードが異なります"
-        # render turbo_stream: turbo_stream.action(:redirect, random_set_path(@current_set))
       end
     end
   end

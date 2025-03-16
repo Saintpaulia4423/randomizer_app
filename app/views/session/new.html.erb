@@ -3,8 +3,9 @@
     <% if logged_in? %>
       <p>既にログイン可能です</p>
     <% else %>
-      <%= form_with(model: @random_Set, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
-        <div class="input-group">
+      <%= form_with(url: login_path, scope: :session, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
+        <%= render "password_flash" %>
+        <div class="input-group">          
           <%= f.password_field :password, class: "form-control" %>
 
           <%= f.submit "検証", class: "btn btn-primary" %>

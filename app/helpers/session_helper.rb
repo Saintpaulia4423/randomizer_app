@@ -19,6 +19,7 @@ module SessionHelper
 
   def remember(random_set)
     random_set.remember
+    cookies.permanent[:set_id] = random_set.id
     cookies.permanent.encrypted[:session_token] = random_set.session_digest
     cookies.permanent.encrypted[:password_token] = params[:password]
   end
