@@ -1,5 +1,3 @@
 <% provide(:submit_button, "更新") %>
 <%= turbo_stream.append "flashes", partial: "flash" %>
-<%= turbo_stream.update @lottery do %>
-  <%= render partial: "edit_lottery", locals: { lottery: @lottery, action_path: random_set_lottery_path } %>
-<% end %>
+<%= turbo_stream.replace @lottery, partial: "edit_lottery", locals: { lottery: @lottery, action_path: random_set_lottery_path } %>

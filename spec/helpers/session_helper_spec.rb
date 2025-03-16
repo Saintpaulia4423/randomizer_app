@@ -6,7 +6,7 @@ RSpec.describe SessionHelper, type: :helper do
     let!(:lot) { FactoryBot.create(:lottery, random_set_id: set.id) }
     describe "セッションについての確認" do
       before do
-        allow(helper).to receive(:params).and_return({id: set.id})
+        allow(helper).to receive(:params).and_return({id: set.id, session: { password: set.password } })
       end
       context "logged_in?" do
         it "そのままならfalseが返る" do

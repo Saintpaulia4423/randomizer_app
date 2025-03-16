@@ -21,13 +21,13 @@ module SessionHelper
     random_set.remember
     cookies.permanent[:set_id] = random_set.id
     cookies.permanent.encrypted[:session_token] = random_set.session_digest
-    cookies.permanent.encrypted[:password_token] = params[:password]
+    cookies.permanent.encrypted[:password_token] = params[:session][:password]
   end
   def get_random_set
     @random_set = RandomSet.find(params[:random_set_id]) if params[:random_set_id].present?
     @random_set = RandomSet.find(params[:id]) if @random_set.nil?
   end
   def get_session_password
-    cookies.encrypted[:password_token]
+    return cookies.encrypted[:password_token]
   end
 end

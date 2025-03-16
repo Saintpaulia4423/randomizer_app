@@ -676,10 +676,91 @@ RSpec.describe "RandomSets", type: :system do
           expect(page).to have_content("セット情報")
           click_link "編集"
           expect(page).to have_content("編集パスワード入力")
-          fill_in "password", with: password
+          fill_in "session_password", with: password
           click_button "検証"
           expect(page).to have_content("ランダマイザーへ")
           expect(current_path).to eq edit_random_set_path(RandomSet.last.id)
+        end
+      end
+    end
+    describe "edit" do
+      describe "遷移の確認" do
+        it "edit pageに到達できるか" do
+          visit login_path(set.id)
+          fill_in "session_password", with: set.password
+          click_button "検証"
+          expect(current_path).to eq edit_random_set_path(set.id)
+        end
+        it "パスワードが誤りの場合、遷移しないか" do
+          visit random_set_path(set.id)
+          click_link "編集"
+          expect(page).to have_content("編集パスワード入力")
+          # パスワードを入力していない場合
+          click_button "検証"
+          expect(page).to have_content("パスワードを入力してください")
+          expect(current_path).to_not eq edit_random_set_path(set.id)
+          # パスワードが異なる場合
+          fill_in "session_password", with: "invalid_password"
+          click_button "検証"
+          expect(page).to have_content("パスワードが異なります")
+          expect(current_path).to_not eq edit_random_set_path(set.id)
+        end
+      end
+      describe "random_setの更新の確認" do
+        before do
+          visit login_path(set.id)
+          sleep 1
+          fill_in "session_password", with: set.password
+          click_button "検証"
+        end
+        it "更新を行えるか" do
+          name = "change_name"
+          dict = "change_dict"
+          fill_in "random_set_name", with: name
+          fill_in "random_set_dict", with: dict
+          within "#random_set_edit_forms" do
+            click_button "更新"
+          end
+          click_link "ランダマイザーへ"
+          expect(page).to have_content(name)
+          expect(page).to have_content(dict)
+        end
+      end
+      describe "lotteryの確認" do
+        let!(:simple_lot) { FactoryBot.create(:lottery, random_set_id: set.id) }
+        let(:c_name) { "Changed_name" }
+        let(:c_dict) { "Changed_dict" }
+        let(:c_reality) { "★5" }
+        let(:c_value) { 65536 }
+        before do
+          visit login_path(set.id)
+          sleep 1
+          fill_in "session_password", with: set.password
+          click_button "検証"
+        end
+        it "更新ができるか" do
+          within "turbo-frame[id=lottery_#{simple_lot.id}]" do
+            find("#lottery_edit_#{simple_lot.id}").click
+          end
+          within ".modal" do
+            expect(page).to have_content("#{simple_lot.name}の編集")
+            fill_in "lottery_name", with: c_name
+            fill_in "lottery_dict", with: c_dict
+            fill_in "lottery_value", with: c_value
+            select c_reality
+            find("#lottery_default_check").check
+            find("#lottery_default_pickup").check
+            expect(page).to_not have_css("flip-opacity")
+            click_button "更新"
+          end
+          within "turbo-frame[id=lottery_#{simple_lot.id}]" do
+            expect(page).to have_content(c_name)
+            expect(page).to have_content(c_dict)
+            expect(page).to have_content(c_value)
+            expect(page).to have_content(c_reality)
+            expect(page).to_not have_css("color-blue")
+            expect(page).to_not have_css("flip-opacity")
+          end
         end
       end
     end

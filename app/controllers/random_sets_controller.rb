@@ -56,7 +56,6 @@ class RandomSetsController < ApplicationController
   # PATCH/PUT /random_sets/1 or /random_sets/1.json
   def update
     @random_set = RandomSet.find(params[:id])
-    @random_set.password = get_session_password()
     respond_to do |format|
       if @random_set.update(random_set_params)
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "を更新しました。" }

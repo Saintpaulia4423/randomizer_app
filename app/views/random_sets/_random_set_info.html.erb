@@ -44,7 +44,7 @@
             <% end %>
           </div>
         <% elsif params[:action] == "edit" || params[:action] == "update" %>
-          <div class="col mb-3">
+          <div class="col mb-3" id="random_set_edit_forms">
             <%= form_with model: @random_set do |f| %>
               <%= render "form_flash", object: f.object %>
               <div class="input-group mb-3">
@@ -55,6 +55,7 @@
                 <%= f.label :dict, class: "input-group-text" %>
                 <%= f.text_area :dict, class: "form-control" %>
               </div>
+              <%= f.hidden_field :password, value: cookies.encrypted[:password_token] %>
 
               <%= f.submit "更新", class: "btn btn-primary" %>
               <%= link_to "リセット", edit_random_set_path(@random_set),

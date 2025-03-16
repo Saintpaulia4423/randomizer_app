@@ -32,11 +32,13 @@
     </div>
     <div class="col-1 d-flex">
       <%= link_to "", edit_random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
+        id: "lottery_edit_#{lottery.id}",
         class: "btn btn-primary btn-small bi bi-pencil-square",
         data: { turbo_frame: "modal", controller: "tooltip", tooltip: "編集" }
       %>
       <%= button_to "", random_set_lottery_path(random_set_id: @random_set.id, id: lottery.id),
         method: :delete,
+        id: "lottery_delete_#{lottery.id}",
         class: "btn btn-danger btn-small bi bi-fire",
         form: { data: { turbo_confirm: "本当に削除しますか？" } },
         data: { controller: "tooltip", tooltip: "削除" }
