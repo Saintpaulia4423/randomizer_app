@@ -241,6 +241,7 @@ RSpec.describe "RandomSets", type: :system do
                 within target_lot[0] do
                   all("td[data-controller=flip]")[1].double_click
                 end
+                sleep 0.5
                 find(:xpath, "//button[@data-action='click->randomizer#checkedDrawTarget']").click
                 sleep 0.5
                 within result_table do
