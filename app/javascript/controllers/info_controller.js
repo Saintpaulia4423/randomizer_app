@@ -3,7 +3,10 @@ import { Toast } from "bootstrap"
 
 // Connects to data-controller="info"
 export default class extends Controller {
-  static targets = ["infoModal", "selectReality", "selectedReality", "value", "realityTranslation", "realityList", "pickupList", "selectedPickup"];
+  static targets = ["infoModal", "value", "realityTranslation", "selectReality",
+    "realityList", "selectedReality",
+    "pickupList", "selectedPickup",
+    "valueList", "selectedValue"];
   connect() {
     this.modal = new bootstrap.Modal(this.infoModalTarget);
     this.toast = new Toast(document.getElementById("toast"));
@@ -17,6 +20,14 @@ export default class extends Controller {
     this.switch = "pickup";
     this.modal.show();
   }
+  addValueModal() {
+    this.switch = "value";
+    this.modal.show()
+  }
+  reset(event) {
+    let value_list = Array.from(event.target.closest("turbo-frame").querySelectorAll("input[type='number']"));
+    value_list.map(element => element.value = element.dataset.defaultValue);
+  }
   add() {
     switch (this.switch) {
       case "reality":
@@ -25,10 +36,12 @@ export default class extends Controller {
       case "pickup":
         this.addPickup();
         break;
+      case "value":
+        this.addValue();
+        break;
       default:
-        console.error("info_controller: not set switch");
+        throw new Error("info_controller: not set switch");
     }
-    this.switch = "";
   }
   addReality() {
     let check = true;
@@ -40,7 +53,7 @@ export default class extends Controller {
       }
     });
     if (check)
-      this.addRealityHTML(this.selectRealityTarget.value, this.valueTarget.value);
+      this.addHTML(this.selectRealityTarget.value, this.valueTarget.value, "selectedReality", "realityFrame", "%");
   }
   addPickup() {
     let check = true;
@@ -52,7 +65,19 @@ export default class extends Controller {
       }
     });
     if (check)
-      this.addPickupHTML(this.selectRealityTarget.value, this.valueTarget.value);
+      this.addHTML(this.selectRealityTarget.value, this.valueTarget.value, "selectedPickup", "pickupFrame", "%");
+  }
+  addValue() {
+    let check = true;
+    this.selectedValueTargets.some(element => {
+      if (element.dataset.value == this.selectRealityTarget.value) {
+        this.viewToast("既に存在するレアリティ要素です。");
+        check = false;
+        return true;
+      }
+    });
+    if (check)
+      this.addHTML(this.selectRealityTarget.value, this.valueTarget.value, "selectedValue", "valueFrame", "個");
   }
   viewToast(message, title = "Warning") {
     const header = document.getElementById("toastHeader");
@@ -62,31 +87,29 @@ export default class extends Controller {
     body.innerText = message;
     this.toast.show();
   }
-  addRealityHTML(index, value) {
+  addHTML(index, value, targetName, dataRandomizerName, quantity) {
     // _infomation.html.erbよりレアリティリストの内容から抽出。
     let html = `
-      <span class="input-group-text" data-info-target="selectedReality" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
-      <input type="number" class="form-control" value=` + value + ` step="0.1" name="reality-` + index + `" data-randomizer-target="realityRate" data-reality=` + index + `>
-      <span class="input-group-text">%</span>
+      <span class="input-group-text" data-info-target="` + targetName + `" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
+      <input type="number" class="form-control" data-default-value=` + value + ` value=` + value + ` name="pick-` + index + `" data-randomizer-target="` + dataRandomizerName + `" data-reality=` + index + `>
+      <span class="input-group-text">`+ quantity + `</span>
     `
     const addhtml = document.createElement("div");
     addhtml.setAttribute("class", "input-group")
     addhtml.innerHTML = html;
-    this.realityListTarget.appendChild(addhtml);
-    this.toast.hide();
-    this.modal.hide();
-  }
-  addPickupHTML(index, value) {
-    // _infomation.html.erbよりレアリティリストの内容から抽出。
-    let html = `
-      <span class="input-group-text" data-info-target="selectedPickup" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
-      <input type="number" class="form-control" value=` + value + ` name="pick-` + index + `" data-randomizer-target="pickupRate" data-reality=` + index + `>
-      <span class="input-group-text">%</span>
-    `
-    const addhtml = document.createElement("div");
-    addhtml.setAttribute("class", "input-group")
-    addhtml.innerHTML = html;
-    this.pickupListTarget.appendChild(addhtml);
+    switch (dataRandomizerName) {
+      case "realityFrame":
+        this.realityListTarget.appendChild(addhtml);
+        break;
+      case "pickupFrame":
+        this.pickupListTarget.appendChild(addhtml);
+        break;
+      case "valueFrame":
+        this.valueListTarget.appendChild(addhtml);
+        break;
+      default:
+        throw new Error("info Error:不正なAddが行われました。")
+    }
     this.toast.hide();
     this.modal.hide();
   }

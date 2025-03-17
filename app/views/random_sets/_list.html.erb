@@ -1,5 +1,5 @@
 <%# listにターゲット情報を入れる。 %>
-<%= turbo_frame_tag :target_list do %>
+<%= turbo_frame_tag turbo_name do %>
   <div class="card">
     <div class="card-header">
       <div class="row">
@@ -8,6 +8,7 @@
         </div>
         <div class="col d-flex justify-content-end">
           <button class="btn btn-primary btn-small" data-action="info#<%= "add" + list.to_s.capitalize + "Modal" %>">追加</button>
+          <button class="btn btn-warning btn-small" data-action="info#reset">リセット</button>
         </div>
       </div>
     </div>
@@ -15,7 +16,7 @@
       <% target_list.each do |item| %>
         <div class="input-group">
           <span class="input-group-text" data-info-target="<%= "selected" + list.to_s.capitalize %>" data-value=<%= item["reality"] %>><%= get_realityname(item["reality"]) %></span>
-          <input type="number" class="form-control" value=<%= item["value"] %> name="<%= list.to_s + "-" + item["reality"].to_s %>" data-randomizer-target="<%= list.to_s + "Rate" %>" data-reality=<%= item["reality"] %>>
+          <input type="number" class="form-control" data-default-value=<%= item["value"] %> value=<%= item["value"] %> name="<%= list.to_s + "-" + item["reality"].to_s %>" data-randomizer-target="<%= list.to_s + "Frame" %>" data-reality=<%= item["reality"] %>>
           <span class="input-group-text"><%= quantity %></span>
         </div>
       <% end %>

@@ -10,16 +10,25 @@
             <%= render "list",  
               list: "reality", list_icon: "bi-eyedropper", list_name: "レアリティ抽選率", quantity: "%",
               tooltip_message: "設定されていないレアリティは余ってる確率を等分します。",
-              target_list: @random_set.rate
+              target_list: @random_set.rate, turbo_name: "pickList"
             %>
           </div>
           <div class="col-md">
             <%= render "list",  
               list: "pickup", list_icon: "bi-star-fill", list_name: "ピックアップ確率", quantity: "%",
               tooltip_message: "ピックアップ判定において利用されます。挙動については「ピックアップ抽選方式」を確認してください。",
-              target_list: @random_set.pickup_rate
+              target_list: @random_set.pickup_rate, turbo_name: "pickupList"
             %>
           </div>
+          <% if @random_set.pick_type == "box" %>
+            <div class="col-md">
+              <%= render "list",  
+                list: "value", list_icon: "bi-cikkectuib-fill", list_name: "レアリティ個数", quantity: "個",
+                tooltip_message: "レアリティ事態の抽選個数の制限です。",
+                target_list: @random_set.value_list, turbo_name: "valueList"
+              %>
+            </div>
+          <% end %>
         </div>
       <% else %>
         <span data-randomizer-target="infomation" data-setcheck="false">設定がありません。編集にて設定を追加してください。</span>
