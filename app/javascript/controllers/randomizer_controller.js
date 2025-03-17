@@ -5,7 +5,7 @@ import { Randomizer } from "randomizer"
 // Connects to data-controller="random-sets"
 export default class extends Controller {
   static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery",
-    "randomizerParmerter", "resultTable", "realityPickRate", "pickUpRate", "pickupedLottery",
+    "randomizerParmerter", "resultTable", "realityRate", "pickupRate", "pickupedLottery",
     "realityTranslation", "lotStyle", "pickupStyle"];
   TARGET_DRAW_DEAD_POINT = 10000000;
   connect() {
@@ -45,12 +45,12 @@ export default class extends Controller {
     this.randomizer.setResultTable(this.resultTableTarget);
 
     // レアリティ情報の提供
-    this.randomizer.setPickRate(this.realityPickRateTargets);
+    this.randomizer.setPickRate(this.realityRateTargets);
     this.randomizer.setRealityTranslation(this.realityTranslationTargets);
     this.randomizer.chkPickRate();
 
     // ピックアップ情報の提供
-    this.randomizer.setPickupList(this.pickUpRateTargets);
+    this.randomizer.setPickupList(this.pickupRateTargets);
     this.randomizer.chkPickupList();
 
     // スタイル情報の提供

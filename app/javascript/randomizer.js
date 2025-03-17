@@ -307,8 +307,13 @@ export class Randomizer {
     // 端数が生じた場合100の倍数に調整
     // 非設定項目用にそれまでの差分をsubProbabilityとして取得。
     this.sumProbability = this.matchedList.reduce((sum, element) => sum + element.value, 0);
+    // matchedListが鳴ければ非判定
     // unmatchedListが存在すればその確率を計算する。
-    if (this.unmatchedList != "") {
+    // unmatchedListも鳴ければsumで終わり
+    if (this.matchedList == "") {
+      this.subProbability = 100;
+      this.setRange(0, this.subProbability);
+    } else if (this.unmatchedList != "") {
       this.subProbability = Math.ceil(this.sumProbability / 100) * 100 - this.sumProbability;
       this.setRange(0, this.sumProbability + this.subProbability);
     } else {

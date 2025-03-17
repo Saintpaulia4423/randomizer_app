@@ -163,6 +163,7 @@ RSpec.describe "RandomSets", type: :system do
               end
               # 結果リセット
               find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
+              sleep 0.5
               within result_table do
                 expect(page).to_not have_content("100")
               end
@@ -221,7 +222,7 @@ RSpec.describe "RandomSets", type: :system do
             context "check有無の確認" do
               it "チェックありの指定数引きで指定数ひけるか（999）。また、チェックされてないlotは出現しないか" do
                 checked_lot = another_set_5lots[0]
-                find("#chkLottery-#{checked_lot.id}").click
+                find("#chkLottery-#{checked_lot.id}").check
                 fill_in "anyDrawNumber", with: draw_lots_num
                 find(:xpath, "//button[@data-action='click->randomizer#checkedSpecifiedDraw']").click
                 within result_table do
@@ -234,13 +235,14 @@ RSpec.describe "RandomSets", type: :system do
                 end
               end
               it "チェックありの指定引きで指定されたものが引けるか" do
-                find("#chkLottery-#{another_set_5lots[0].id}").click
-                find("#chkLottery-#{another_set_5lots[1].id}").click
-                find("#chkLottery-#{another_set_5lots[2].id}").click
+                find("#chkLottery-#{another_set_5lots[0].id}").check
+                find("#chkLottery-#{another_set_5lots[1].id}").check
+                find("#chkLottery-#{another_set_5lots[2].id}").check
                 within target_lot[0] do
                   all("td[data-controller=flip]")[1].double_click
                 end
                 find(:xpath, "//button[@data-action='click->randomizer#checkedDrawTarget']").click
+                sleep 0.5
                 within result_table do
                   expect(page).to have_content(another_set_5lots[0].name)
                   expect(page).to_not have_content(another_set_5lots[3].name)
@@ -250,9 +252,10 @@ RSpec.describe "RandomSets", type: :system do
 
               it "チェックなしの指定数引きで指定数ひけるか（999）。また、チェックされているlotは出現しないか" do
                 checked_lot = another_set_5lots[0]
-                find("#chkLottery-#{checked_lot.id}").click
+                find("#chkLottery-#{checked_lot.id}").check
                 fill_in "anyDrawNumber", with: draw_lots_num
                 find(:xpath, "//button[@data-action='click->randomizer#uncheckedSpecifiedDraw']").click
+                expect(find("#chkLottery-#{checked_lot.id}")).to be_checked
                 within result_table do
                   expect(page).to_not have_content(checked_lot.name)
                   expect(page).to have_content(another_set_5lots[1].name)
@@ -262,14 +265,13 @@ RSpec.describe "RandomSets", type: :system do
                 end
               end
               it "チェックなしの指定引きで指定されたものが引けるか" do
-                find("#chkLottery-#{another_set_5lots[0].id}").click
-                sleep 0.1
-                find("#chkLottery-#{another_set_5lots[1].id}").click
-                sleep 0.1
-                find("#chkLottery-#{another_set_5lots[2].id}").click
+                find("#chkLottery-#{another_set_5lots[0].id}").check
+                find("#chkLottery-#{another_set_5lots[1].id}").check
+                find("#chkLottery-#{another_set_5lots[2].id}").check
                 within target_lot[3] do
                   all("td[data-controller=flip]")[1].double_click
                 end
+                sleep 0.5
                 find(:xpath, "//button[@data-action='click->randomizer#uncheckedDrawToTarget']").click
                 within result_table do
                   expect(page).to_not have_content(another_set_5lots[0].name)
@@ -550,7 +552,7 @@ RSpec.describe "RandomSets", type: :system do
               it "ピックアップされたものが特に抽選されるか（失敗する可能性あり）" do
                 fill_in "anyDrawNumber", with: draw_lots_num * 10
                 # 有意に大きくするためピックアップ比率90:10とする
-                fill_in "pick-#{add_lot_default_pickup.reality}", with: 90
+                fill_in "pickup-#{add_lot_default_pickup.reality}", with: 90
                 find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
                 within result_table do
                   results = all("tr")
@@ -631,7 +633,7 @@ RSpec.describe "RandomSets", type: :system do
             end
             within find("div[data-info-target=pickupList]") do
               expect(page).to have_content("★#{another_set.pickup_rate[0]["reality"]}")
-              expect(find_field("pick-#{another_set.pickup_rate[0]["reality"]}").value).to have_content(another_set.pickup_rate[0]["value"])
+              expect(find_field("pickup-#{another_set.pickup_rate[0]["reality"]}").value).to have_content(another_set.pickup_rate[0]["value"])
             end
           end
         end

@@ -86,6 +86,6 @@ class RandomSetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def random_set_params
-      params.require(:random_set).permit(:name, :dict, :data, :password)
+      params.require(:random_set).permit(:name, :dict, :password, :pick_type, :rate, :pickup_rate, :value)
     end
 end
