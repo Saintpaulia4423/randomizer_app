@@ -35,7 +35,7 @@
   </div>
   <div id="lotteries">
     <% @lotteries.each_with_index do |lottery, index| %>
-      <div class=" <%= "bg-body-secondary" if index.even? %>">
+      <div class="<%= "bg-body-secondary" if index.even? %>">
         <%= render partial: "lotteries/edit_lottery", locals: { lottery: lottery, index: index } %>
       </div>
     <% end %>

@@ -54,6 +54,10 @@ export default class extends Controller {
         let cell1 = cellA.children[0].classList.length;
         let cell2 = cellB.children[0].classList.length;
         return (cell2 - cell1) * multiplier;
+      } else if (type === "reverse_number") {
+        let cell1 = cellA.children[0].dataset.value;
+        let cell2 = cellB.children[0].dataset.value;
+        return (cell2 - cell1) * multiplier * -1;
       } else {
         let cell1 = cellA.innerText;
         let cell2 = cellB.innerText;

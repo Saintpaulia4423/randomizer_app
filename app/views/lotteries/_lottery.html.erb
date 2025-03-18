@@ -23,12 +23,8 @@
   </td>
   <td><%= lottery.name %></td>
   <% if defined?(@random_set) != nil then %>
-    <td data-value=<%= lottery.value %> data-default-value=<%= lottery.value %>>
-      <% if lottery.value == -1 then %>
-        <span class="bi bi-infinity"></span>
-      <% else %>
-        <%= lottery.value %>
-      <% end %>
+    <td>
+      <span data-value=<%= lottery.value %> data-default-value=<%= lottery.value %>, class='<%= "bi bi-infinity" if lottery.value == -1 %>'><%= lottery.value if lottery.value != -1 %></span>
     </td>
   <% end %>
   <td><%= lottery.dict %></td>

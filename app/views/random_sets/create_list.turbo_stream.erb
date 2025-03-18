@@ -1,0 +1,2 @@
+<%= turbo_stream.append "flashes", partial: "flash" %>
+<%= turbo_stream.replace get_list_parameter(@target_list)["turbo_name"], partial: "list", locals: { list_object: get_list_parameter(@target_list)} %>

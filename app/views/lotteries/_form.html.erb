@@ -15,7 +15,7 @@
     </div>
     <div class="input-group">
       <%= f.label :value, class: "input-group-text" %>
-      <%= f.number_field :value, class: "form-control" %>
+      <%= f.number_field :value, class: "form-control", min: -1 %>
     </div>
     <div class="form-text mb-3">
       ※-1は無限として扱います。

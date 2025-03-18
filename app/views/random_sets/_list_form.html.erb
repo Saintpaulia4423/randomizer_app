@@ -1,11 +1,28 @@
 <%= turbo_frame_tag "form_list" do %>
   <%= form_with(model: @random_set, url: @action_path, method: :new, html: { data: { action: "turbo:submit-end->modal#close" } }) do |f| %>
-    <div class="input-group mb-3">
+    <div class="input-group mb-2">
       <%= f.label :reality, class: "input-group-text" %>
-      <%= f.select :reality, get_realityname_list.map { |list| [get_realityname(list), list] }, {}, class: "form-select" %>
+      <% if ["new"].include?(action) %>
+        <%= f.select :reality,
+          get_realityname_list.reject {
+            |item| @have_list.include?(item)
+          }.map { 
+            |list| [get_realityname(list), list] }, {}, class: "form-select w-25-" 
+        %>
+      <% else ["edit"].include?(action) %>
+        <%= f.hidden_field :reality, value: params[:target_list] %>
+      <% end %>
+
+      <%= f.label :value, class:"input-group-text" %>
+      <%= f.number_field :value, class: "form-control", value: get_list_parameter(params[:target_list])["min_value"] ? -1 : 0 , min: get_list_parameter(params[:target_list])["min_value"] ? -1 : 0 %>
+
     </div>
-    <%= f.label :value, class:"input-group-text" %>
-    <%= f.number_field :value %>
+    <% if get_list_parameter(params[:target_list])["min_value"] %>
+      <div class="form-text mb-3">※-1は無限として扱います。</div>
+    <% end %>
+    <%= f.hidden_field :target_list, value: params[:target_list] %>
+
+    <%= f.submit submit_button, class: "btn btn-primary" %>
 
   <% end %>
 <% end %>

@@ -1,5 +1,5 @@
 class RandomSetsController < ApplicationController
-  before_action :check_loggin?, only: [ :edit ]
+  before_action :check_loggin?, only: [ :edit, :create_list, :update_list, :destroy_list ]
 
   # GET /random_sets or /random_sets.json
   def index
@@ -67,27 +67,54 @@ class RandomSetsController < ApplicationController
     end
   end
 
-  def create_list
+
+  # レアリティ抽選などのリスト用処理
+  def new_list
+    @action_path = create_list_path
     @random_set = RandomSet.find(params[:id])
     case params[:target_list]
       when "reality_list"
-        @random_set.rate.push({"reality" => params[:reality], "value" => params[:value] })
+        @have_list =  @random_set.rate.map { |item| item["reality"] }
       when "pickup_list"
-        @random_set.pickup_list({"reality" => params[:reality], "value" => params[:value] })
+        @have_list =  @random_set.pickup_rate.map { |item| item["reality"] }
       when "value_list"
-        @random_set.value_list({"reality" => params[:reality], "value" => params[:value] })
+        @have_list = @random_set.value_list.map { |item| item["reality"] }
+    end
+  end
+
+  def create_list
+    @random_set = RandomSet.find(params[:id])
+    case params[:random_set][:target_list]
+      when "reality_list"
+        @random_set.rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+        @target_list = params[:random_set][:target_list]
+      when "pickup_list"
+        @random_set.pickup_rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+        @target_list = params[:random_set][:target_list]
+      when "value_list"
+        @random_set.value_list.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+        @target_list = params[:random_set][:target_list]
     end
 
     respond_to do |format|
       if @random_set.save
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "に追加されました。" }
-        forget.html { render "new_list" }
+        format.html { render "create_list" }
       else
-        # format.turbo_stream { flash.now.alert = }
+        format.turbo_stream { flash.now.alert = "追加に失敗しました。" }
+        format.html { render "new_list", status: :unprocessable_entity }
       end
     end
+end
 
-    
+  def edit_list
+    @random_set = RandomSet.find(params[:id])
+    @action_path = update_list_path
+  end
+  def update_list
+    fae.fafae
+  end
+  def destroy_list
   end
 
   # DELETE /random_sets/1 or /random_sets/1.json

@@ -4,29 +4,17 @@
       <i class="bi bi-bar-chart">セット設定</i>
     </div>
     <div class="card-body">
-      <% if chk_parameter(@random_set) || params[:action] == "edit" %>
+      <% if chk_parameter(@random_set) || list_edit_action.include?(params[:action]) == "edit" %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
           <div class="col-md">
-            <%= render "list",  
-              list: "reality", list_icon: "bi-eyedropper", list_name: "レアリティ抽選率", quantity: "%",
-              tooltip_message: "設定されていないレアリティは余ってる確率を等分します。",
-              target_list: @random_set.rate, turbo_name: "pickList"
-            %>
+            <%= render "list", list_object: get_list_parameter("reality_list") %>
           </div>
           <div class="col-md">
-            <%= render "list",  
-              list: "pickup", list_icon: "bi-star-fill", list_name: "ピックアップ確率", quantity: "%",
-              tooltip_message: "ピックアップ判定において利用されます。挙動については「ピックアップ抽選方式」を確認してください。",
-              target_list: @random_set.pickup_rate, turbo_name: "pickupList"
-            %>
+            <%= render "list", list_object: get_list_parameter("pickup_list") %>
           </div>
-          <% if @random_set.pick_type == "box" || params[:action] == "edit" %>
+          <% if @random_set.pick_type == "box" || list_edit_action.include?(params[:action]) %>
             <div class="col-md">
-              <%= render "list",  
-                list: "value", list_icon: "bi-cikkectuib-fill", list_name: "レアリティ個数", quantity: "個",
-                tooltip_message: "レアリティ事態の抽選個数の制限です。",
-                target_list: @random_set.value_list, turbo_name: "valueList"
-              %>
+              <%= render "list", list_object: get_list_parameter("value_list") %>
             </div>
           <% end %>
         </div>

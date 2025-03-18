@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
-  resources :random_sets do
+  resources :random_sets  do
     resources :lotteries, only: [:new, :create, :index, :edit, :update, :destroy]
   end
+  get "/random_sets/:id/new_list", to: "random_sets#new_list", as: "new_list"
+  post "/random_sets/:id/create_list", to: "random_sets#create_list", as: "create_list"
+  get "/random_sets/:id/edit_list", to: "random_sets#edit_list", as: "edit_list"
+  post "/random_sets/:id/update_list", to: "random_sets#update_list", as: "update_list"
+  delete "/random_sets/:id/destroy_list", to: "random_sets#destroy_list", as: "destroy_list"
   get "/login/:random_set_id", to: "session#new", as: "login"
   post "/login/:random_set_id", to: "session#create", as: "create_login"
   delete "/logout/:random_set_id", to: "session#destroy", as: "logout"

@@ -20,7 +20,7 @@
           <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">レアリティ</th>
           <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">名前</th>   
           <% if defined?(@random_set) != nil %>
-            <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">個数</th>
+            <th class="sortable" data-sort="reverse_number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">個数</th>
           <% end %>
           <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">内容</th>     
         </tr>

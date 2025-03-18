@@ -1,2 +1,6 @@
 <%= turbo_stream.append "flashes", partial: "flash" %>
-<%= turbo_stream.append "lotteries", partial: "edit_lottery", locals: { lottery: @lottery } %>
+<%= turbo_stream.append "lotteries"  do %>
+  <div class="<%= "bg-body-secondary" if (@random_set.lotteries.length - 1).even? %>">
+    <%= render partial: "lotteries/edit_lottery", locals: { lottery: @lottery } %>
+  </div>
+<% end %>
