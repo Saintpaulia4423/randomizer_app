@@ -41,16 +41,16 @@ class RandomSetsController < ApplicationController
   # POST /random_sets or /random_sets.json
   def create
     @random_set = RandomSet.new(random_set_params)
-
-    respond_to do |format|
       if @random_set.save
-        format.html { redirect_to @random_set, notice: "Random set was successfully created." }
-        format.json { render :show, status: :created, location: @random_set }
+        reset_session
+        remember(@random_set, params[:random_set][:password])
+        log_in(@random_set)
+        render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@random_set))
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @random_set.errors, status: :unprocessable_entity }
+        respond_to do |format|
+          format.html { render :new, status: :unprocessable_entity }
+        end
       end
-    end
   end
 
   # PATCH/PUT /random_sets/1 or /random_sets/1.json
@@ -61,11 +61,33 @@ class RandomSetsController < ApplicationController
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "を更新しました。" }
         format.html { render "update" }
       else
-        flash.now.alert = "更新に失敗しました。"
-        format.turbo_stream { render "edit", status: :unprocessable_entity }
+        format.turbo_stream { flash.now.alert = "更新に失敗しました。" }
         format.html { render "edit", status: :unprocessable_entity }
       end
     end
+  end
+
+  def create_list
+    @random_set = RandomSet.find(params[:id])
+    case params[:target_list]
+      when "reality_list"
+        @random_set.rate.push({"reality" => params[:reality], "value" => params[:value] })
+      when "pickup_list"
+        @random_set.pickup_list({"reality" => params[:reality], "value" => params[:value] })
+      when "value_list"
+        @random_set.value_list({"reality" => params[:reality], "value" => params[:value] })
+    end
+
+    respond_to do |format|
+      if @random_set.save
+        format.turbo_stream { flash.now.notice = @random_set.name.to_s + "に追加されました。" }
+        forget.html { render "new_list" }
+      else
+        # format.turbo_stream { flash.now.alert = }
+      end
+    end
+
+    
   end
 
   # DELETE /random_sets/1 or /random_sets/1.json

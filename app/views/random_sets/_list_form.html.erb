@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "form_list" do %>
+  <%= form_with(model: @random_set, url: @action_path, method: :new, html: { data: { action: "turbo:submit-end->modal#close" } }) do |f| %>
+    <div class="input-group mb-3">
+      <%= f.label :reality, class: "input-group-text" %>
+      <%= f.select :reality, get_realityname_list.map { |list| [get_realityname(list), list] }, {}, class: "form-select" %>
+    </div>
+    <%= f.label :value, class:"input-group-text" %>
+    <%= f.number_field :value %>
+
+  <% end %>
+<% end %>

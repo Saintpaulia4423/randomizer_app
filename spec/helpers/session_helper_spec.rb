@@ -27,14 +27,14 @@ RSpec.describe SessionHelper, type: :helper do
       end
       context "remember" do
         it "remmberで記憶されるか" do
-          helper.remember(set)
+          helper.remember(set, "password")
           expect(helper.cookies[:session_token]).to_not eq ""
           expect(helper.cookies[:password_token]).to_not eq ""
         end
       end
       context "current_set_session" do
         it "通常のログイン挙動によりログインされるか" do
-          helper.remember(set)
+          helper.remember(set, "password")
           helper.log_in(set)
           expect(helper.logged_in?).to eq true
         end

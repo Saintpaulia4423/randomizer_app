@@ -4,7 +4,7 @@
       <i class="bi bi-bar-chart">セット設定</i>
     </div>
     <div class="card-body">
-      <% if chk_parameter(@random_set) %>
+      <% if chk_parameter(@random_set) || params[:action] == "edit" %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
           <div class="col-md">
             <%= render "list",  
@@ -20,7 +20,7 @@
               target_list: @random_set.pickup_rate, turbo_name: "pickupList"
             %>
           </div>
-          <% if @random_set.pick_type == "box" %>
+          <% if @random_set.pick_type == "box" || params[:action] == "edit" %>
             <div class="col-md">
               <%= render "list",  
                 list: "value", list_icon: "bi-cikkectuib-fill", list_name: "レアリティ個数", quantity: "個",

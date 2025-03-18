@@ -7,7 +7,7 @@ class SessionController < ApplicationController
     @current_set = RandomSet.find(params[:random_set_id])
     if session[:set_id] = @current_set.id && @current_set&.authenticate(params[:session][:password])
       reset_session
-      remember(@current_set)
+      remember(@current_set, params[:session][:password])
       log_in @current_set
       render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set))
     else

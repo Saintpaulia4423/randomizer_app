@@ -1,7 +1,6 @@
 class RandomSet < ApplicationRecord
   has_many :lotteries
   validates :name, presence: :true, length: {minimum:3, maximum:255}
-  validates :password, presence: :ture
   validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
   validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }
   validate :rate_pickup_rate_with_array_into_fixed_hash

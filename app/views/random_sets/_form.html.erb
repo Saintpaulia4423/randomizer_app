@@ -1,16 +1,5 @@
 <%= form_with(model: random_set) do |form| %>
-  <% if random_set.errors.any? %>
-    <div style="color: red">
-      <h4><%= pluralize(random_set.errors.count, "error") %> prohibited this random_set from being saved:</h4>
-
-      <ul>
-        <% random_set.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render "form_flash", object: form.object%>
   <div class="input-group mb-3">
     <%= form.label :name, class: "input-group-text", id: "random_set_name" %>
     <%= form.text_field :name, class: "form-control", placeholder: "3文字～255文字まで", aria: { describedby: "random_set_name" } %>

@@ -42,7 +42,6 @@ class LotteriesController < ApplicationController
         format.html { redirect_to edit_random_set_path, notice: @lottery.name.to_s + "は更新されました。" }
       else
         @action_path = random_set_lottery_path
-        puts "miss lot"
         format.turbo_stream { render "edit", status: :unprocessable_entity }
         format.html { render "edit", status: :unprocessable_entity }
       end
