@@ -93,19 +93,22 @@ export default class extends Controller {
       <span class="input-group-text" data-info-target="` + targetName + `" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
       <input type="number" class="form-control" data-default-value=` + value + ` value=` + value + ` name="pick-` + index + `" data-randomizer-target="` + dataRandomizerName + `" data-reality=` + index + `>
       <span class="input-group-text">`+ quantity + `</span>
-    `
+    `;
     const addhtml = document.createElement("div");
-    addhtml.setAttribute("class", "input-group")
+    const addhtml2 = document.createElement("div");
+    addhtml.setAttribute("class", "input-group col")
+    addhtml2.setAttribute("class", "row mw-100");
     addhtml.innerHTML = html;
+    addhtml2.appendChild(addhtml)
     switch (dataRandomizerName) {
       case "realityFrame":
-        this.realityListTarget.appendChild(addhtml);
+        this.realityListTarget.appendChild(addhtml2);
         break;
       case "pickupFrame":
-        this.pickupListTarget.appendChild(addhtml);
+        this.pickupListTarget.appendChild(addhtml2);
         break;
       case "valueFrame":
-        this.valueListTarget.appendChild(addhtml);
+        this.valueListTarget.appendChild(addhtml2);
         break;
       default:
         throw new Error("info Error:不正なAddが行われました。")

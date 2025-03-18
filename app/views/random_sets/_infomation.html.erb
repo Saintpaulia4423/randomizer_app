@@ -4,7 +4,7 @@
       <i class="bi bi-bar-chart">セット設定</i>
     </div>
     <div class="card-body">
-      <% if chk_parameter(@random_set) || list_edit_action.include?(params[:action]) == "edit" %>
+      <% if chk_parameter(@random_set) || list_edit_action.include?(params[:action]) %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
           <div class="col-md">
             <%= render "list", list_object: get_list_parameter("reality_list") %>

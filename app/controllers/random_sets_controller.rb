@@ -84,16 +84,14 @@ class RandomSetsController < ApplicationController
 
   def create_list
     @random_set = RandomSet.find(params[:id])
+    @target_list = params[:random_set][:target_list]
     case params[:random_set][:target_list]
       when "reality_list"
         @random_set.rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
-        @target_list = params[:random_set][:target_list]
       when "pickup_list"
         @random_set.pickup_rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
-        @target_list = params[:random_set][:target_list]
       when "value_list"
         @random_set.value_list.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
-        @target_list = params[:random_set][:target_list]
     end
 
     respond_to do |format|
@@ -112,9 +110,73 @@ end
     @action_path = update_list_path
   end
   def update_list
-    fae.fafae
+    @random_set = RandomSet.find(params[:id])
+    @target_list = params[:random_set][:target_list]
+    begin
+      case params[:random_set][:target_list]
+        when "reality_list"
+          target_data = @random_set.rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+          target_data[0]["value"] = params[:random_set][:value].to_i
+        when "pickup_list"
+          target_data = @random_set.pickup_rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+          target_data[0]["value"] = params[:random_set][:value].to_i
+        when "value_list"
+          target_data = @random_set.value_list.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+          target_data[0]["value"] = params[:random_set][:value].to_i
+      end
+    rescue
+      respond_to do |format|
+        format.turbo_stream { flash.now.alert = "不正な値が書き込まれたため、失敗しました。" }
+        format.html { render "edit_list", status: :unprocessable_entity }
+        return 0
+      end
+    end
+    
+    respond_to do |format|
+      if @random_set.save
+        format.turbo_stream { flash.now.notice = @random_set.name.to_s + "に追加されました。" }
+        format.html { render "update_list" }
+      else
+        format.turbo_stream { flash.now.alert = "更新に失敗しました。" }
+        format.html { render "edit_list", status: :unprocessable_entity }
+      end
+    end
+
   end
   def destroy_list
+    @random_set = RandomSet.find(params[:id])
+    @target_list = params[:target_list]
+    begin
+      case params[:target_list]
+        when "reality_list"
+          target_index = @random_set.rate.find_index { |item| item["reality"] == params[:reality].to_i }
+          @random_set.rate.delete_at(target_index)
+        when "pickup_list"
+          target_index = @random_set.pickup_rate.find_index { |item| item["reality"] == params[:reality].to_i }
+          @random_set.pickup_rate.delete_at(target_index)
+        when "value_list"
+          target_index = @random_set.value_list.find_index { |item| item["reality"] == params[:reality].to_i }
+          @random_set.value_list.delete_at(target_index)
+      end
+    rescue
+      respond_to do |format|
+        format.turbo_stream { flash.now.alert = "不正な値が書き込まれたため、失敗しました。" }
+        format.html { render "destroy_list", status: :unprocessable_entity }
+        return 0
+      end
+    end
+    puts target_index
+
+    # テスト実装のため削除なし
+    respond_to do |format|
+      if @random_set.save
+        format.turbo_stream { flash.now.notice = @random_set.name.to_s + "から削除されました。" }
+        format.html { render "destroy_list" }
+      else
+        format.turbo_stream { flash.now.alert = "削除に失敗しました。" }
+        format.html { render "destroy_list", status: :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /random_sets/1 or /random_sets/1.json

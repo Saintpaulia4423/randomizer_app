@@ -1,3 +1,3 @@
 <%= render "modal", title: "レアリティの追加" do %>
-  <%= render "list_form", action: "edit", target_list: target %>
+  <%= render "list_form", action: "edit", submit_button: "更新", target: params[:list_reality], reality_value: params[:reality_value] %>
 <% end %>

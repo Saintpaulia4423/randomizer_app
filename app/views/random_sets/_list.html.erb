@@ -25,16 +25,17 @@
           <div class="input-group col">
             <span class="input-group-text" data-info-target="<%= "selected" + list_object["list"].to_s.capitalize %>" data-value=<%= item["reality"] %>><%= get_realityname(item["reality"]) %></span>
             <input type="number" class="form-control" data-default-value=<%= item["value"] %> value=<%= item["value"] %> min=<%= list_object["min_value"] ? -1 : 0 %>
-              name="<%= list_object["list"].to_s + "-" + item["reality"].to_s %>" data-randomizer-target="<%= list_object["list"].to_s + "Frame" %>" data-reality=<%= item["reality"] %>>
+              name="<%= list_object["list"].to_s + "-" + item["reality"].to_s %>" data-randomizer-target="<%= list_object["list"].to_s + "Frame" %>" data-reality=<%= item["reality"] %> <%= "disabled" if list_edit_action.include?(params[:action]) %> >
             <span class="input-group-text"><%= list_object["quantity"] %></span>
           </div>
           <% if list_edit_action.include?(params[:action]) %>
             <div class="col d-flex flex-grow-0 p-0">
-              <%= link_to "", list_object["edit_path"],
+              <%= link_to "", (list_object["edit_path"] + "&list_reality=" + item["reality"].to_s + "&reality_value=" + item["value"].to_s ),
                 class:"btn btn-primary bi bi-pencil-square",
                 data: { turbo_frame: "modal", controller: "tooltip", tooltip: "編集" }
               %>
-              <%= button_to "", list_object["destroy_path"], 
+              <%= button_to "", (list_object["destroy_path"] + "&reality=" + item["reality"].to_s ),
+                method: :delete,
                 class:"btn btn-danger bi bi-fire",
                 form: { data: { turbo_confirm: "本当に削除しますか？"} },
                 data: { controller: "tooltip", tooltip: "削除" }
