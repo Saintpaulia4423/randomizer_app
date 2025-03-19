@@ -31,12 +31,12 @@
           <% if list_edit_action.include?(params[:action]) %>
             <div class="col d-flex flex-grow-0 p-0">
               <%= link_to "", (list_object["edit_path"] + "&list_reality=" + item["reality"].to_s + "&reality_value=" + item["value"].to_s ),
-                class:"btn btn-primary bi bi-pencil-square",
+                class:"btn btn-primary bi bi-pencil-square rounded-start-pill",
                 data: { turbo_frame: "modal", controller: "tooltip", tooltip: "編集" }
               %>
               <%= button_to "", (list_object["destroy_path"] + "&reality=" + item["reality"].to_s ),
                 method: :delete,
-                class:"btn btn-danger bi bi-fire",
+                class:"btn btn-danger bi bi-fire rounded-end-circle rounded-start-0",
                 form: { data: { turbo_confirm: "本当に削除しますか？"} },
                 data: { controller: "tooltip", tooltip: "削除" }
               %>
