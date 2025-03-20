@@ -81,14 +81,11 @@
               <div class="input-group mb-3">
                 <%= f.label :dict, class: "input-group-text" %>
                 <%= f.text_area :dict, class: "form-control" %>
-              </div>              
+              </div>
               <div class="input-group mb-3 w-25">
                 <%= f.label :pick_type, class: "input-group-text" %>
                 <%= f.select :pick_type, [[get_infomation_conversion("mix"), "mix"], [get_infomation_conversion("box"), "box"]], {}, class: "form-select" %>
               </div>
-
-              <%= f.hidden_field :password, value: cookies.encrypted[:password_token] %>
-
               <%= f.submit "更新", class: "btn btn-primary" %>
               <%= link_to "リセット", edit_random_set_path(@random_set),
                 class: "btn btn-danger",

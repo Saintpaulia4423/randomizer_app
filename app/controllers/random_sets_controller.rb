@@ -1,5 +1,5 @@
 class RandomSetsController < ApplicationController
-  before_action :check_loggin?, only: [ :edit, :create_list, :update_list, :destroy_list ]
+  before_action :check_loggin?, only: [ :edit, :update, :create_list, :update_list, :destroy_list ]
 
   # GET /random_sets or /random_sets.json
   def index
@@ -197,6 +197,6 @@ end
 
     # Only allow a list of trusted parameters through.
     def random_set_params
-      params.require(:random_set).permit(:name, :dict, :password, :pick_type, :rate, :pickup_rate, :value)
+      params.require(:random_set).permit(:name, :dict, :password, :pick_type, :rate, :pickup_rate, :value, :default_value)
     end
 end

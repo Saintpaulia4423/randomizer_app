@@ -7,11 +7,7 @@
     <% end %>
   </td>
   <td data-controller="flip" data-action="dblclick->flip#flip">
-    <% if lottery.default_pickup == true then %>
-      <span class="bi bi-stars" data-pickup-id=<%= lottery.id %>></span>
-    <% else %>
-      <span class="bi bi-stars flip-opacity" data-pickup-id=<%= lottery.id %>></span>
-    <% end %>
+    <span class="bi bi-stars <%= lottery.default_pickup == true ? "" : "flip-opacity" %>" data-pickup-id=<%= lottery.id %>></span>
   </td>
   <% if defined?(@random_set) != nil && params[:action] == "show" then %>
     <td data-controller="flip" data-action="dblclick->flip#flip">
@@ -24,7 +20,12 @@
   <td><%= lottery.name %></td>
   <% if defined?(@random_set) != nil then %>
     <td>
-      <span data-value=<%= lottery.value %> data-default-value=<%= lottery.value %>, class='<%= "bi bi-infinity" if lottery.value == -1 %>'><%= lottery.value if lottery.value != -1 %></span>
+      <span data-value=<%= lottery.value %> data-default-value=<%= lottery.value %>
+        class='<%= "bi bi-infinity" if lottery.value == -1 %>' data-randomizer-target="lotteriesValue"
+        data-action="dblclick->number-change#change" data-type="value"
+      >
+        <%= lottery.value if lottery.value != -1 %>
+      </span>
     </td>
   <% end %>
   <td><%= lottery.dict %></td>

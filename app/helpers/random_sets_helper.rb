@@ -73,7 +73,7 @@ module RandomSetsHelper
           "list_icon" => "bi-briefcase-fill",
           "list_name" => "レアリティ別個数",
           "quantity" => "個",
-          "tooltip_message" => "レアリティ事態の抽選個数の制限です。",
+          "tooltip_message" => "レアリティ毎の抽選個数の制限です。",
           "target_list" => @random_set.value_list,
           "turbo_name" => "valueList",
           "min_value" => true,

@@ -11,27 +11,57 @@
 
     <%# 結果表示 %>
     <%= render "result" %>
-
-    <%# 要素確認 %>
-    <div class="card mt-3">
-      <div class="card-header">
-        <i class="bi bi-database">セット内容</i>
-      </div>
-      <div class="card-body">
-        <ul class="list-unstyled">
-          <%= render "randomset_lotteries" %>
-        </ul>
-      </div>
-    </div>
-    <%# トースト要素 %>
-    <div class="toast-container position-fixed top-0 end-0 p-3" >
-      <div class="toast" role="alert" aria-atomic="true" id="toast">
-        <div class="toast-header">
-          <strong class="me-auto" id="toastHeader"></strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div data-controller="number-change">
+      <%# 要素確認 %>
+      <div class="card mt-3">
+        <div class="card-header">
+          <i class="bi bi-database">セット内容</i>
         </div>
-        <div class="toast-body">
-          <span id="toastBody"></span>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <%= render "randomset_lotteries" %>
+          </ul>
+        </div>
+      </div>
+      <%# トースト要素 %>
+      <div class="toast-container position-fixed top-0 end-0 p-3" >
+        <div class="toast" role="alert" aria-atomic="true" id="toast">
+          <div class="toast-header">
+            <strong class="me-auto" id="toastHeader"></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            <span id="toastBody"></span>
+          </div>
+        </div>
+      </div>
+      <%# モーダル要素  %>
+      <div class="modal fade" aria-hidden="true" data-number-change-target="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">個数の変更</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="alert alert-danger d-none" data-number-change-target="validate"></div>
+                <div class="col-md-6">
+                    <label class="form-label">現在の初期値</label>
+                    <input type="number" min=-1 class="form-control" data-number-change-target="inputDefaultValue" value=0>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">現在の個数</label>
+                    <input type="number" min=-1 class="form-control" data-number-change-target="inputValue" value=0>
+                </div>
+              </div>
+              <div class="form-text">※一時的な追加となります。更新により初期化されます。</div>
+              <div class="form-text">※-1は無限として扱います。<br>　初期値が無限の場合、現在の個数は無視されます。</div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-action="number-change#submit">更新</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

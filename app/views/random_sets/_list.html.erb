@@ -9,6 +9,9 @@
         <div class="col d-flex justify-content-end">
           <% if params[:action] == "show" %>
             <button class="btn btn-primary btn-small" data-action="info#<%= "add" + list_object["list"].to_s.capitalize + "Modal" %>">追加</button>
+            <% if list_object["list"] == "value" %>
+              <button class="btn btn-info btn-small" data-action="info#fix" data-controller="tooltip" data-tooltip="現在値を初期値に設定します">固定</button>
+            <% end %>
             <button class="btn btn-warning btn-small" data-action="info#reset">リセット</button>
           <% elsif list_edit_action.include?(params[:action]) %>
             <%= link_to "追加", list_object["new_path"],
@@ -20,28 +23,29 @@
       </div>
     </div>
     <div class="card-body" data-info-target="<%= list_object["list"].to_s + "List" %>">
+      <% if list_object["list"] == "value" %>
+        <div class="form-text">※-1は無限として扱います。</div>
+      <% end %>
       <% list_object["target_list"].each do |item| %>
         <div class="row mw-100">
-          <div class="input-group col">
+          <div class="input-group col pe-0">
             <span class="input-group-text" data-info-target="<%= "selected" + list_object["list"].to_s.capitalize %>" data-value=<%= item["reality"] %>><%= get_realityname(item["reality"]) %></span>
-            <input type="number" class="form-control" data-default-value=<%= item["value"] %> value=<%= item["value"] %> min=<%= list_object["min_value"] ? -1 : 0 %>
+            <input type="number" class="form-control" data-default-value=<%= item["value"] %> value=<%= item["value"] %> min=<%= list_object["min_value"] ? -1 : 0 %> step=<%= list_object["list"] == "value" ? 1 : 0.1 %>
               name="<%= list_object["list"].to_s + "-" + item["reality"].to_s %>" data-randomizer-target="<%= list_object["list"].to_s + "Frame" %>" data-reality=<%= item["reality"] %> <%= "disabled" if list_edit_action.include?(params[:action]) %> >
             <span class="input-group-text"><%= list_object["quantity"] %></span>
-          </div>
-          <% if list_edit_action.include?(params[:action]) %>
-            <div class="col d-flex flex-grow-0 p-0">
+            <% if list_edit_action.include?(params[:action]) %>
               <%= link_to "", (list_object["edit_path"] + "&list_reality=" + item["reality"].to_s + "&reality_value=" + item["value"].to_s ),
-                class:"btn btn-primary bi bi-pencil-square rounded-start-pill",
+                class:"btn btn-primary bi bi-pencil-square rounded-0",
                 data: { turbo_frame: "modal", controller: "tooltip", tooltip: "編集" }
               %>
               <%= button_to "", (list_object["destroy_path"] + "&reality=" + item["reality"].to_s ),
                 method: :delete,
-                class:"btn btn-danger bi bi-fire rounded-end-circle rounded-start-0",
+                class:"btn btn-danger bi bi-fire rounded-2 rounded-start-0",
                 form: { data: { turbo_confirm: "本当に削除しますか？"} },
                 data: { controller: "tooltip", tooltip: "削除" }
               %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>

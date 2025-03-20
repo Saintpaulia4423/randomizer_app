@@ -3,7 +3,7 @@ import { Toast } from "bootstrap"
 
 // Connects to data-controller="info"
 export default class extends Controller {
-  static targets = ["infoModal", "value", "realityTranslation", "selectReality",
+  static targets = ["infoModal", "value", "realityTranslation", "selectReality", "setValue",
     "realityList", "selectedReality",
     "pickupList", "selectedPickup",
     "valueList", "selectedValue"];
@@ -14,19 +14,32 @@ export default class extends Controller {
   }
   addRealityModal() {
     this.switch = "reality";
+    this.valueTarget.value = 0;
     this.modal.show();
   }
   addPickupModal() {
     this.switch = "pickup";
+    this.valueTarget.value = 0;
     this.modal.show();
   }
   addValueModal() {
     this.switch = "value";
+    this.valueTarget.value = 0;
     this.modal.show()
+  }
+  fix(event) {
+    let value_list = Array.from(event.target.closest("turbo-frame").querySelectorAll("input[type='number']"));
+    value_list.map(element => element.dataset.defaultValue = element.value);
   }
   reset(event) {
     let value_list = Array.from(event.target.closest("turbo-frame").querySelectorAll("input[type='number']"));
     value_list.map(element => element.value = element.dataset.defaultValue);
+  }
+  fixBox() {
+    this.setValueTargets[0].dataset.defaultValue = this.setValueTargets[0].value;
+  }
+  resetBox() {
+    this.setValueTargets[0].value = this.setValueTargets[0].dataset.defaultValue;
   }
   add() {
     switch (this.switch) {
@@ -91,12 +104,12 @@ export default class extends Controller {
     // _infomation.html.erbよりレアリティリストの内容から抽出。
     let html = `
       <span class="input-group-text" data-info-target="` + targetName + `" data-value=` + index + `>` + this.realityTranslationTargets[index].innerText + `</span>
-      <input type="number" class="form-control" data-default-value=` + value + ` value=` + value + ` name="pick-` + index + `" data-randomizer-target="` + dataRandomizerName + `" data-reality=` + index + `>
+      <input type="number" class="form-control" data-default-value=` + value + ` value=` + value + ` mim=-1 name="pick-` + index + `" data-randomizer-target="` + dataRandomizerName + `" data-reality=` + index + `>
       <span class="input-group-text">`+ quantity + `</span>
     `;
     const addhtml = document.createElement("div");
     const addhtml2 = document.createElement("div");
-    addhtml.setAttribute("class", "input-group col")
+    addhtml.setAttribute("class", "input-group col pe-0")
     addhtml2.setAttribute("class", "row mw-100");
     addhtml.innerHTML = html;
     addhtml2.appendChild(addhtml)

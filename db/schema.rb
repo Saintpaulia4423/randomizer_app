@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_16_051913) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_19_053529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_16_051913) do
     t.jsonb "pickup_rate", default: []
     t.string "pickup_type", default: "pre"
     t.jsonb "value_list", default: []
+    t.integer "default_value", default: -1
   end
 
   add_foreign_key "lotteries", "random_sets"

@@ -6,15 +6,18 @@
     <div class="card-body">
       <% if chk_parameter(@random_set) || list_edit_action.include?(params[:action]) %>
         <div class="row" data-randomizer-target="infomation" data-setcheck="true">
-          <div class="col-md">
+          <div class="col-lg mb-3">
             <%= render "list", list_object: get_list_parameter("reality_list") %>
           </div>
-          <div class="col-md">
+          <div class="col-lg mb-3">
             <%= render "list", list_object: get_list_parameter("pickup_list") %>
           </div>
           <% if @random_set.pick_type == "box" || list_edit_action.include?(params[:action]) %>
-            <div class="col-md">
+            <div class="col-lg mb-3">
               <%= render "list", list_object: get_list_parameter("value_list") %>
+            </div>
+            <div class="col-lg">
+              <%= render "box_card" %>
             </div>
           <% end %>
         </div>
@@ -38,7 +41,7 @@
                   <option value=<%= i %> data-info-target="realityTranslation" data-randomizer-target="realityTranslation"><%= get_realityname(i) %></option>
                 <% end %>
               </select>
-              <input id="addReality" class="form-control" type="number" step="0.1" value=0 data-info-target="value">
+              <input id="addReality" class="form-control" type="number" step="0.1" min=-1 value=0 data-info-target="value">
             </div>
             <small>注：一時的な追加です。ページ移動をすると消去されます。</small>
           </div>

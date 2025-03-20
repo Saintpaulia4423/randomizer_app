@@ -192,18 +192,25 @@ export class Randomizer {
     this.result = new RandomizerResult();
     this.min = 0;
     this.max = 0;
-    this.lotteries = [];
-    this.randomCalicurationMode = "MersseneTwister";
-    this.realityRates = [];
-    this.pickupRates = [];
-    this.matchedList = [];
-    this.unmatchedList = [];
-    this.pickupList = [];
-    this.sumProbability;
-    this.subProbability;
-    this.floatCheck = false;
-    this.lotStyle;
-    this.pickupStyle;
+    this.lotteries = []; // 今回抽選するlottery
+    this.originLotteries = []; // 
+    this.randomCalicurationMode = "MersseneTwister"; // 利用するrandomizerの方式
+    this.lotteriesRealityList = []; // lotteryに含まれる全てのレアリティ
+    this.realityRates = []; // レアリティ抽選率のリスト
+    this.pickupRates = []; // ピックアップ抽選率のリスト
+    this.matchedList = [];  // レアリティ登録のあるレアリティ
+    this.unmatchedList = []; // レアリティ登録のないレアリティ
+    this.pickupList = []; // ピックアップ登録されているレアリティ
+    this.sumProbability; // 確率計算、未登録レアリティがlotteryなければレアリティリストの合算、そうでなければ100の倍数のceilされたもの
+    this.subProbability; // 確率計算、未登録レアリティがlotteryにあればsumProbabilityの100倍数ceil前のとceil後の差分
+    this.floatCheck = false; // 確率計算において小数点以下が発生した際の処理。小数点がなければ高速化する。
+    this.lotStyle; // mixかboxの判定
+    this.pickupStyle; // 現在未使用状態
+    this.valueFrameObjectList; // レアリティ別個数のレアリティ個数の制御
+    this.valueFrameRealityList; // レアリティ別個数のレアリティのリスト
+    this.lotteriesValueObjectList; // lotteryの個数の制御
+    this.boxValue; // セット全体の数量
+    this.allResetCount; // リセット回数
   }
 
   // get・setter処理群
@@ -249,6 +256,18 @@ export class Randomizer {
       return { reality: Number(element.dataset.reality), value: Number(element.value) }
     });
   }
+  setValueList(valueListObject, valueLotteriesObject, valueBox, resetCount) {
+    this.valueFrameObjectList = valueListObject;
+    this.lotteriesValueObjectList = valueLotteriesObject;
+    this.boxValue = valueBox;
+    this.allResetCount = resetCount;
+    // box時に元の情報を用意する。
+    this.originLotteries = this.lotteries
+  }
+  setResetPattern(valueFrameReset, lotteryValueReset) {
+    this.valueFrameReset = valueFrameReset.value;
+    this.lotteryValueReset = lotteryValueReset.value;
+  }
   setStyles(lotStyle, pickupStyle) {
     switch (lotStyle) {
       case "box":
@@ -273,15 +292,14 @@ export class Randomizer {
   chkPickRate() {
     if (this.realityRates == "") {
       console.error("randomizer chkPickRate: not set realityRates");
-      return -1;
+      throw new Error("レアリティ情報が提供されていません。")
     } else if (this.lotteries == "") {
       console.error("randomizer chkPickRate: not set lotteries");
-      return -1;
+      throw new Error("セット情報が提供されていません。")
     }
 
     // lotteriesからレアリティ抽出
     // lotteriesから含まれているレアリティ抽出
-    this.lotteriesRealityList = [];
     this.lotteries.forEach(element => {
       if (!this.lotteriesRealityList.includes(element.reality)) {
         this.lotteriesRealityList.push(element.reality);
@@ -302,6 +320,16 @@ export class Randomizer {
         return false;
       }
     }).filter(element => typeof element == "object");
+
+    // bos時にreality,valueが0の物はここで排除する。
+    if (this.lotStyle == "box") {
+      // lotteryを排除する。
+      this.lotteries = this.lotteries.filter(element => element.value != 0);
+      // realityを排除する。
+      // reject_reality = this.lotteries.filter(element => )
+      console.log(this.matchedList)
+      console.log(this.lotteries[0])
+    }
 
     // 確率計算
     // 端数が生じた場合100の倍数に調整
@@ -326,13 +354,106 @@ export class Randomizer {
   chkPickupList() {
     if (this.lotteriesRealityList == "") {
       console.error("randomizer chkPickupList: not set lotteriesRealiryList");
-      return -1;
+      throw new Error("ピックアップ情報が提供されていません。")
     }
 
     this.pickupList = this.pickupRates.filter(element => {
       return this.lotteriesRealityList.includes(element.reality);
     });
   }
+  // 個数の照合
+  chkValueList() {
+    // boxの場合処理をしない。
+    if (this.lotStyle != "box") {
+      return 0
+    }
+
+    // リストフレームの合算値とロット別の合算値計算
+    this.valueFrameSum = this.valueFrameObjectList.reduce((accumulator, element) => {
+      if (!this.controleValue(element, "isInfinity"))
+        return accumulator + this.controleValue(element, "value")
+      else
+        return accumulator
+    }, 0)
+    this.valueLotteriesSum = this.lotteriesValueObjectList.reduce((accumulator, element) => {
+      if (!this.controleValue(element, "isInfinity"))
+        return accumulator + this.controleValue(element, "value")
+      else
+        return accumulator
+    }, 0)
+    console.log(this.boxValue)
+    console.log(this.allResetCount)
+    this.resetValues()
+  }
+  // valueの変換用
+  controleValue(object, index) {
+    let allowlist = ["INPUT"];
+    switch (index) {
+      case "reality":
+        return Number(object.dataset.reality);
+      case "value":
+        return allowlist.includes(object.tagName) ? parseInt(object.value) : parseInt(object.dataset.value);
+      case "default":
+        return parseInt(object.dataset.defaultValue);
+      case "reset":
+        if (allowlist.includes(object.tagName)) {
+          object.value = this.controleValue(object, "default");
+        } else {
+          object.dataset.value = this.controleValue(object, "default");
+          object.text = this.controleValue(object, "default");
+        }
+        break;
+      case "isInfinity":
+        if (allowlist.includes(object.tagName)) {
+          return (object.value == -1) ? true : false
+        } else {
+          return (object.dataset.value == -1) ? true : false
+        }
+      case "add":
+        if (allowlist.includes(object.tagName)) {
+          object.value++;
+        } else {
+          object.dataset.value++;
+        }
+        break;
+      case "reduce":
+        if (allowlist.includes(object.tagName)) {
+          object.value--;
+        } else {
+          object.dataset.value--;
+        }
+        break;
+    }
+  }
+  reduceValue(object) {
+    // 全体ボックス数
+    if (this.controleValue(this.boxValue, "isInfinity")) {
+    } else if (this.boxValue.value == 0) {
+      // リセット処理
+      this.controleValue(this.boxValue, "reset");
+      this.controleValue(this.allResetCount, "add");
+      this.resetValues(this.valueFrameObjectList, this.valueFrameReset);
+      this.resetValues(this.lotteriesValueObjectList, this.lotteryValueReset);
+      this.controleValue(this.boxValue, "reduce");
+    } else {
+      // 通常時
+      this.controleValue(this.boxValue, "reduce");
+    }
+
+  }
+  // resetFrameとlotteryValueをリセットする。
+  resetValues(objectArray, mode) {
+    switch (mode) {
+      case "reset":
+        objectArray.map(element => this.controleValue(element, "reset"));
+        break;
+      case "onlyZero":
+        objectArray.filter(element => this.controleValue(element, "value") == 0)
+          .map(element => this.controleValue(element, "reset"));
+        break;
+    }
+  }
+
 
   // 抽選情報の取得
   // 数値を渡すと結果を返す。
@@ -384,6 +505,7 @@ export class Randomizer {
 
     // 計算の結果
     let hitLotteries = this.lotteries.filter(element => element.reality == resultReality.reality);
+    // value処理追加予定地
     hitLotteries = this.getPickupLottery(hitLotteries);
     if (hitLotteries.length == 1) {
       return hitLotteries[0];

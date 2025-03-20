@@ -22,7 +22,6 @@
       <div class="form-text mb-3">※-1は無限として扱います。</div>
     <% end %>
     <%= f.hidden_field :target_list, value: params[:target_list] %>
-    <%= f.hidden_field :password, value: cookies.encrypted[:password_token] %>
     <%= f.submit submit_button, class: "btn btn-primary" %>
   <% end %>
 <% end %>

@@ -3,6 +3,7 @@ class RandomSet < ApplicationRecord
   validates :name, presence: :true, length: {minimum:3, maximum:255}
   validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
   validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }
+  validates :default_value, comparison: { greater_than_or_equal_to: -1 }
   validate :rate_pickup_rate_with_array_into_fixed_hash
   before_save :list_sort_by_reality
 

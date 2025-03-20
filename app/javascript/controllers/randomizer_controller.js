@@ -5,8 +5,9 @@ import { Randomizer } from "randomizer"
 // Connects to data-controller="random-sets"
 export default class extends Controller {
   static targets = ["specifiedNumber", "seed", "randomizerSwitch", "lotteries", "lottery",
-    "randomizerParmerter", "resultTable", "realityFrame", "pickupFrame", "pickupedLottery",
-    "realityTranslation", "lotStyle", "pickupStyle"];
+    "randomizerParmerter", "resultTable", "realityFrame", "pickupFrame", "valueFrame", "pickupedLottery",
+    "realityTranslation", "lotStyle", "pickupStyle", "lotteriesValue", "setValue", "resetCount",
+    "valueFrameResetPattern", "lotteryValueResetPattern"];
   TARGET_DRAW_DEAD_POINT = 10000000;
   connect() {
     this.randomizer = new Randomizer();
@@ -47,11 +48,10 @@ export default class extends Controller {
     // レアリティ情報の提供
     this.randomizer.setPickRate(this.realityFrameTargets);
     this.randomizer.setRealityTranslation(this.realityTranslationTargets);
-    this.randomizer.chkPickRate();
 
     // ピックアップ情報の提供
     this.randomizer.setPickupList(this.pickupFrameTargets);
-    this.randomizer.chkPickupList();
+
 
     // スタイル情報の提供
     try {
@@ -59,6 +59,18 @@ export default class extends Controller {
     } catch (e) {
       this.viewToast("想定されていない設定です。再度編集から実施しなおしてください。");
       throw new Error("セットアップ失敗");
+    }
+    // 個数情報の提供
+    if (this.lotStyleTarget.dataset.style == "box") {
+      this.randomizer.setValueList(this.valueFrameTargets, this.lotteriesValueTargets, this.setValueTarget, this.resetCountTarget);
+      this.randomizer.setResetPattern(this.valueFrameResetPatternTargets.filter(radio => radio.checked)[0], this.lotteryValueResetPatternTargets.filter(radio => radio.checked)[0])
+    }
+
+    // 各種情報の確認
+    this.randomizer.chkPickRate();
+    this.randomizer.chkPickupList();
+    if (this.lotStyleTarget.dataset.style == "box") {
+      this.randomizer.chkValueList();
     }
 
     return selectPattern;
@@ -110,8 +122,10 @@ export default class extends Controller {
     json.reality = Number(lotteryObject.children[3].children[0].dataset.value);
     json.pickup = !lotteryObject.children[1].children[0].className.includes("flip-opacity");
     json.target = !lotteryObject.children[2].children[0].className.includes("flip-opacity");
+    json.value = lotteryObject.children[5].dataset.value
+    json.defaultValue = lotteryObject.children[5].dataset.defaultValue
     json.name = lotteryObject.children[4].innerText;
-    json.dict = lotteryObject.children[5].innerText;
+    json.dict = lotteryObject.children[6].innerText;
     this.lotteries.push(json);
   }
   resetLottery() {
