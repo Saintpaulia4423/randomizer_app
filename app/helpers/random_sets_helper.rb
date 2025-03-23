@@ -39,7 +39,7 @@ module RandomSetsHelper
         {
           "list" => "reality",
           "list_icon" => "bi-eyedropper",
-          "list_name" => "レアリティ抽選率",
+          "list_name" => "レアリティ抽選率*",
           "quantity" => "%",
           "tooltip_message" => "設定されていないレアリティは余ってる確率を等分します。",
           "target_list" => @random_set.rate,
@@ -55,7 +55,7 @@ module RandomSetsHelper
         {
           "list" => "pickup",
           "list_icon" => "bi-star-fill",
-          "list_name" => "ピックアップ確率",
+          "list_name" => "ピックアップ確率*",
           "quantity" => "%",
           "tooltip_message" => "ピックアップ判定において利用されます。挙動については「ピックアップ抽選方式」を確認してください。",
           "target_list" => @random_set.pickup_rate,

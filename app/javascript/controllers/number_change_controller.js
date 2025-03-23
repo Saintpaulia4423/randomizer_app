@@ -29,7 +29,10 @@ export default class extends Controller {
     }
 
     this.targetAssign.dataset.defaultValue = parseInt(this.inputDefaultValueTarget.value)
-    this.targetAssign.dataset.value = parseInt(this.inputValueTarget.value)
+    if (this.targetAssign.dataset.defaultValue != -1)
+      this.targetAssign.dataset.value = parseInt(this.inputValueTarget.value)
+    else
+      this.targetAssign.dataset.value = parseInt(-1)
     if (this.inputDefaultValueTarget.value != -1) {
       this.targetAssign.classList.remove("bi", "bi-infinity")
       this.targetAssign.innerText = this.inputValueTarget.value

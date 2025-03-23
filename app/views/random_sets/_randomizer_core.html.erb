@@ -15,6 +15,13 @@
                 <button class="btn btn-primary mb-1" data-action="click->randomizer#anyDraw" data-count=100>１００回引く</button> 
               </div>
             </li>
+            <li>
+              <div class="btn-group">
+                <% if @random_set.pick_type == "box" %>
+                  <button class="btn btn-primary mb-1" data-action="click->randomizer#halfDraw">ボックスの半分を引く</button>
+                  <button class="btn btn-primary mb-1" data-action="click->randomizer#allDraw">ボックスのすべてを引く</button>
+                <% end %>
+              </div>
             <li><button class="btn btn-primary mb-1" data-action="click->randomizer#specifiedDraw">全てから指定数引く</button></li>
             <li><button class="btn btn-primary mb-1" data-action="click->randomizer#drawToTarget">指定の物が出るまで引く</button></li>
             <br>

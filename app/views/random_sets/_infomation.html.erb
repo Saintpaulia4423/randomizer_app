@@ -21,6 +21,9 @@
             </div>
           <% end %>
         </div>
+        <% if list_edit_action.include?(params[:action]) %>
+          <div class="form-text">*必須要素</div>
+        <% end %>
       <% else %>
         <span data-randomizer-target="infomation" data-setcheck="false">設定がありません。編集にて設定を追加してください。</span>
       <% end %>

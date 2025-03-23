@@ -6,6 +6,7 @@ class RandomSet < ApplicationRecord
   validates :default_value, comparison: { greater_than_or_equal_to: -1 }
   validate :rate_pickup_rate_with_array_into_fixed_hash
   before_save :list_sort_by_reality
+  before_save :default_value_had_over_then_or_equal_values_list_sum
 
 
   has_secure_password
@@ -91,6 +92,16 @@ class RandomSet < ApplicationRecord
       end
       unless value_list.blank?
         self.value_list = value_list.sort_by{ |target_data| target_data["reality"] }
+      end
+    end
+    # default_valueがvalue_listの合計より多いか
+    def default_value_had_over_then_or_equal_values_list_sum
+      if default_value == -1
+        return
+      end
+      sum = self.value_list.map { |i| i["value"] }
+      if sum.sum > self.default_value
+        errors.add(:default_value, "default_value had over than value_lists sumed")
       end
     end
 end
