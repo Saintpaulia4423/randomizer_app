@@ -14,5 +14,27 @@ FactoryBot.define do
       { reality: 0, value: 50 }
     ] }
     pickup_type { "pre" }
+
+    trait :box do
+      default_value { 20 }
+      pick_type { "box" }
+      value_list { [ 
+        {reality: 0, value: 10},
+        {reality: 1, value: 10}
+      ]}
+    end
+
+    trait :infinityValue do
+      pick_type { "box" }
+      value_list { [
+        {reality: 0, value: -1},
+        {reality: 1, value: -1}
+      ]}
+    end
+
+    trait :infinityBox do
+      pick_type { "box" }
+      default_value { -1 }
+    end
   end
 end

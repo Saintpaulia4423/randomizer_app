@@ -161,20 +161,14 @@ export default class extends Controller {
     this.randomizer.writeResult();
   }
   specifiedDraw() {
-    let start = Date.now()
     try {
       this.setLotteriesAll();
-      console.log("set", Date.now() - start)
       this.setupParameter();
-      console.log("setup", Date.now() - start)
       this.randomizer.setResult(this.randomizer.anyNext(this.specifiedNumberTarget.value));
-      console.log("draw", Date.now() - start)
     } catch (e) {
       this.viewToast(e);
     }
-    let end = Date.now()
     this.randomizer.writeResult();
-    console.log(end - start)
   }
   drawToTarget() {
     try {
@@ -222,6 +216,36 @@ export default class extends Controller {
       this.setLotteriesUnChecked();
       this.setupParameter();
       this.targetDraw();
+    } catch (e) {
+      this.viewToast(e);
+    }
+    this.randomizer.writeResult();
+  }
+  halfDraw() {
+    let halfNum = Math.floor(this.setValueTarget.value / 2)
+    if (halfNum <= 0) {
+      this.viewToast("ボックスの数が無いか、無限のため引くことができません。", "半数引きエラー");
+      return;
+    }
+    try {
+      this.setLotteriesAll();
+      this.setupParameter();
+      this.randomizer.setResult(this.randomizer.anyNext(halfNum));
+    } catch (e) {
+      this.viewToast(e);
+    }
+    this.randomizer.writeResult();
+  }
+  allDraw() {
+    let allNum = this.setValueTarget.value
+    if (allNum <= 0) {
+      this.viewToast("ボックスの数が無いか、無限のため引くことができません。", "全数引きエラー");
+      return;
+    }
+    try {
+      this.setLotteriesAll();
+      this.setupParameter();
+      this.randomizer.setResult(this.randomizer.anyNext(allNum));
     } catch (e) {
       this.viewToast(e);
     }

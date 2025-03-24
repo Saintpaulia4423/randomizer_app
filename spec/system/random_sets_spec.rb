@@ -612,6 +612,240 @@ RSpec.describe "RandomSets", type: :system do
               end
             end
           end
+          describe "追加以外の機能のついて" do
+            context "レアリティ抽選率" do
+              it "数値変更後、リセットできるか" do
+                original_value = set.rate[0]["value"].to_i
+                reality = set.rate[0]["reality"].to_i
+                within find("#pickList") do
+                  fill_in "reality-0", with: original_value + 1
+                  expect(find("input[name=reality-0]").value.to_i).to eq original_value + 1
+                  find("button[data-action='info#reset']").click
+                  expect(find("input[name=reality-0]").value.to_i).to eq original_value
+                end
+              end
+            end
+            context "ピックアップ確率" do
+              it "数値変更後、リセットできるか" do
+                original_value = set.pickup_rate[0]["value"].to_i
+                reality = set.pickup_rate[0]["reality"].to_i
+                within find("#pickupList") do
+                  fill_in "pickup-0", with: original_value + 1
+                  expect(find("input[name=pickup-0]").value.to_i).to eq original_value + 1
+                  find("button[data-action='info#reset']").click
+                  expect(find("input[name=pickup-0]").value.to_i).to eq original_value
+                end
+              end
+            end
+            context "レアリティ別個数" do
+              let!(:add_box_set) { FactoryBot.create(:random_set, :box) }
+              let!(:add_box_lot) { FactoryBot.create(:lottery, :value_10, random_set_id: add_box_set.id) }
+              before do
+                visit random_set_path(add_box_set.id)
+              end
+              it "数値変更後、リセットできるか" do
+                original_value = add_box_set.value_list[0]["value"].to_i
+                reality = add_box_set.value_list[0]["reality"].to_i
+                within find("#valueList") do
+                  fill_in "value-0", with: original_value + 1
+                  expect(find("input[name=value-0]").value.to_i).to eq original_value + 1
+                  find("button[data-action='info#reset']").click
+                  expect(find("input[name=value-0]").value.to_i).to eq original_value
+                end
+              end
+              it "一時的な固定ができているか" do
+                original_value = add_box_set.value_list[0]["value"].to_i
+                reality = add_box_set.value_list[0]["reality"].to_i
+                within find("#valueList") do
+                  fill_in "value-0", with: original_value + 1
+                  find("button[data-action='info#fix']").click
+                  expect(find("input[name=value-0]").value.to_i).to eq original_value + 1
+                  find("button[data-action='info#reset']").click
+                  expect(find("input[name=value-0]").value.to_i).to eq original_value + 1
+                end
+              end
+            end
+          end
+        end
+        describe "boxの確認" do
+          context "boxが無限状態" do
+            let!(:inf_set) { FactoryBot.create(:random_set, :infinityValue, :infinityBox) }
+            let!(:inf_lot) { FactoryBot.create(:lottery, random_set_id: inf_set.id) }
+            before do
+              visit random_set_path(inf_set.id)
+            end
+            it "大量に引き続けることができるか" do
+              fill_in "anyDrawNumber", with: draw_lots_num
+              find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
+              within result_table do
+                expect(page).to have_content(draw_lots_num)
+              end
+            end
+            it "lot valueに個数を付与した時にその数までしか引けないこと" do
+              count = 9
+              find(:xpath, "//span[@data-action='dblclick->number-change#change']").double_click
+              within ".modal" do
+                expect(page).to have_content("個数の変更")
+                fill_in "lotDefault", with: count
+                fill_in "lotValue", with: count
+                # 反応しないことがあるので、予備として2回押させる。
+                click_button "更新"
+                begin 
+                  click_button "更新"
+                  click_button "更新"
+                rescue
+                end
+              end
+              expect(page).to_not have_content("個数の変更")
+              expect(page).to have_css("[data-value='#{count}']")
+              expect(page).to have_css("[data-default-value='#{count}']")
+              expect(page).to have_content(count)
+              find(:xpath, "//button[@data-count='10']").click
+              within result_table do
+                expect(page).to have_content(inf_lot.name)
+                expect(page).to have_content(count)
+              end
+            end
+            it "reality frameの個数を超過しないこと" do
+              count = 9
+              fill_in "value-0", with: count
+              find(:xpath, "//button[@data-count='10']").click
+              # javascriptの処理待機時間
+              sleep 1
+              within result_table do
+                expect(page).to have_content(inf_lot.name)
+                expect(page).to have_content(count)
+              end
+            end
+            describe "ボックスリセット時の処理について" do
+              before do
+                inf_set.update( default_value: 50 )
+                visit random_set_path(inf_set.id)
+              end
+              context "リセットしない場合" do
+                it "レアリティ別個数がリセットされないこと" do
+                  count = 9
+                  find("input[name=valueFrameResetPattern]").click
+                  expect(find("input[name=valueFrameResetPattern]")).to_not be_checked
+                  fill_in "value-0", with: count
+                  find(:xpath, "//button[@data-count='100']").click
+                  within result_table do
+                    expect(page).to have_content(inf_lot.name)
+                    expect(page).to have_css("[data-value='#{count}']")
+                  end
+                end
+                it "lotがリセットされないこと" do
+                  count = 9
+                  find("input[name=valueFrameResetPattern]").click
+                  expect(find("input[name=valueFrameResetPattern]")).to_not be_checked
+                  find(:xpath, "//span[@data-action='dblclick->number-change#change']").double_click
+                  within ".modal" do
+                    expect(page).to have_content("個数の変更")
+                    fill_in "lotDefault", with: count
+                    fill_in "lotValue", with: count
+                    # 反応しないことがあるので、予備として2回押させる。
+                    click_button "更新"
+                    begin 
+                      click_button "更新"
+                      click_button "更新"
+                    rescue
+                    end
+                  end
+                  expect(page).to_not have_content("個数の変更")
+                  expect(page).to have_css("[data-value='#{count}']")
+                  expect(page).to have_css("[data-default-value='#{count}']")
+                  expect(page).to have_content(count)
+                  find(:xpath, "//button[@data-count='10']").click
+                  within result_table do
+                    expect(page).to have_content(inf_lot.name)
+                    expect(page).to have_content(count)
+                  end
+                end
+                context "リセットする場合" do
+                  it "レアリティ別個数がリセットされて100ヒットになること" do
+                    count = 10
+                    find("input[name=valueFrameResetPattern]").click
+                    expect(find("input[name=valueFrameResetPattern]")).to_not be_checked
+                    fill_in "value-0", with: count
+                    find(:xpath, "//button[@data-count='100']").click
+                    expect(find("input[data-randomizer-target='resetCount']").value).to_not eq(0)
+                    within result_table do
+                      expect(page).to have_content(inf_lot.name)
+                      # ボックスは0になるとストップがかかるので、100回引いても10回で打ち止め
+                      expect(page).to have_css("[data-value='#{count}']")
+                    end
+                  end
+                end
+              end
+            end
+            describe "boxについての確認" do
+              let(:count) { 10 }
+              context "一時的な変更の場合" do
+                it "一時的な変更を固定できるか" do
+                  fill_in "boxValue", with: count
+                  find(:xpath, "//button[@data-action='info#fixBox']").click
+                  expect(page).to have_css("[data-default-value='#{count}']")
+                  expect(page).to have_css("[value='#{count}']")
+                  find(:xpath, "//button[@data-action='info#resetBox']").click
+                  expect(find("input[data-randomizer-target=setValue]").value.to_i).to eq count
+                end
+                it "boxの数が有限の場合、その数まで引けるか" do
+                  fill_in "boxValue", with: count
+                  find(:xpath, "//button[@data-action='info#fixBox']").click
+                  expect(page).to have_css("[data-default-value='#{count}']")
+                  expect(page).to have_css("[value='#{count}']")
+                  find(:xpath, "//button[@data-count='100']").click
+                  # ボックスが零になるとリセットがかかるので、残数0のリセット10になる。
+                  expect(find("input[data-randomizer-target='setValue']").value.to_i).to_not eq(0)
+                  within result_table do
+                    expect(page).to have_content(100)
+                  end
+                end
+              end
+              context "恒久的な変更" do
+                before do
+                  inf_set.update(default_value: count)
+                end
+                it "boxの数が有限の場合、その数まで引けるか" do
+                  find(:xpath, "//button[@data-count='100']").click
+                  # ボックスが零になるとリセットがかかるので、残数0のリセット10になる。
+                  expect(find("input[data-randomizer-target='setValue']").value.to_i).to_not eq(0)
+                  within result_table do
+                    expect(page).to have_content(100)
+                  end
+                end
+              end
+            end
+          end
+        end
+        describe "lotteriesについてのvalueの確認" do
+          let!(:inf_set) { FactoryBot.create(:random_set, :infinityValue, :infinityBox) }
+          let!(:inf_lot) { FactoryBot.create(:lottery,  random_set_id: inf_set.id) }
+          before do
+            visit random_set_path(inf_set.id)
+          end
+          it "lotの数値変更後にリセットできるか" do
+            inf_lot.update(value: 100)
+            visit random_set_path(inf_set.id)
+            expect(page).to have_css("[data-value='#{inf_lot.value}']")
+            count = 10
+            find(:xpath, "//span[@data-action='dblclick->number-change#change']").double_click
+            within ".modal" do
+              expect(page).to have_content("個数の変更")
+              fill_in "lotValue", with: count
+              # 反応しないことがあるので、予備として2回押させる。
+              click_button "更新"
+              begin 
+                click_button "更新"
+                click_button "更新"
+              rescue
+              end
+            end
+            expect(page).to_not have_content("個数の変更")
+            expect(page).to have_css("[data-value='#{count}']")
+            find(:xpath, "//button[@data-action='click->number-change#reset']").click
+            expect(page).to have_css("[data-value='#{inf_lot.value}']")
+          end
         end
       end
       describe "showページの表示の確認" do

@@ -535,7 +535,7 @@ export class Randomizer {
     // 存在しないフレームの場合、減少しない。
     if (targetFrame != null) {
       // 無限の時は減少しない。
-      if (targetFrame != -1) {
+      if (targetFrame.cacheValue != -1) {
         targetFrame.cacheValue--;
       }
       // 値が0になったら再計算処理
@@ -634,8 +634,8 @@ export class Randomizer {
       this.matchedList = this.matchedList.filter(i => !realityPrecheck.includes(i.reality));
       this.unmatchedList = this.unmatchedList.filter(i => !realityPrecheck.includes(i.reality));
     }
-    // この結果、底をついた場合は伊郷の処理を中断する。
-    if (this.matchedList == "" && this.unmatchedList == "")
+    // この結果、底をついた場合は以降の処理を中断する。
+    if (this.matchedList == "" && this.unmatchedList == "" || this.lotteries == "")
       this.hitBottomFlag = true
   }
 
@@ -643,7 +643,6 @@ export class Randomizer {
   // 抽選情報の取得
   // 数値を渡すと結果を返す。
   getLottery(number) {
-    this.testChkParameter()
     if (typeof number != "number") {
       console.error("randomizer getLottery: Bad Argument " + typeof number);
       return -1;

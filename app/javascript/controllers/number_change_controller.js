@@ -3,7 +3,7 @@ import { Modal } from "bootstrap"
 
 // Connects to data-controller="number-change"
 export default class extends Controller {
-  static targets = ["modal", "inputValue", "inputDefaultValue", "validate"];
+  static targets = ["modal", "inputValue", "inputDefaultValue", "validate", "lotteriesValue"];
   connect() {
     this.modal = new Modal(this.modalTarget)
   }
@@ -49,5 +49,14 @@ export default class extends Controller {
       throw new Error("\n現在の個数の最低値は-1までです。")
     if (this.inputDefaultValueTarget.value != -1 && this.inputValueTarget.value == -1)
       throw new Error("\n現在の値が無限を指定していますが、初期値が異なります。\n無限を希望する場合は「現在の初期値」に-1を入力してください。")
+  }
+  reset() {
+    let lotsValue = this.lotteriesValueTargets
+    console.log(this.lotteriesValueTargets)
+    console.log(this.lotteriesValueTargets.filter(i => !(i.dataset.defaultValue < 0)))
+    lotsValue.filter(i => !(i.dataset.defaultValue < 0)).forEach(element => {
+      element.dataset.value = element.dataset.defaultValue;
+      element.innerText = element.dataset.defaultValue;
+    });
   }
 }

@@ -5,25 +5,29 @@
     </div>
     <div class="card-body">
       <% if chk_parameter(@random_set) || list_edit_action.include?(params[:action]) %>
-        <div class="row" data-randomizer-target="infomation" data-setcheck="true">
-          <div class="col-lg mb-3">
-            <%= render "list", list_object: get_list_parameter("reality_list") %>
-          </div>
-          <div class="col-lg mb-3">
-            <%= render "list", list_object: get_list_parameter("pickup_list") %>
+        <div data-randomizer-target="infomation" data-setcheck="true">
+          <div class="row">
+            <div class="col-lg mb-3">
+              <%= render "list", list_object: get_list_parameter("reality_list") %>
+            </div>
+            <div class="col-lg mb-3">
+              <%= render "list", list_object: get_list_parameter("pickup_list") %>
+            </div>
           </div>
           <% if @random_set.pick_type == "box" || list_edit_action.include?(params[:action]) %>
-            <div class="col-lg mb-3">
-              <%= render "list", list_object: get_list_parameter("value_list") %>
-            </div>
-            <div class="col-lg">
-              <%= render "box_card" %>
+            <div class="row">
+              <div class="col mb-3">
+                <%= render "list", list_object: get_list_parameter("value_list") %>
+              </div>
+              <div class="col">
+                <%= render "box_card" %>
+              </div>
             </div>
           <% end %>
+          <% if list_edit_action.include?(params[:action]) %>
+            <div class="form-text">*必須要素</div>
+          <% end %>
         </div>
-        <% if list_edit_action.include?(params[:action]) %>
-          <div class="form-text">*必須要素</div>
-        <% end %>
       <% else %>
         <span data-randomizer-target="infomation" data-setcheck="false">設定がありません。編集にて設定を追加してください。</span>
       <% end %>

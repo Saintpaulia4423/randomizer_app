@@ -22,7 +22,7 @@
       <% end %>
     <% else %>
       <div class="input-group mb-3">
-        <input type="number" class="form-control" value=<%= @random_set.default_value %> data-default-value=<%= @random_set.default_value %> min=-1 data-info-target="setValue" data-randomizer-target="setValue">
+        <input id="boxValue" type="number" class="form-control" value=<%= @random_set.default_value %> data-default-value=<%= @random_set.default_value %> min=-1 data-info-target="setValue" data-randomizer-target="setValue">
         <div class="input-group-text">個</div>
       </div>
       <div class="input-group mb-3">

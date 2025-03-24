@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:name) { |n| "lot#{n}" }
     reality { 0 }
     origin_id { random_set_id }
+    value { -1 }
     
     trait :with_pickup do
       default_pickup { true }
@@ -15,6 +16,9 @@ FactoryBot.define do
     end
     trait :with_dict do
       dict { "test_dict" }
+    end
+    trait :value_10 do
+      value { 10 }
     end
   end
 end

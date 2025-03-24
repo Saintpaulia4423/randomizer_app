@@ -21,7 +21,7 @@
   <% if defined?(@random_set) != nil then %>
     <td>
       <span data-value=<%= lottery.value %> data-default-value=<%= lottery.value %>
-        class='<%= "bi bi-infinity" if lottery.value == -1 %>' data-randomizer-target="lotteriesValue"
+        class='<%= "bi bi-infinity" if lottery.value == -1 %>' data-randomizer-target="lotteriesValue" data-number-change-target="lotteriesValue"
         data-action="dblclick->number-change#change" data-type="value" id=<%= lottery.id %>
       >
         <%= lottery.value if lottery.value != -1 %>
