@@ -970,6 +970,177 @@ RSpec.describe "RandomSets", type: :system do
           expect(find(name_target).value).to_not eq name
           expect(find(dict_target).value).to_not eq dict
         end
+        describe "information項目の確認" do
+          let(:info_turbo) { "turbo-frame#random_set_information" }
+          let(:new_reality) { "★10" }
+          let(:new_reality_raw) { "10" }
+          let(:test_value) { 42 }
+          context "レアリティ抽選率" do
+            let(:filter_list) { "turbo-frame#pickList" }
+            it "項目を追加ができるか" do
+              find(info_turbo).find(filter_list).find(".card-header").find(".btn.btn-primary").click
+              expect(page).to have_content("新規")
+              within ".modal" do
+                select new_reality
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("新規")
+              within filter_list do
+                expect(page).to have_content(new_reality)
+                expect(find(:xpath, "//input[@data-reality='#{new_reality_raw}']").value.to_i).to eq test_value
+              end
+            end
+            it "項目の変更ができるか" do
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-primary.bi").click
+              expect(page).to have_content("レアリティ情報の変更")
+              within ".modal" do
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("レアリティ情報の変更")
+              within filter_list do
+                expect(find(".card-body").all(".input-group")[0].find("input[name=reality-#{set.rate[0]["reality"]}]").value.to_i).to eq test_value
+              end
+            end
+            it "項目の削除ができるか" do
+              delete_target = "★0"
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-danger.bi").click
+              page.accept_alert
+              within filter_list do
+                expect(page).to_not have_content(delete_target)
+              end
+            end
+          end
+          context "ピックアップ確率" do
+            let(:filter_list) { "turbo-frame#pickupList" }
+            it "項目を追加ができるか" do
+              find(info_turbo).find(filter_list).find(".card-header").find(".btn.btn-primary").click
+              expect(page).to have_content("新規")
+              within ".modal" do
+                select new_reality
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("新規")
+              within filter_list do
+                expect(page).to have_content(new_reality)
+                expect(find(:xpath, "//input[@data-reality='#{new_reality_raw}']").value.to_i).to eq test_value
+              end
+            end
+            it "項目の変更ができるか" do
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-primary.bi").click
+              expect(page).to have_content("レアリティ情報の変更")
+              within ".modal" do
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("レアリティ情報の変更")
+              within filter_list do
+                expect(find(".card-body").all(".input-group")[0].find("input[name=pickup-#{set.pickup_rate[0]["reality"]}]").value.to_i).to eq test_value
+              end
+            end
+            it "項目の削除ができるか" do
+              delete_target = "★0"
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-danger.bi").click
+              page.accept_alert
+              within filter_list do
+                expect(page).to_not have_content(delete_target)
+              end
+            end
+          end
+          context "レアリティ別個数" do
+            before do
+              set.update(FactoryBot.attributes_for(:random_set, :box))
+              visit edit_random_set_path(set.id)
+            end
+            let(:filter_list) { "turbo-frame#valueList" }
+            it "項目を追加ができるか" do
+              find(info_turbo).find(filter_list).find(".card-header").find(".btn.btn-primary").click
+              expect(page).to have_content("新規")
+              within ".modal" do
+                select new_reality
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("新規")
+              within filter_list do
+                expect(page).to have_content(new_reality)
+                expect(find(:xpath, "//input[@data-reality='#{new_reality_raw}']").value.to_i).to eq test_value
+              end
+            end
+            it "項目の変更ができるか" do
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-primary.bi").click
+              expect(page).to have_content("レアリティ情報の変更")
+              within ".modal" do
+                fill_in "random_set[value]", with: test_value
+                begin
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                  find("input[name='commit']").click
+                rescue
+                end
+                sleep 1
+              end
+              expect(page).to_not have_content("レアリティ情報の変更")
+              within filter_list do
+                expect(find(".card-body").all(".input-group")[0].find("input[name=value-#{set.value_list[0]["reality"]}]").value.to_i).to eq test_value
+              end
+            end
+            it "項目の削除ができるか" do
+              delete_target = "★0"
+              find(filter_list).find(".card-body").all(".input-group")[0].find(".btn.btn-danger.bi").click
+              page.accept_alert
+              within filter_list do
+                expect(page).to_not have_content(delete_target)
+              end
+            end
+          end
+          context "ボックス全体数" do
+            before do
+              set.update(FactoryBot.attributes_for(:random_set, :box))
+              visit edit_random_set_path(set.id)
+            end
+            it "数値を変更する" do
+              count = 100
+              fill_in "random_set[default_value]", with: count
+              within info_turbo do
+                click_button "変更"
+                expect(find("#random_set_default_value").value.to_i).to eq count 
+              end
+            end
+          end
+        end
       end
       describe "lotteryの確認" do
         let!(:simple_lot) { FactoryBot.create(:lottery, random_set_id: set.id) }

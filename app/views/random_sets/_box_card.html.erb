@@ -3,10 +3,12 @@
     <div class="row">
       <div class="col d-flex align-items-center">
         <div class="bi-box-fill" data-controller="tooltip" data-tooltip="このセット全体の個数です。0の時に引くとリセットがかかります。">ボックス全体数</div>
-        <div class="col d-flex justify-content-end">
-          <button class="btn btn-info btn-small" data-action="info#fixBox">固定</button>
-          <button class="btn btn-warning btn-small" data-action="info#resetBox">リセット</button>
-        </div>
+        <% if !list_edit_action.include?(params[:action]) %>
+          <div class="col d-flex justify-content-end">
+            <button class="btn btn-info btn-small" data-action="info#fixBox">固定</button>
+            <button class="btn btn-warning btn-small" data-action="info#resetBox">リセット</button>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
