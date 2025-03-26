@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe "RandomSets", type: :request do
   describe "GET /random_sets" do
     let!(:set) { FactoryBot.create(:random_set) }
-    let!(:lot) { FactoryBot.create_list(:lottery, 5, random_set_id: set.id)}
+    let!(:lot) { FactoryBot.create_list(:lottery, 5, random_set_id: set.id) }
     before do
       get random_set_path(set.id)
     end
@@ -18,12 +18,12 @@ RSpec.describe "RandomSets", type: :request do
         expect(title).to include(set.name)
       end
       it "lotteryがすべて含まれる" do
-        set.lotteries.each do |lottery| 
+        set.lotteries.each do |lottery|
           expect(response.body).to include(lottery.name)
         end
       end
     end
-  
+
     context "各種カードの確認" do
       it "セット情報" do
         expect(response.body).to include("セット情報")

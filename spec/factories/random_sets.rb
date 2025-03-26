@@ -9,26 +9,26 @@ FactoryBot.define do
       { reality: 0, value: 80 },
       { reality: 1, value: 10 },
       { reality: 2, value: 5 }
-    ] }
+    ]}
     pickup_rate { [
       { reality: 0, value: 50 }
-    ] }
+    ]}
     pickup_type { "pre" }
 
     trait :box do
       default_value { 20 }
       pick_type { "box" }
-      value_list { [ 
-        {reality: 0, value: 10},
-        {reality: 1, value: 10}
+      value_list { [
+        { reality: 0, value: 10 },
+        { reality: 1, value: 10 }
       ]}
     end
 
     trait :infinityValue do
       pick_type { "box" }
       value_list { [
-        {reality: 0, value: -1},
-        {reality: 1, value: -1}
+        { reality: 0, value: -1 },
+        { reality: 1, value: -1 }
       ]}
     end
 

@@ -2,12 +2,11 @@
 
 FactoryBot.define do
   factory :lottery do
-
     sequence(:name) { |n| "lot#{n}" }
     reality { 0 }
     origin_id { random_set_id }
     value { -1 }
-    
+
     trait :with_pickup do
       default_pickup { true }
     end

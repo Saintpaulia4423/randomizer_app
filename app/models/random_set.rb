@@ -1,6 +1,6 @@
 class RandomSet < ApplicationRecord
   has_many :lotteries
-  validates :name, presence: :true, length: {minimum:3, maximum:255}
+  validates :name, presence: :true, length: { minimum: 3, maximum: 255 }
   validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
   validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }
   validates :default_value, comparison: { greater_than_or_equal_to: -1 }
@@ -13,7 +13,7 @@ class RandomSet < ApplicationRecord
 
   # 検索設定
   def
-    self.ransackable_attributes(auth_object = nil) ["name", "id", "created_at", "updated_at"]
+    self.ransackable_attributes(auth_object = nil) [ "name", "id", "created_at", "updated_at" ]
   end
 
   # セッション情報の記録
@@ -35,7 +35,6 @@ class RandomSet < ApplicationRecord
   end
 
   class << self
-
       # 新たなトークンを与える
       def new_token
         SecureRandom.urlsafe_base64
@@ -46,7 +45,7 @@ class RandomSet < ApplicationRecord
         cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
         BCrypt::Password.create(string, cost: cost)
       end
-  end 
+  end
   private
     def rate_pickup_rate_with_array_into_fixed_hash
       # rate,pickup_rateはArrayであること。
@@ -79,19 +78,18 @@ class RandomSet < ApplicationRecord
 
       unless item["reality"].is_a?(Numeric) && item["value"].is_a?(Numeric)
         errors.add(symbol, "Item index #{index} is invalid: Only values")
-        return
       end
     end
     # 配列の並びをレアリティ基準でソートする。
     def list_sort_by_reality
       unless rate.blank?
-        self.rate = rate.sort_by{ |target_data| target_data["reality"] }
+        self.rate = rate.sort_by { |target_data| target_data["reality"] }
       end
       unless pickup_rate.blank?
-        self.pickup_rate = pickup_rate.sort_by{ |target_data| target_data["reality"] }
+        self.pickup_rate = pickup_rate.sort_by { |target_data| target_data["reality"] }
       end
       unless value_list.blank?
-        self.value_list = value_list.sort_by{ |target_data| target_data["reality"] }
+        self.value_list = value_list.sort_by { |target_data| target_data["reality"] }
       end
     end
     # default_valueがvalue_listの合計より多いか

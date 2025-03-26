@@ -73,12 +73,12 @@ class RandomSetsController < ApplicationController
     @action_path = create_list_path
     @random_set = RandomSet.find(params[:id])
     case params[:target_list]
-      when "reality_list"
-        @have_list =  @random_set.rate.map { |item| item["reality"] }
-      when "pickup_list"
-        @have_list =  @random_set.pickup_rate.map { |item| item["reality"] }
-      when "value_list"
-        @have_list = @random_set.value_list.map { |item| item["reality"] }
+    when "reality_list"
+      @have_list =  @random_set.rate.map { |item| item["reality"] }
+    when "pickup_list"
+      @have_list =  @random_set.pickup_rate.map { |item| item["reality"] }
+    when "value_list"
+      @have_list = @random_set.value_list.map { |item| item["reality"] }
     end
   end
 
@@ -86,12 +86,12 @@ class RandomSetsController < ApplicationController
     @random_set = RandomSet.find(params[:id])
     @target_list = params[:random_set][:target_list]
     case params[:random_set][:target_list]
-      when "reality_list"
-        @random_set.rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
-      when "pickup_list"
-        @random_set.pickup_rate.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
-      when "value_list"
-        @random_set.value_list.push({"reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+    when "reality_list"
+      @random_set.rate.push({ "reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+    when "pickup_list"
+      @random_set.pickup_rate.push({ "reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
+    when "value_list"
+      @random_set.value_list.push({ "reality" => params[:random_set][:reality].to_i, "value" => params[:random_set][:value].to_i })
     end
 
     respond_to do |format|
@@ -109,20 +109,21 @@ end
     @random_set = RandomSet.find(params[:id])
     @action_path = update_list_path
   end
+
   def update_list
     @random_set = RandomSet.find(params[:id])
     @target_list = params[:random_set][:target_list]
     begin
       case params[:random_set][:target_list]
-        when "reality_list"
-          target_data = @random_set.rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
-          target_data[0]["value"] = params[:random_set][:value].to_i
-        when "pickup_list"
-          target_data = @random_set.pickup_rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
-          target_data[0]["value"] = params[:random_set][:value].to_i
-        when "value_list"
-          target_data = @random_set.value_list.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
-          target_data[0]["value"] = params[:random_set][:value].to_i
+      when "reality_list"
+        target_data = @random_set.rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+        target_data[0]["value"] = params[:random_set][:value].to_i
+      when "pickup_list"
+        target_data = @random_set.pickup_rate.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+        target_data[0]["value"] = params[:random_set][:value].to_i
+      when "value_list"
+        target_data = @random_set.value_list.filter { |item| item["reality"] == params[:random_set][:reality].to_i }
+        target_data[0]["value"] = params[:random_set][:value].to_i
       end
     rescue
       respond_to do |format|
@@ -131,7 +132,7 @@ end
         return 0
       end
     end
-    
+
     respond_to do |format|
       if @random_set.save
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "に追加されました。" }
@@ -141,22 +142,22 @@ end
         format.html { render "edit_list", status: :unprocessable_entity }
       end
     end
-
   end
+
   def destroy_list
     @random_set = RandomSet.find(params[:id])
     @target_list = params[:target_list]
     begin
       case params[:target_list]
-        when "reality_list"
-          target_index = @random_set.rate.find_index { |item| item["reality"] == params[:reality].to_i }
-          @random_set.rate.delete_at(target_index)
-        when "pickup_list"
-          target_index = @random_set.pickup_rate.find_index { |item| item["reality"] == params[:reality].to_i }
-          @random_set.pickup_rate.delete_at(target_index)
-        when "value_list"
-          target_index = @random_set.value_list.find_index { |item| item["reality"] == params[:reality].to_i }
-          @random_set.value_list.delete_at(target_index)
+      when "reality_list"
+        target_index = @random_set.rate.find_index { |item| item["reality"] == params[:reality].to_i }
+        @random_set.rate.delete_at(target_index)
+      when "pickup_list"
+        target_index = @random_set.pickup_rate.find_index { |item| item["reality"] == params[:reality].to_i }
+        @random_set.pickup_rate.delete_at(target_index)
+      when "value_list"
+        target_index = @random_set.value_list.find_index { |item| item["reality"] == params[:reality].to_i }
+        @random_set.value_list.delete_at(target_index)
       end
     rescue
       respond_to do |format|

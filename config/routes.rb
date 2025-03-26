@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :random_sets  do
-    resources :lotteries, only: [:new, :create, :index, :edit, :update, :destroy]
+    resources :lotteries, only: [ :new, :create, :index, :edit, :update, :destroy ]
   end
   get "/random_sets/:id/new_list", to: "random_sets#new_list", as: "new_list"
   post "/random_sets/:id/create_list", to: "random_sets#create_list", as: "create_list"

@@ -28,6 +28,6 @@ module SessionHelper
     @random_set = RandomSet.find(params[:id]) if @random_set.nil?
   end
   def get_session_password
-    return cookies.encrypted[:password_token]
+    cookies.encrypted[:password_token]
   end
 end

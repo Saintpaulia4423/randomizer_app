@@ -13,7 +13,7 @@ RSpec.describe LotteriesHelper, type: :helper do
       let(:items) { get_realityname_list() }
       it "それぞれにおいて情報が返ってくること" do
         items.each do |item|
-          expect(get_realityname(item).is_a?(String)).to eq(true)          
+          expect(get_realityname(item).is_a?(String)).to eq(true)
         end
       end
     end

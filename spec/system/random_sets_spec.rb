@@ -43,7 +43,7 @@ RSpec.describe "RandomSets", type: :system do
       end
       describe "ransackの確認" do
         it "検索機能が利用できるか。another_setが消えているかで判定" do
-          fill_in "q_name_cont",	with: "Test_Random" 
+          fill_in "q_name_cont", with: "Test_Random"
           find_field("q_name_cont").send_keys(:enter)
           expect(page).to have_content(set.name)
           expect(page).to_not have_content(another_set.name)
@@ -284,7 +284,7 @@ RSpec.describe "RandomSets", type: :system do
             context "チェックの対象が存在しない場合の確認" do
               context "全てチェックなしパターン" do
                 let(:err_message_checkless) { "チェックされたデータがありません" }
-                
+
                 it "指定数引きでエラーメッセージが出る" do
                   find(:xpath, "//button[@data-action='click->randomizer#checkedSpecifiedDraw']").click
                   expect(page).to have_content(err_message_checkless)
@@ -385,7 +385,7 @@ RSpec.describe "RandomSets", type: :system do
               find("[data-count='100']").click
               within result_table do
                 expect(result).to eq all("td")[2].text.to_i
-              end                
+              end
             end
           end
           context "XorShift " do
@@ -412,7 +412,7 @@ RSpec.describe "RandomSets", type: :system do
               find("[data-count='100']").click
               within result_table do
                 expect(result).to eq all("td")[2].text.to_i
-              end                
+              end
             end
           end
           context "線形合同方式" do
@@ -438,7 +438,7 @@ RSpec.describe "RandomSets", type: :system do
               find("[data-count='100']").click
               within result_table do
                 expect(result).to eq all("td")[2].text.to_i
-              end                
+              end
             end
           end
           context "Math.Random（シード固定不可のため、一部テストなし）" do
@@ -472,10 +472,10 @@ RSpec.describe "RandomSets", type: :system do
                     result_lot = element.all("td")
                     next if result_lot.empty?
                     case result_lot[1].text
-                      when util_lot.name
-                        high_rate_num = result_lot[2].text.to_i
-                      when add_lot.name
-                        low_rate_num = result_lot[2].text.to_i
+                    when util_lot.name
+                      high_rate_num = result_lot[2].text.to_i
+                    when add_lot.name
+                      low_rate_num = result_lot[2].text.to_i
                     end
                   end
                 end
@@ -494,10 +494,10 @@ RSpec.describe "RandomSets", type: :system do
                     result_lot = element.all("td")
                     next if result_lot.empty?
                     case result_lot[1].text
-                      when util_lot.name
-                        high_rate_num = result_lot[2].text.to_i
-                      when add_lot_no_set.name
-                        low_rate_num = result_lot[2].text.to_i
+                    when util_lot.name
+                      high_rate_num = result_lot[2].text.to_i
+                    when add_lot_no_set.name
+                      low_rate_num = result_lot[2].text.to_i
                     end
                   end
                 end
@@ -534,17 +534,17 @@ RSpec.describe "RandomSets", type: :system do
                   result_lot = element.all("td")
                   next if result_lot.empty?
                   case result_lot[1].text
-                    when add_lot_no_set.name
-                      high_rate_num = result_lot[2].text.to_i
-                    when util_lot.name
-                      low_rate_num = result_lot[2].text.to_i
+                  when add_lot_no_set.name
+                    high_rate_num = result_lot[2].text.to_i
+                  when util_lot.name
+                    low_rate_num = result_lot[2].text.to_i
                   end
                 end
               end
             end
           end
           describe "ピックアップ抽選率の確認" do
-            let!(:add_lot_default_pickup) { FactoryBot.create(:lottery, :with_pickup, name: "add_lot_with_pickup", random_set_id: set.id)}
+            let!(:add_lot_default_pickup) { FactoryBot.create(:lottery, :with_pickup, name: "add_lot_with_pickup", random_set_id: set.id) }
             before do
               visit random_set_path(set.id)
             end
@@ -560,10 +560,10 @@ RSpec.describe "RandomSets", type: :system do
                     result_lot = element.all("td")
                     next if result_lot.empty?
                     case result_lot[1].text
-                      when add_lot_default_pickup.name
-                        high_rate_num = result_lot[2].text.to_i
-                      when util_lot.name
-                        low_rate_num = result_lot[2].text.to_i
+                    when add_lot_default_pickup.name
+                      high_rate_num = result_lot[2].text.to_i
+                    when util_lot.name
+                      low_rate_num = result_lot[2].text.to_i
                     end
                   end
                 end
@@ -601,14 +601,14 @@ RSpec.describe "RandomSets", type: :system do
                       result_lot = element.all("td")
                       next if result_lot.empty?
                       case result_lot[1].text
-                        when add_lot_for_add_pickup.name
-                          high_rate_num = result_lot[2].text.to_i
-                        when add_lot_for_add_nopickup.name
-                          low_rate_num = result_lot[2].text.to_i
+                      when add_lot_for_add_pickup.name
+                        high_rate_num = result_lot[2].text.to_i
+                      when add_lot_for_add_nopickup.name
+                        low_rate_num = result_lot[2].text.to_i
                       end
                     end
                   end
-                end  
+                end
               end
             end
           end
@@ -690,7 +690,7 @@ RSpec.describe "RandomSets", type: :system do
                 fill_in "lotValue", with: count
                 # 反応しないことがあるので、予備として2回押させる。
                 click_button "更新"
-                begin 
+                begin
                   click_button "更新"
                   click_button "更新"
                 rescue
@@ -719,7 +719,7 @@ RSpec.describe "RandomSets", type: :system do
             end
             describe "ボックスリセット時の処理について" do
               before do
-                inf_set.update( default_value: 50 )
+                inf_set.update(default_value: 50)
                 visit random_set_path(inf_set.id)
               end
               context "リセットしない場合" do
@@ -745,7 +745,7 @@ RSpec.describe "RandomSets", type: :system do
                     fill_in "lotValue", with: count
                     # 反応しないことがあるので、予備として2回押させる。
                     click_button "更新"
-                    begin 
+                    begin
                       click_button "更新"
                       click_button "更新"
                     rescue
@@ -835,7 +835,7 @@ RSpec.describe "RandomSets", type: :system do
               fill_in "lotValue", with: count
               # 反応しないことがあるので、予備として2回押させる。
               click_button "更新"
-              begin 
+              begin
                 click_button "更新"
                 click_button "更新"
               rescue
@@ -849,7 +849,7 @@ RSpec.describe "RandomSets", type: :system do
         end
       end
       describe "showページの表示の確認" do
-        let!(:nodata_set) { FactoryBot.create(:random_set, rate: [], pickup_rate: [] ) }
+        let!(:nodata_set) { FactoryBot.create(:random_set, rate: [], pickup_rate: []) }
         context "情報が存在する場合の確認" do
           before do
             visit random_set_path(another_set.id)
@@ -1136,7 +1136,7 @@ RSpec.describe "RandomSets", type: :system do
               fill_in "random_set[default_value]", with: count
               within info_turbo do
                 click_button "変更"
-                expect(find("#random_set_default_value").value.to_i).to eq count 
+                expect(find("#random_set_default_value").value.to_i).to eq count
               end
             end
           end
@@ -1211,5 +1211,5 @@ RSpec.describe "RandomSets", type: :system do
         end
       end
     end
-  end      
+  end
 end
