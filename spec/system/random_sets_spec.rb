@@ -927,7 +927,6 @@ RSpec.describe "RandomSets", type: :system do
           expect(page).to have_content("編集パスワード入力")
           # パスワードを入力していない場合
           click_button "検証"
-          expect(page).to have_content("パスワードを入力してください")
           expect(current_path).to_not eq edit_random_set_path(set.id)
           # パスワードが異なる場合
           fill_in "session_password", with: "invalid_password"

@@ -1,0 +1,125 @@
+<section class="projects-section bg-light" id="projects">
+  <div class="container px-4 px-lg-5 justify-content-center">
+    <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+      <div class="col-lg-7 mh-50 d-flex justify-content-center">
+        <%= image_tag "new_page_l.png", class: "img-fluid mb-3 mb-lg-0 h-100 w-75 border", alt: "新規作成" %>
+      </div>
+      <div class="col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>作る</h4>
+          <p class="text-black-50 mb-0">まずはセットが必要です。セット作成で情報を入力しましょう。<br>パスワードは編集のために利用しますが、変更はできません。ご注意ください。</p>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+      <div class="col-lg-7 mh-50 d-flex justify-content-center">
+        <%= image_tag "edit_page.png", class: "img-fluid mb-3 mb-lg-0 h-100 w-75 border", alt: "編集ページ" %>
+      </div>
+      <div class="col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>編集画面</h4>
+          <p class="text-black-50 mb-0">新規作成により、自動的に編集ページに移動します。<br>編集ページではランダマイザーとしての情報を入力するほか、引く対象を作成できます。<br>ただし、レアリティ抽選率とピックアップ確率は必ず設定する必要があります。</p>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+      <div class="col-lg-7 mh-50 d-flex justify-content-center">
+        <%= image_tag "add_lot_e.png", class: "img-fluid mb-3 mb-lg-0 h-100 w-75 border", alt: "対象の作成" %>
+      </div>
+      <div class="col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>引く対象の作成</h4>
+          <p class="text-black-50 mb-0">では引く対象を作成しましょう。<br>セット内容の右側のボタンから入力画面に移動できます。</p>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+      <div class="col-lg-7 mh-50 d-flex justify-content-center">
+        <%= image_tag "add_lots.png", class: "img-fluid mb-3 mb-lg-0 h-100 w-75 border", alt: "作成後" %>
+      </div>
+      <div class="col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>複数の作成</h4>
+          <p class="text-black-50 mb-0">作成を続けて、セットの内容を充足させましょう。<br>内容の編集や削除は項目の右側から選択できます。</p>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+      <div class="col-lg-7 mh-50 d-flex justify-content-center">
+        <%= image_tag "randomizer.png", class: "img-fluid mb-3 mb-lg-0 h-100 w-75 border", alt: "ランダマイザーページ" %>
+      </div>
+      <div class="col-lg-5">
+        <div class="featured-text text-center text-lg-left">
+          <h4>利用する</h4>
+          <p class="text-black-50 mb-0">各種設定と作成が終わったら、右上にある「ランダマイザーへ」から移動できます。<br>後は好きなだけ引いてお試しください！</p>
+        </div>
+      </div>
+    </div>
+    <div class="border"></div>
+    <div class="m-4 d-flex justify-content-center">
+      <h2>他の設定について</h2>
+    </div>
+    <ul class="list-group list-group-flush container text-center">
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-gear"></span>抽選タイプ</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>抽選タイプには「独立」と「ボックス」の二つがあります。<br>独立は個数を影響を受けず、高速に動作します。<br>ボックスは個数の影響を受け、様々な確率や乱数の際限が行えますが、処理に負荷がかかります。</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-cookie"></span>シード値</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>シード値は乱数精製の種となる数値です。<br>基本的に気にする必要がありませんが、同一シードでは同じ引きになります。</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-123"></span>指定数</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>指定数引きの個数指定になります。<br>任意の数を指定してその数を引くことができますが、大きな値にすると処理に時間がかかるためご注意ください。</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-check2-square">チェックボックス</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>画面左側にあるチェックボックスによりチェック有/無で引く対象を即座に変更できます。</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-stars">ピックアップ</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>ピックアップはソーシャルゲームのルートボックスの再現（ピックアップ上昇）のほか、ピックアップ確率を下げることで抽選率を下げるためにも利用できます。<br>設定については編集で行うほか、一時的にランダマイザーでダブルクリックにて変更することができます。</p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item bg-light">
+        <div class="row">
+          <div class="col-lg-5 d-flex justify-content-center align-items-center">
+            <h4><span class="bi bi-hand-index-fill">指定引き</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>指定引きは引く対象を選択します。<br>その後、指定引きによりその対象を引くことができ、それまでに何が引けたかの運試しとしても使えます。</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

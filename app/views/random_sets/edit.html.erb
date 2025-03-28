@@ -1,24 +1,26 @@
 <%= turbo_frame_tag "random_set" do %>
-  <%= render "random_set_info" %>
+  <div class="mx-4 p-4 mt-5">
+    <%= render "random_set_info" %>
 
-  <div class="card mt-3">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-6 mt-auto">
-          <i class="bi bi-database">セット内容</i>
-        </div>
-        <div class="col d-flex justify-content-end mt-auto">
-          <%= link_to "", new_random_set_lottery_path(random_set_id: @random_set.id),
-            class: "btn btn-primary btn-small bi bi-plus-circle rounded-5",
-            data: { turbo_frame: "modal", controller: "tooltip", tooltip: "追加" }
-          %>
+    <div class="card mt-3">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-6 mt-auto">
+            <i class="bi bi-database">セット内容</i>
+          </div>
+          <div class="col d-flex justify-content-end mt-auto">
+            <%= link_to "", new_random_set_lottery_path(random_set_id: @random_set.id),
+              class: "btn btn-primary btn-small bi bi-plus-circle rounded-5",
+              data: { turbo_frame: "modal", controller: "tooltip", tooltip: "追加" }
+            %>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="card-body">
-      <ul class="list-unstyled">
-        <%= render partial: "lotteries/edit_lotteries_list", locals: { lotteries: @lotteries } %>      
-      </ul>
+      <div class="card-body">
+        <ul class="list-unstyled">
+          <%= render partial: "lotteries/edit_lotteries_list", locals: { lotteries: @lotteries } %>      
+        </ul>
+      </div>
     </div>
   </div>
 <% end %>

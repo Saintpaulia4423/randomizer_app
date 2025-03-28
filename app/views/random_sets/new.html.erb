@@ -1,12 +1,15 @@
 <% content_for :title, "セット作成" %>
 
-<h1>セット作成</h1>
-
-<div class="card">
-  <div class="card-header">
-    <i class="bi bi-brush-fill">セット情報</i>
-  </div>
-  <div class="card-body">
-    <%= render "form", random_set: @random_set %>
+<div class="p-0 max-height container">
+  <div class="row gx-0 align-items-center w-100 h-100 dice-img background-fix opacity-50"></div>
+  <div class="d-flex justify-content-center align-items-center h-100">
+    <div class="card w-50">
+      <div class="card-header">
+        <i class="bi bi-brush-fill">セット情報</i>
+      </div>
+      <div class="card-body">
+        <%= render "form", random_set: @random_set %>
+      </div>
+    </div>
   </div>
 </div>

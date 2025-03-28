@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get "/login/:random_set_id", to: "session#new", as: "login"
   post "/login/:random_set_id", to: "session#create", as: "create_login"
   delete "/logout/:random_set_id", to: "session#destroy", as: "logout"
+  get "/home", to: "static_pages#home"
+  get "/guide", to: "static_pages#guide"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -22,5 +24,5 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root to: redirect("/random_sets")
+  root "static_pages#home"
 end

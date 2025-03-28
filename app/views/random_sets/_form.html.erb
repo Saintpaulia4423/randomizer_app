@@ -1,21 +1,21 @@
 <%= form_with(model: random_set) do |form| %>
-  <%= render "form_flash", object: form.object%>
+  <%= render "form_flash", object: form.object %>
   <div class="input-group mb-3">
     <%= form.label :name, class: "input-group-text", id: "random_set_name" %>
-    <%= form.text_field :name, class: "form-control", placeholder: "3文字～255文字まで", aria: { describedby: "random_set_name" } %>
+    <%= form.text_field :name, class: "form-control", placeholder: "3文字～255文字まで", aria: { describedby: "random_set_name" }, required: true %>
   </div>
 
   <div class="input-group mb-3">
     <%= form.label :dict, class: "input-group-text", id: "random_set_dict" %>
-    <%= form.text_field :dict, class: "form-control", placeholder: "説明を入力", aria: { describedby: "random_set_dict" }  %>
+    <%= form.text_area :dict, class: "form-control", placeholder: "説明を入力", aria: { describedby: "random_set_dict" }  %>
   </div>
 
   <div class="input-group mb-3">
     <%= form.label :password, class: "input-group-text", id: "random_set_password" %>
-    <%= form.text_field :password, class: "form-control", placeholder: "編集時に使用するパスワード", aria: { describedby: "random_set_password" }  %>
+    <%= form.password_field :password, class: "form-control", placeholder: "編集時に使用するパスワード", aria: { describedby: "random_set_password" }, required: true  %>
   </div>
 
   <div>
-    <%= form.submit "作成", class: "btn btn-outline-primary" %>
+    <%= form.submit "作成", class: "btn btn-primary" %>
   </div>
 <% end %>
