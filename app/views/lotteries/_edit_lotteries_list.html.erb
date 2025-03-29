@@ -2,9 +2,7 @@
   <div class="row border-bottom">
     <div class="col-1 mt-auto">
       <strong>
-        <%= sort_link(@search, :default_check, class: "text-decoration-none text-black") do %>
-          Check
-        <% end %>
+        <%= sort_link(@search, :default_check, class: "text-decoration-none text-black") %>
       </strong>
     </div>
     <div class="col-1 mt-auto">
@@ -22,7 +20,7 @@
         <%= sort_link(@search, :name, class: "text-decoration-none text-black") %>
       </strong>
     </div>
-    <div class="col-1 mt-auto">
+    <div class="col-1 mt-auto text-center">
       <strong>
         <%= sort_link(@search, :value, class: "text-decoration-none text-black") %>
       </strong>

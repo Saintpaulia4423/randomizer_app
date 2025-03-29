@@ -1,0 +1,33 @@
+ja:
+  common:
+    name: 名前
+    dict: 説明
+    password: パスワード
+    reality: レア度
+    value: 個数
+    default_check: チェック
+    default_pickup: ピックアップ
+  alert:
+    error: "%{count}個の問題"
+
+  activerecord:
+    attributes:
+      random_set:
+        name: 名前
+        dict: 説明
+        password: パスワード
+        value: 個数
+        reality: レア度
+        default_check: チェック
+        default_value: 初期値
+      lottery:
+        name: 名前
+        dict: 説明
+        reality: レア度
+        value: 個数
+        default_check: チェック
+        default_pickup: ピックアップ
+  random_sets:
+    result:
+      hit: ヒット数
+      ratio: ヒット割合

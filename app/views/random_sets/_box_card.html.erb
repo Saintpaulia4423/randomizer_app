@@ -16,7 +16,6 @@
     <div class="form-text">※-1は無限として扱います。</div>
     <% if list_edit_action.include?(params[:action]) %>
       <%= form_with model: @random_set do |f| %>
-        <%= render "form_flash", object: f.object %>
         <div class="input-group">
           <%= f.number_field :default_value, class:"form-control" %>
           <%= f.submit "変更", class: "btn btn-primary py-3 px-4"%>

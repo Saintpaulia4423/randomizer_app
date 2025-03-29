@@ -55,7 +55,7 @@
                   <% end %>
                 </li>
               <% end %>
-              <li class="list-group-item">
+              <li class="list-group-item mb-3">
                 <h5>抽選タイプ</h5>
                 <span data-controller="tooltip" data-randomizer-target="lotStyle" data-style=<%= @random_set.pick_type %> data-tooltip="<%= get_infomation_conversion(@random_set.pick_type + "-tip") %>">
                   <%= get_infomation_conversion(@random_set.pick_type) %>

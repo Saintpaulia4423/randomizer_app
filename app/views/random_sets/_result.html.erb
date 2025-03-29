@@ -13,10 +13,10 @@
     <table class="table table-hover table-striped table-sm" data-controller="table-sort" data-randomizer-target="resultTable">
       <thead>
         <tr>
-          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Reality</th>
-          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">Name</th>   
-          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット数</th>     
-          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader">ヒット割合</th>
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader"><%= t("common.reality") %></th>
+          <th class="sortable" data-sort="string" data-action="click->table-sort#sort" data-table-sort-target="tableHeader"><%= t("common.name") %></th>   
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader"><%= t(".hit") %></th>     
+          <th class="sortable" data-sort="number" data-action="click->table-sort#sort" data-table-sort-target="tableHeader"><%= t(".ratio") %></th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
