@@ -1,5 +1,6 @@
 volumes:
   randomizer_vol:
+  https-portal-data:
 networks:
   back_net:
 
@@ -38,3 +39,16 @@ services:
       - db
     tty: true
     stdin_open: true
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      DOMAIN: "randomizer-application.f5.si -> http://web:3000"
+      # STAGE: "production"
+    networks:
+      - default
+    volumes:
+      - https-portal-data:/var/lib/https-portal
