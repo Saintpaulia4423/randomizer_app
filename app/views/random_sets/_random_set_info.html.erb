@@ -40,18 +40,18 @@
                   <h5>セット説明</h5>
                   <% if @random_set.dict.length >= 255 then %>
                     <div class="text-truncate mb-2">
-                      <%= @random_set.dict %>
+                      <%= simple_format(@random_set.dict) %>
                     </div>
                     <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#random_set_long_dict" aria-expanded="false" aria-controls="collapse">
                         全ての確認はこちらから
                     </button>
                     <div class="collapse" id="random_set_long_dict">
                       <div class="card card-body">
-                        <%= @random_set.dict %>
+                        <%= simple_format(@random_set.dict) %>
                       </div>
                     </div>
                   <% else %>
-                    <%= @random_set.dict %>
+                    <%= simple_format(@random_set.dict) %>
                   <% end %>
                 </li>
               <% end %>

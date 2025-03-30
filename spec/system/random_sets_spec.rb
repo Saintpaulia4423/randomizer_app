@@ -173,7 +173,7 @@ RSpec.describe "RandomSets", type: :system do
               # 全てから指定数引く
               find(:xpath, "//button[@data-action='click->randomizer#specifiedDraw']").click
               within result_table do
-                value = all("td")[2].text
+                value = all("td")[3].text
                 expect(value).to have_content(draw_lots_num)
               end
             end
@@ -343,7 +343,7 @@ RSpec.describe "RandomSets", type: :system do
             find("[data-count='100']").click
             result = 0
             within result_table do
-              result = all("td")[2].text.to_i
+              result = all("td")[3].text.to_i
             end
             sleep 1
             find(:xpath, "//button[@data-action='click->randomizer#resetResult']").click
@@ -356,7 +356,7 @@ RSpec.describe "RandomSets", type: :system do
             find(:xpath, "//button[@data-action='click->randomizer#setSeed']").click
             find("[data-count='100']").click
             within result_table do
-              expect(result).to eq all("td")[2].text.to_i
+              expect(result).to eq all("td")[3].text.to_i
             end
           end
         end
@@ -473,9 +473,9 @@ RSpec.describe "RandomSets", type: :system do
                     next if result_lot.empty?
                     case result_lot[1].text
                     when util_lot.name
-                      high_rate_num = result_lot[2].text.to_i
+                      high_rate_num = result_lot[3].text.to_i
                     when add_lot.name
-                      low_rate_num = result_lot[2].text.to_i
+                      low_rate_num = result_lot[3].text.to_i
                     end
                   end
                 end
@@ -495,9 +495,9 @@ RSpec.describe "RandomSets", type: :system do
                     next if result_lot.empty?
                     case result_lot[1].text
                     when util_lot.name
-                      high_rate_num = result_lot[2].text.to_i
+                      high_rate_num = result_lot[3].text.to_i
                     when add_lot_no_set.name
-                      low_rate_num = result_lot[2].text.to_i
+                      low_rate_num = result_lot[3].text.to_i
                     end
                   end
                 end

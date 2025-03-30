@@ -74,6 +74,7 @@ class RandomizerResult {
     let cellIndex = 0;
     let nCReality = newRow.insertCell(cellIndex++);
     let nCName = newRow.insertCell(cellIndex++);
+    let nCDict = newRow.insertCell(cellIndex++);
     let nCHit = newRow.insertCell(cellIndex++);
     let nCRatio = newRow.insertCell(cellIndex++);
 
@@ -81,6 +82,8 @@ class RandomizerResult {
     nCRChild.dataset.value = object.reality;
     nCRChild.innerText = this.translationList[object.reality].innerText;
     nCName.innerText = object.name;
+    let nCDChild = nCDict.appendChild(document.createElement("span"));
+    nCDChild.innerText = object.dict;
     let nCHChild = nCHit.appendChild(document.createElement("span"));
     nCHChild.dataset.value = object.resultValue;
     nCHChild.innerText = object.resultValue;
@@ -429,7 +432,7 @@ export class Randomizer {
     }, 0);
     // フレーム在庫がボックス数より多ければ、そのレアリティのみ出る。
     let stockList = [];
-    if (this.controleValue(this.boxValue, "value") <= this.valueFrameSum) {
+    if (!this.controleValue(this.boxValue, "isInfinity") && this.controleValue(this.boxValue, "value") <= this.valueFrameSum) {
       let stockFromRealityFrame = this.valueFrameRealityList.map(stock => {
         if (stock.cacheValue > 0)
           return stock.reality;
@@ -671,6 +674,9 @@ export class Randomizer {
           return lot + currentReality.value;
         }
       }, 0);
+    } else if (this.matchedList != "" && this.unmatchedList == "") {
+      // レアリティの抽選率が0に設定されており、それ以外の要素がない場合はエラーを出す。
+      throw new Error("セットが設定されていますが、レアリティ抽選率が0となっているため、抽選できません。");
     } else {
       // 未設定レアリティに当選した場合は等分計算。
       let rate = this.subProbability / this.unmatchedList.length;
