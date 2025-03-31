@@ -41,3 +41,6 @@
 
 # rspec test shellscript.
 /rspec_test.sh
+
+# cert
+/secrets/*

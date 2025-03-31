@@ -3,7 +3,11 @@ volumes:
   https-portal-data:
 networks:
   back_net:
-
+secrets:
+  nginx_key_pem_secret:
+    file: ./secrets/nginx-key.pem
+  nginx_pem_secret:
+    file: ./secrets/nginx.pem
 
 services:
   db:
@@ -32,23 +36,18 @@ services:
       - .:/rails
     networks:
       - back_net
-      - default
-    ports:
-      - "3000:3000"
     depends_on:
       - db
     tty: true
     stdin_open: true
-  https-portal:
-    image: steveltn/https-portal:1
+  nginx:
+    build: ./nginx/
     ports:
       - "80:80"
       - "443:443"
-    restart: always
-    environment:
-      DOMAIN: "randomizer-application.f5.si -> http://web:3000"
-      # STAGE: "production"
     networks:
       - default
-    volumes:
-      - https-portal-data:/var/lib/https-portal
+      - back_net
+    secrets:
+      - nginx_key_pem_secret
+      - nginx_pem_secret
