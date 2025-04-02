@@ -44,3 +44,5 @@
 
 # cert
 /secrets/*
+
+/config/credentials/production.key

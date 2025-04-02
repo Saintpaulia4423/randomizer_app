@@ -1,5 +1,6 @@
 volumes:
   randomizer_vol:
+  rails_vol:
   https-portal-data:
 networks:
   back_net:
@@ -8,6 +9,8 @@ secrets:
     file: ./secrets/nginx-key.pem
   nginx_pem_secret:
     file: ./secrets/nginx.pem
+  rails_prod_key:
+    file: ./secrets/production.key
 
 services:
   db:
@@ -38,6 +41,9 @@ services:
       - back_net
     depends_on:
       - db
+    secrets:
+      - source: rails_prod_key
+        target: /rails/config/credentials/production.key
     tty: true
     stdin_open: true
   nginx:
