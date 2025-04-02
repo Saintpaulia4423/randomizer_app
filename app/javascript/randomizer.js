@@ -78,9 +78,12 @@ class RandomizerResult {
     let nCHit = newRow.insertCell(cellIndex++);
     let nCRatio = newRow.insertCell(cellIndex++);
 
+    console.log(object, target)
+    console.log(this.translationList)
+    console.log(nCReality, nCName, nCDict, nCHit, nCRatio)
     let nCRChild = nCReality.appendChild(document.createElement("span"));
     nCRChild.dataset.value = object.reality;
-    nCRChild.innerText = this.translationList[object.reality].innerText;
+    nCRChild.innerText = this.translationList.find(i => i.value == object.reality).innerText;
     nCName.innerText = object.name;
     let nCDChild = nCDict.appendChild(document.createElement("span"));
     nCDChild.innerText = object.dict;
@@ -810,6 +813,8 @@ export class Randomizer {
     this.result.setResultTarget(object);
   }
   setResult(object) {
+    console.log(object)
+    this.testChkParameter()
     if (Array.isArray(object)) {
       let lots = object.map(element => this.getLottery(element))
       lots.forEach(element => this.result.setCache(element));
