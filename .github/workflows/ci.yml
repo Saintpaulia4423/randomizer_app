@@ -84,6 +84,11 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+      
+      - name: Set up DB
+        run: |
+          bundle exec rails db:create RAILS_ENV=test
+          bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Run tests
         env:
@@ -97,5 +102,5 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/capybara
+          path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
