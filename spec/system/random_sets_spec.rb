@@ -1210,5 +1210,21 @@ RSpec.describe "RandomSets", type: :system do
         end
       end
     end
+    describe "delete" do
+      before do
+        visit login_path(set.id)
+        sleep 1
+        fill_in "session_password", with: set.password
+        click_button "検証"
+      end
+      it "削除できるか" do
+        expect(current_path).to eq edit_random_set_path(set.id)
+        find("#random_set_delete_#{set.id}").click
+        page.accept_alert
+        sleep 1
+        expect(current_path).to eq random_sets_path()
+        expect(page).to_not have_content(set.name)
+      end
+    end
   end
 end

@@ -7,6 +7,12 @@
         </div>
         <div class="col-4 mt-auto d-flex justify-content-end">
           <% if params[:action] == "edit" || params[:action] == "update" %>
+            <%= button_to "削除", random_set_path(@random_set),
+              method: :delete,
+              id: "random_set_delete_#{@random_set.id}",
+              class: "btn btn-danger mx-3",
+              form: { data: { turbo_confirm: "本当に削除しますか？" } }
+            %>
             <%= link_to "ランダマイザーへ", random_set_path(@random_set),
               class: "btn btn-primary",
               data: { turbo_frame: "random_set" }

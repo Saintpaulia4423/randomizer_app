@@ -1,5 +1,5 @@
 class RandomSet < ApplicationRecord
-  has_many :lotteries
+  has_many :lotteries, dependent: :destroy
   validates :name, presence: :true, length: { minimum: 3, maximum: 255 }
   validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
   validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }

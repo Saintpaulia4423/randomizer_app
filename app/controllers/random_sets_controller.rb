@@ -1,5 +1,5 @@
 class RandomSetsController < ApplicationController
-  before_action :check_loggin?, only: [ :edit, :update, :create_list, :update_list, :destroy_list ]
+  before_action :check_loggin?, only: [ :edit, :update, :destroy, :create_list, :update_list, :destroy_list ]
 
   # GET /random_sets or /random_sets.json
   def index
@@ -168,7 +168,6 @@ end
     end
     puts target_index
 
-    # テスト実装のため削除なし
     respond_to do |format|
       if @random_set.save
         format.turbo_stream { flash.now.notice = @random_set.name.to_s + "から削除されました。" }
@@ -182,11 +181,13 @@ end
 
   # DELETE /random_sets/1 or /random_sets/1.json
   def destroy
-    @random_set.destroy!
-
     respond_to do |format|
-      format.html { redirect_to random_sets_path, status: :see_other, notice: "Random set was successfully destroyed." }
-      format.json { head :no_content }
+      if @random_set.destroy!
+        format.turbo_stream { flash.notice = "削除しました。" }
+        render turbo_stream: turbo_stream.action(:redirect, random_sets_path)
+      else
+        format.turbo_stream { flash.now.alert = "削除に失敗しました。" }
+      end
     end
   end
 
