@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_19_053529) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_04_085747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,5 +46,35 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_19_053529) do
     t.integer "default_value", default: -1
   end
 
+  create_table "user_created_random_sets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "random_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["random_set_id"], name: "index_user_created_random_sets_on_random_set_id"
+    t.index ["user_id"], name: "index_user_created_random_sets_on_user_id"
+  end
+
+  create_table "user_favorite_random_sets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "random_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["random_set_id"], name: "index_user_favorite_random_sets_on_random_set_id"
+    t.index ["user_id"], name: "index_user_favorite_random_sets_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "user_id"
+    t.string "password_digest"
+    t.string "session_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "lotteries", "random_sets"
+  add_foreign_key "user_created_random_sets", "random_sets"
+  add_foreign_key "user_created_random_sets", "users", on_delete: :cascade
+  add_foreign_key "user_favorite_random_sets", "random_sets"
+  add_foreign_key "user_favorite_random_sets", "users", on_delete: :cascade
 end
