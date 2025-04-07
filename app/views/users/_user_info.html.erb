@@ -1,0 +1,29 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="row">
+      <span class="col bi bi-person-fill">ユーザー情報</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col">
+        <%= t(:user_id) %>：<%= @user.user_id %>
+      </div>
+    </div>
+    <div class="row d-flex">
+      <div class="col-mb-1 d-flex flex-grow-0">
+        <%= button_to "ログアウト", logout_path(id: @user.id, session_mode: "user"),
+          method: :delete,
+          class: "btn btn-warning p-3 mx-3",
+          form: { data: { turbo_confirm: "ログアウトしますか？" } }
+        %>
+        <%= button_to "ユーザーの削除", user_path(@user),
+          method: :delete,
+          id: "user_delete_#{@user.id}",
+          class: "btn btn-danger p-3 mx-3",
+          form: { data: { turbo_confirm: "本当に削除しますか？（この削除では作成したセットは削除されません！）" } }
+        %>
+      </div>
+    </div>
+  </div>
+</div>

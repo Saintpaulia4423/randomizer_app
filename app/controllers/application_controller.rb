@@ -10,6 +10,9 @@ class ApplicationController < ActionController::Base
       true
     end
   end
+  def check_user_loggin?
+    current_user_session.nil? ? redirect_to(root_path) : true
+  end
   def default_url_options
     { locale: I18n.locale }
   end

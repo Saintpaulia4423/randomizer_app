@@ -94,3 +94,15 @@ body>div.background {
     position: fixed;
   }
 }
+
+.trump-img {
+  background-image: url("trump_s.jpg");
+  background-color: rgba($color: #FFF, $alpha: 0.25);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &.background-fix {
+    height: 95vh;
+    position: fixed;
+  }
+}

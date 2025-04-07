@@ -23,7 +23,7 @@
                 class: "btn btn-primary",
                 data: { turbo_frame: "random_set" } %>
             <% else %>
-              <%= link_to "編集", login_path(@random_set),
+              <%= link_to "編集", login_path(id: @random_set.id, session_mode: "random_set", title: "編集パスワード入力"),
                 class: "btn btn-secondary",
                 data: { turbo_frame: "modal" } 
               %>

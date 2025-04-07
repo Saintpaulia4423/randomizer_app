@@ -1,8 +1,7 @@
 class RandomSet < ApplicationRecord
   has_many :lotteries, dependent: :destroy
-  belongs_to :user, optional: true
+  belongs_to :user_created_random_sets, optional: true
   has_many :user_favorite_random_sets
-  has_many :user
   validates :name, presence: :true, length: { minimum: 3, maximum: 255 }
   validates :pick_type, inclusion: { in: %w[mix box], message: "%{value} is not a valid status" }
   validates :pickup_type, inclusion: { in: %w[pre percent-ave percent-fix], message: "%[value] is not a valid status" }
@@ -35,6 +34,14 @@ class RandomSet < ApplicationRecord
   def session_check(session_password)
     return false if session_password.blank?
     BCrypt::Password.new(password_digest).is_password?(session_password)
+  end
+
+  # 制作者情報の取得
+  def created_by
+    users = UserCreatedRandomSet.preload(:user, :random_set).where(random_set_id: self.id)[0]
+    if defined?(users.user).present?
+      users.user
+    end
   end
 
   class << self

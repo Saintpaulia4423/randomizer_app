@@ -1,15 +1,29 @@
 <%= turbo_frame_tag "random_set_password" do %>
-  <%= render "modal", title: "編集パスワード入力" do %>
-    <% if logged_in? %>
-      <p>既にログイン可能です</p>
-    <% else %>
-      <%= form_with(url: login_path, scope: :session, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
-        <%= render "password_flash" %>
-        <div class="input-group">          
+  <%= render "modal", title: params[:title] do %>
+    <%= form_with(url: login_path, scope: :session, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
+      <%= f.hidden_field :session_mode, value: session_mode_check() %>
+      <%= render "password_flash" %>
+      <% if session_mode_check() == "random_set" %>
+        <div class="input-group">
           <%= f.password_field :password, class: "form-control", required: true %>
 
           <%= f.submit "検証", class: "btn btn-primary" %>
         </div>
+      <% elsif session_mode_check() == "user" %>
+        <div class="input-group mb-3">
+          <%= f.label :user_id, class: "input-group-text" %>
+          <%= f.text_field :user_id, class: "form-control", required: true %>
+        </div>
+        <div class="input-group mb-3">
+          <%= f.label :password, class: "input-group-text" %>
+          <%= f.password_field :password, class: "form-control", required: true %>
+        </div>
+        <p class="form-text">新規ユーザーは
+          <%= link_to "こちら", pass_new_user_path() %>
+          から作成<br>
+          ※ユーザー作成せずにセットは作成できます。
+        </p>
+        <%= f.submit "ログイン", class: "btn btn-primary p-3" %>
       <% end %>
     <% end %>
   <% end %>

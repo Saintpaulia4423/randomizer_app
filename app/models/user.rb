@@ -1,8 +1,7 @@
 class User < ApplicationRecord
-  has_many :random_set, dependent: :nullify
+  has_many :user_created_random_sets
   has_many :user_favorite_random_sets, dependent: :destroy
-  has_many :random_set, dependent: :nullify
-  validates :user_id, presence: true, length: { minimum: 3, maximum: 255 }
+  validates :user_id, presence: true, length: { minimum: 3, maximum: 255 }, uniqueness: true
   has_secure_password
 
   # アカウント関係
@@ -51,5 +50,16 @@ class User < ApplicationRecord
   end
   def created_all
     User.preload(:user_created_random_sets => :random_set).find(self.id).user_created_random_sets
+  end
+
+  class << self
+    # ログイン関係
+    def new_token
+      SecureRandom.urlsafe_base64
+    end
+    def digest(string)
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
+      BCrypt::Password.create(string, cost: cost)
+    end
   end
 end

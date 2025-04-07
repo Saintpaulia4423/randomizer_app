@@ -916,7 +916,7 @@ RSpec.describe "RandomSets", type: :system do
     describe "edit" do
       describe "遷移の確認" do
         it "edit pageに到達できるか" do
-          visit login_path(set.id)
+          visit login_path(id: set.id, session_mode: "random_set")
           fill_in "session_password", with: set.password
           click_button "検証"
           expect(current_path).to eq edit_random_set_path(set.id)
@@ -937,7 +937,7 @@ RSpec.describe "RandomSets", type: :system do
       end
       describe "random_setの更新の確認" do
         before do
-          visit login_path(set.id)
+          visit login_path(id: set.id, session_mode: "random_set")
           sleep 1
           fill_in "session_password", with: set.password
           click_button "検証"
@@ -1148,7 +1148,7 @@ RSpec.describe "RandomSets", type: :system do
         let(:c_reality) { "★5" }
         let(:c_value) { 65536 }
         before do
-          visit login_path(set.id)
+          visit login_path(id: set.id, session_mode: "random_set")
           sleep 1
           fill_in "session_password", with: set.password
           click_button "検証"
@@ -1212,7 +1212,7 @@ RSpec.describe "RandomSets", type: :system do
     end
     describe "delete" do
       before do
-        visit login_path(set.id)
+        visit login_path(id: set.id, session_mode: "random_set")
         sleep 1
         fill_in "session_password", with: set.password
         click_button "検証"

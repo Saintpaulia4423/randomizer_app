@@ -2,14 +2,17 @@ Rails.application.routes.draw do
   resources :random_sets  do
     resources :lotteries, only: [ :new, :create, :index, :edit, :update, :destroy ]
   end
+  resources :users, only: %i[new create show edit update destroy]
+  delete "/users/:id/:random_set_id", to: "users#destroy_list", as: "user_destroy_list"
+  get "/users/pass_new", to: "users#pass_new", as: "pass_new_user"
   get "/random_sets/:id/new_list", to: "random_sets#new_list", as: "new_list"
   post "/random_sets/:id/create_list", to: "random_sets#create_list", as: "create_list"
   get "/random_sets/:id/edit_list", to: "random_sets#edit_list", as: "edit_list"
   post "/random_sets/:id/update_list", to: "random_sets#update_list", as: "update_list"
   delete "/random_sets/:id/destroy_list", to: "random_sets#destroy_list", as: "destroy_list"
-  get "/login/:random_set_id", to: "session#new", as: "login"
-  post "/login/:random_set_id", to: "session#create", as: "create_login"
-  delete "/logout/:random_set_id", to: "session#destroy", as: "logout"
+  get "/login/:id", to: "session#new", as: "login"
+  post "/login/:id", to: "session#create", as: "create_login"
+  delete "/logout/:id", to: "session#destroy", as: "logout"
   get "/home", to: "static_pages#home"
   get "/guide", to: "static_pages#guide"
 

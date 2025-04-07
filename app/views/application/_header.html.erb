@@ -14,5 +14,17 @@
         <%= link_to "利用方法", guide_path, class: "nav-link link-light" %>
       </li>
     </ul>
+    <ul class="navbar-nav d-flex text-center text-white">
+      <li class="nav-item">
+        <% if user_logged_in? %>
+            <%= link_to @current_user.user_id, user_path(@current_user), class: "bi bi-person nav-link link-light" %>
+        <% else %>
+          <%= link_to "ログイン", login_path(id: 0, session_mode: "user", title: "ユーザーログイン"),
+            class: "nav-link link-light",
+            data: { turbo_frame: "modal" }
+          %>
+        <% end %>
+      </li>
+    </ul>
   </nav>
 </header>

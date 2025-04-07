@@ -1,0 +1,24 @@
+<%= turbo_frame_tag "favorite" do %>
+  <div class="card">
+    <div class="card-header">
+      登録したお気に入り
+    </div>
+    <div class="card-body">
+      <% if @favorities.empty? %>
+        <p>
+          まだお気に入りが登録されていません。<br>
+          登録してみませんか？<br><br>
+          <%= link_to "セット検索へ", random_sets_path %>
+        </p>
+      <% else %>
+        <ul class="list-group list-group-flush">
+        <% @favorities.each do |favorite| %>
+          <li class="list-group-item">
+            <%= render "favorite_list", favorite: favorite.random_set %>
+          </li>
+        <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+<% end %>

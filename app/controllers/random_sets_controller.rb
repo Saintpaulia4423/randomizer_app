@@ -41,16 +41,17 @@ class RandomSetsController < ApplicationController
   # POST /random_sets or /random_sets.json
   def create
     @random_set = RandomSet.new(random_set_params)
-      if @random_set.save
-        reset_session
-        remember(@random_set, params[:random_set][:password])
-        log_in(@random_set)
-        render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@random_set))
-      else
-        respond_to do |format|
-          format.html { render :new, status: :unprocessable_entity }
-        end
+    if @random_set.save
+      add_created_user_id() if user_logged_in?
+      keep_reset_session()
+      remember(@random_set, params[:random_set][:password])
+      log_in(@random_set)
+      render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@random_set))
+    else
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
       end
+    end
   end
 
   # PATCH/PUT /random_sets/1 or /random_sets/1.json
@@ -200,5 +201,10 @@ end
     # Only allow a list of trusted parameters through.
     def random_set_params
       params.require(:random_set).permit(:name, :dict, :password, :pick_type, :rate, :pickup_rate, :value, :default_value)
+    end
+
+    # ユーザーログイン中に制作したら追加
+    def add_created_user_id
+      @current_user.add_random_set(@random_set)
     end
 end
