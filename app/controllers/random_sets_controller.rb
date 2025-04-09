@@ -43,7 +43,7 @@ class RandomSetsController < ApplicationController
     @random_set = RandomSet.new(random_set_params)
     if @random_set.save
       add_created_user_id() if user_logged_in?
-      keep_reset_session()
+      keep_reset_session("random_set")
       remember(@random_set, params[:random_set][:password])
       log_in(@random_set)
       render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@random_set))

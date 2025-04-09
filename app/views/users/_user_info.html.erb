@@ -6,9 +6,16 @@
   </div>
   <div class="card-body">
     <div class="row mb-3">
-      <div class="col">
-        <%= t(:user_id) %>：<%= @user.user_id %>
-      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <span class="bi bi-person-fill"><%= t(:user_id) %>：<%= @user.user_id %>
+        </li>
+        <li class="list-group-item">
+          <span class="bi bi-hammer"></span>作成数：<%= @created.size %>
+        </li>
+        <li class="list-group-item">
+          <span class="bi bi-heart-fill"></span>お気に入り数：<%= @favorities.size %>
+        </li>
     </div>
     <div class="row d-flex">
       <div class="col-mb-1 d-flex flex-grow-0">

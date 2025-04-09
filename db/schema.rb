@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_06_162620) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_07_161640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_06_162620) do
     t.string "pickup_type", default: "pre"
     t.jsonb "value_list", default: []
     t.integer "default_value", default: -1
+    t.integer "favorities_count", default: 0
   end
 
   create_table "user_created_random_sets", force: :cascade do |t|

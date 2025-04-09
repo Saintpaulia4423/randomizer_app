@@ -4,6 +4,28 @@
       作成したセット
     </div>
     <div class="card-body">
+      <% if @created.empty? %>
+        <p>
+          まだセットを作成したことがありません。<br>
+          作成してみませんか？<br><br>
+          <%= link_to "セット検索へ", new_random_sets_path %>
+        </p>
+      <% else %>
+        <ul class="list-group list-group-flush">
+          <% @created.each do |create| %>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col">
+                  <%= link_to random_set_path(create.random_set.id), data: { turbo_frame: "_top" } do %>
+                    <span class="bi bi-box-arrow-up-left"><%= create.random_set.name %></span>
+                  <% end  %>
+                  <span class="bi bi-heart-fill icon-pink"></span><%= create.random_set.favorities_count %>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
   </div>
 <% end %>

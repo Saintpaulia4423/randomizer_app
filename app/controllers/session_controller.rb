@@ -13,9 +13,8 @@ class SessionController < ApplicationController
     case params[:session][:session_mode]
     when "random_set"
       @current_set = RandomSet.find(params[:id])
-      if session[:set_id] = @current_set.id && @current_set&.authenticate(params[:session][:password])
-        puts "run random_set session create"
-        keep_reset_session()
+      if @current_set.id && @current_set&.authenticate(params[:session][:password])
+        keep_reset_session("random_set")
         remember(@current_set, params[:session][:password])
         log_in @current_set
         render turbo_stream: turbo_stream.action(:redirect, edit_random_set_path(@current_set))
@@ -31,9 +30,8 @@ class SessionController < ApplicationController
       end
     when "user"
       @current_user = User.find_by(user_id: params[:session][:user_id])
-      if session[:user_session_id] = @current_user.id && @current_user&.authenticate(params[:session][:password])
-        puts "run user session create"
-        reset_session #こちらはユーザー情報もリセットのため
+      if @current_user.id && @current_user&.authenticate(params[:session][:password])
+        keep_reset_session("user")
         user_remember(@current_user)
         user_log_in @current_user
         render turbo_stream: turbo_stream.action(:redirect, user_path(@current_user))

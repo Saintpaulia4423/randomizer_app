@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "favorite_button", class: "d-flex align-items-center mx-3" do %>
+  <% if user_logged_in? %>
+    <%= link_to flip_favorite_path(id: @current_user.id, random_set_id: @random_set.id),
+      class: "text-decoration-none text-black my-auto",
+      data: { turbo_stream: true } do
+    %>
+      <div class="my-auto" data-controller="tooltip" data-tooltip="お気に入り数 クリックでお気に入りに">
+        <span class="bi icon-pink <%= @current_user.has_favorite?(@random_set) ? "bi-heart" : "bi-heart-fill" %>"></span><%= @random_set.favorities_count %>
+      </div>
+    <% end %>
+  <% else %>
+    <div data-controller="tooltip" data-tooltip="お気に入り数 ユーザー登録でお気に入りに登録できます。">
+      <span class="bi bi-heart icon-pink"></span><%= @random_set.favorities_count %>
+    </div>
+  <% end %>
+<% end %>

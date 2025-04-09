@@ -1,10 +1,19 @@
 <%= turbo_frame_tag "random_set_favorite_#{favorite.id}" do %>
   <div class="row">
-    <%= link_to favorite.name, random_set_path(favorite.id) %>
-    <%= button_to "削除", user_destroy_list_path(id: @user.id, random_set_id: favorite.id, list_mode: "favorite"),
-      method: :delete,
-      class: "btn btn-danger btn-small",
-      form: { data: { turbo_confirm: "#{favorite.name}をお気に入りから削除してもよろしいですか？" } }
-    %>
+      <div class="d-flex">
+        <div class="col">
+          <%= link_to random_set_path(favorite.id), data: { turbo_frame: "_top" } do %>
+            <span class="bi bi-box-arrow-up-left"><%= favorite.name %></span>
+          <% end %>
+          <span class="bi bi-heart-fill icon-pink"></span><%= favorite.favorities_count %>
+        </div>
+        <div class="d-flex justify-content-end">
+          <%= button_to "削除", user_destroy_list_path(id: @user.id, random_set_id: favorite.id, list_mode: "favorite"),
+            method: :delete,
+            class: "btn btn-danger btn-small",
+            form: { data: { turbo_confirm: "#{favorite.name}をお気に入りから削除してもよろしいですか？" } }
+          %>
+        </div>
+    </div>
   </div>
 <% end %>

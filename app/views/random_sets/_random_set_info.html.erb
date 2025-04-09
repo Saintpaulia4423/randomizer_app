@@ -18,6 +18,7 @@
               data: { turbo_frame: "random_set" }
             %>
           <% else %>
+            <%= render "favorite/favorite_button" %>
             <% if logged_in? %>
               <%= link_to "編集モードへ", edit_random_set_path(@random_set),
                 class: "btn btn-primary",

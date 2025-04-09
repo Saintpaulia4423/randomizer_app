@@ -1,8 +1,11 @@
 <div class="alert alert-info">
+  params<br>
   <%= params %>
   <br>
+  session<br>
   <%= session.each { |i| i } %>
   <br>
+  cookies<br>
   <%= cookies.each { |i| i } %>
   <br>
   current_user id:<%= @current_user.present? ? @current_user.id : "N/A" %>
