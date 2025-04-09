@@ -39,8 +39,18 @@
           <div class="col">
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                <h5>セット名称</h5>
-                <%= @random_set.name %>
+                <div class="row">
+                  <div class="col-9">
+                    <h5>セット名称</h5>
+                    <%= @random_set.name %>
+                  </div>
+                  <% if @random_set.created_by.present? %>
+                    <div class="col">
+                      <h5>制作者</h5>
+                      <%= @random_set.created_by.user_id %>
+                    </div>
+                  <% end %>
+                </div>
               </li>
               <% if @random_set.dict.present? %>
                 <li class="list-group-item">

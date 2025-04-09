@@ -275,3 +275,13 @@ blackjack = RandomSet.create!(
     )
   end
 end
+
+
+test_user = User.create!(
+  user_id: "テストユーザー",
+  password: ENV["TEST_USER_PASSWORD"]
+)
+
+test_user.add_random_set(dominion)
+test_user.add_random_set(trump)
+test_user.add_random_set(blackjack)
