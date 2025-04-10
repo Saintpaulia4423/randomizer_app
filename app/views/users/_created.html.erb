@@ -8,7 +8,7 @@
         <p>
           まだセットを作成したことがありません。<br>
           作成してみませんか？<br><br>
-          <%= link_to "セット検索へ", new_random_set_path %>
+          <%= link_to "セット作成へ", new_random_set_path, data: { turbo_frame: "_top" } %>
         </p>
       <% else %>
         <ul class="list-group list-group-flush">

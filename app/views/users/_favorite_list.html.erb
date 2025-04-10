@@ -9,6 +9,7 @@
         </div>
         <div class="d-flex justify-content-end">
           <%= button_to "削除", user_destroy_list_path(id: @user.id, random_set_id: favorite.id, list_mode: "favorite"),
+            id: "favorite_delete_button_#{favorite.id}",
             method: :delete,
             class: "btn btn-danger btn-small",
             form: { data: { turbo_confirm: "#{favorite.name}をお気に入りから削除してもよろしいですか？" } }

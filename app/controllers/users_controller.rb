@@ -15,7 +15,7 @@ class UsersController < ApplicationController
         render turbo_stream: turbo_stream.action(:redirect, user_path(@user))
       else
         format.turbo_stream { flash.now.alert = "作成に失敗しました。" }
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render "new", status: :unprocessable_entity }
       end
     end
   end
@@ -46,8 +46,9 @@ class UsersController < ApplicationController
     when "favorite"
       user.delete_favorite(@target_set)
       respond_to do |format|
-        format.turbo_stream { flash.now.info = @target_set.name "をお気に入りから削除しました。" }
-        format.html { render "destroy_favorite" }
+        @destroy_list_target = "favorite"
+        format.turbo_stream { flash.now.notice = @target_set.name.to_s + "をお気に入りから削除しました。" }
+        format.html { render "destroy_favorite", deleted_id: @target_set.id }
       end
     end
   end

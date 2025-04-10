@@ -1,0 +1,2 @@
+<%= turbo_stream.remove "random_set_favorite_#{@target_set.id}" if @destroy_list_target == "favorite" %>
+<%= turbo_stream.append "flashes", partial: "flash" %>

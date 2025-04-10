@@ -1,0 +1,18 @@
+<%= turbo_frame_tag "user_form" do %>
+  <%= form_with(model: @user) do |form| %>
+    <%= render "form_flash", object: form.object %>
+    <div class="input-group mb-3">
+      <%= form.label :user_id, class: "input-group-text", id: "random_set_name" %>
+      <%= form.text_field :user_id, class: "form-control", placeholder: "3文字～255文字まで", aria: { describedby: "random_set_name" }, required: true %>
+    </div>
+
+    <div class="input-group mb-3">
+      <%= form.label :password, class: "input-group-text", id: "random_set_password" %>
+      <%= form.password_field :password, class: "form-control", placeholder: "パスワード", aria: { describedby: "random_set_password" }, required: true  %>
+    </div>
+
+    <div>
+      <%= form.submit "作成", class: "btn btn-primary p-3" %>
+    </div>
+  <% end %>
+<% end %>

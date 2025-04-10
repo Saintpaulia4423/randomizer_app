@@ -4,19 +4,20 @@ RSpec.describe "RandomSets", type: :system do
   before do
     driven_by :selenium_headless
   end
-  describe "random_set" do
-    let!(:set) { FactoryBot.create(:random_set) }
-    let!(:another_set) { FactoryBot.create(:random_set, name: "Another_test", dict: "in dict") }
-    let!(:util_lot) { FactoryBot.create(:lottery, :with_pickup, :with_dict, random_set_id: set.id) }
-    let!(:another_set_5lots) { FactoryBot.create_list(:lottery, 5, random_set_id: another_set.id) }
+  let!(:set) { FactoryBot.create(:random_set) }
+  let!(:another_set) { FactoryBot.create(:random_set, name: "Another_test", dict: "in dict") }
+  let!(:util_lot) { FactoryBot.create(:lottery, :with_pickup, :with_dict, random_set_id: set.id) }
+  let!(:another_set_5lots) { FactoryBot.create_list(:lottery, 5, random_set_id: another_set.id) }
+  let!(:user) { FactoryBot.create(:user) }
 
-    # 各種確認において利用される定数
-    # セット内容
-    let(:target_lot) { all("tr[data-randomizer-target=lotteries]") }
-    # 結果確認
-    let(:result_table) { "table[data-randomizer-target=resultTable]" }
-    # 大量のドロー
-    let(:draw_lots_num) { 999 }
+  # 各種確認において利用される定数
+  # セット内容
+  let(:target_lot) { all("tr[data-randomizer-target=lotteries]") }
+  # 結果確認
+  let(:result_table) { "table[data-randomizer-target=resultTable]" }
+  # 大量のドロー
+  let(:draw_lots_num) { 999 }
+describe "random_set" do
 
     describe "index" do
       before(:each) do
@@ -1227,4 +1228,60 @@ RSpec.describe "RandomSets", type: :system do
       end
     end
   end
+  describe "random_set pageでのuserと連動の確認" do
+    context "userが未ログイン時の確認" do
+      it "favorite_buttonはクリックしても変わらない" do
+        visit random_set_path(set.id)
+        within "turbo-frame[id=favorite_button]" do
+          expect(page).to have_css("span.bi-heart")
+          expect(page).to have_content("0")
+          find(:xpath, "//div[@data-controller='tooltip']").click
+          expect(page).to have_css("span.bi-heart")
+          expect(page).to have_content("0")
+        end
+      end
+    end
+    context "userがログイン状態の確認" do
+      before do
+        visit login_path(id: 0, session_mode: "user", title: "ユーザーログイン")
+        fill_in "session[user_id]", with: user.user_id
+        fill_in "session[password]", with: user.password
+        find(:xpath, "//input[@type='submit']").click
+      end
+      it "favorite_buttonをクリックでfavoriteが追加されて数字が更新される" do
+        # ログインできているかの確認
+        cookie = page.driver.browser.manage.cookie_named("user_id")
+        expect(cookie[:value].to_i).to eq(user.id)
+        visit random_set_path(set.id)
+        within "turbo-frame[id=favorite_button]" do
+          # クリックするたびに切り替わるかのチェック
+          expect(page).to have_content("0")
+          find("a").click
+          expect(page).to have_content("1")
+          expect(page).to have_css("span.bi-heart-fill")
+          find("a").click
+          expect(page).to have_content("0")
+          expect(page).to have_css("span.bi-heart")
+        end
+      end
+    end
+    describe "制作者の情報表示確認" do
+      it "制作者がなければ表示されない" do
+        visit random_set_path(set.id)
+        within "turbo-frame[id=random_set_info]" do
+          expect(page).to_not have_content("制作者") 
+          expect(page).to_not have_content(user.user_id) 
+        end
+      end
+      it "制作者があれば表示される" do
+        user.add_random_set(set)
+        visit random_set_path(set.id)
+        within "turbo-frame[id=random_set_info]" do
+          expect(page).to have_content("制作者") 
+          expect(page).to have_content(user.user_id) 
+        end
+      end
+    end
+  end
+
 end
