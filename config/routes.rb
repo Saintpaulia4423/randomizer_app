@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :users, only: %i[new create show edit update destroy]
   get "/favorite/:id/:random_set_id", to: "favorite#flip_favorite", as: "flip_favorite"
   delete "/users/:id/:random_set_id", to: "users#destroy_list", as: "user_destroy_list"
-  get "/users/pass_new", to: "users#pass_new", as: "pass_new_user"
   get "/random_sets/:id/new_list", to: "random_sets#new_list", as: "new_list"
   post "/random_sets/:id/create_list", to: "random_sets#create_list", as: "create_list"
   get "/random_sets/:id/edit_list", to: "random_sets#edit_list", as: "edit_list"

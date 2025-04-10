@@ -7,6 +7,7 @@ ja:
     value: 個数
     default_check: チェック
     default_pickup: ピックアップ
+    user_id: ID
   alert:
     error: "%{count}個の問題"
 
@@ -27,7 +28,25 @@ ja:
         value: 個数
         default_check: チェック
         default_pickup: ピックアップ
+      user:
+        user_id: ID
+        password: パスワード
+      session:
+        user_id: ID
+        password: パスワード
+
   random_sets:
     result:
       hit: ヒット数
       ratio: ヒット割合
+  session:
+    new:
+      user_id: ID
+      password: パスワード
+  users:
+    new:
+      user_id: ID
+      password: パスワード
+    show:
+      user_id: ID
+      password: パスワード

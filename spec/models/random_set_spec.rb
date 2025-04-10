@@ -6,6 +6,7 @@ RSpec.describe RandomSet, type: :model do
   describe "method処理の確認" do
     let(:set) { FactoryBot.create(:random_set) }
     let(:lot) { FactoryBot.create(:lottery, random_set_id: set.id) }
+    let(:user) { FactoryBot.create(:user) }
     it "remember forget test" do
       session = set.remember
       expect(set.session_digest).to eq(session)
@@ -24,6 +25,10 @@ RSpec.describe RandomSet, type: :model do
       it "invalid hash value" do
         set.update(rate: [ { reality: "invalid", value: 0 } ])
         expect(set.errors.full_messages[0]).to include("is invalid: Only values")
+      end
+      it "created_by" do
+        user.add_random_set(set)
+        expect(set.created_by.id).to eq user.id
       end
     end
   end

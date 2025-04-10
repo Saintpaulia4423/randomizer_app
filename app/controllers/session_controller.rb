@@ -25,24 +25,22 @@ class SessionController < ApplicationController
             message = "パスワードを入力してください"
           end
           format.turbo_stream { flash.now.alert = message }
-          format.html { render "new", status: :unprocessable_entity, params: "random_set" }
+          format.html { render "new", status: :unprocessable_entity, session_mode: "random_set" }
         end
       end
     when "user"
       @current_user = User.find_by(user_id: params[:session][:user_id])
-      if @current_user.id && @current_user&.authenticate(params[:session][:password])
+      if @current_user&.authenticate(params[:session][:password])
         keep_reset_session("user")
         user_remember(@current_user)
         user_log_in @current_user
         render turbo_stream: turbo_stream.action(:redirect, user_path(@current_user))
       else
+        puts "test"
         respond_to do |format|
-          message = "パスワードが異なります"
-          if params[:session][:password].blank?
-            message = "パスワードを入力してください"
-          end
+          message = "IDまたはパスワードが異なります"
           format.turbo_stream { flash.now.alert = message }
-          format.html { render "new", status: :unprocessable_entity, params: "user" }
+          format.html { render "new", status: :unprocessable_entity, session_mode: "user" }
         end
       end
     end

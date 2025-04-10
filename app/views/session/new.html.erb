@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "random_set_password" do %>
+<%= turbo_frame_tag "session" do %>
   <%= render "modal", title: params[:title] do %>
     <%= form_with(url: login_path, scope: :session, html: { data: { action: "turbo:submit-end->previewModal#close" } }) do |f| %>
       <%= f.hidden_field :session_mode, value: session_mode_check() %>
@@ -11,15 +11,15 @@
         </div>
       <% elsif session_mode_check() == "user" %>
         <div class="input-group mb-3">
-          <%= f.label :user_id, class: "input-group-text" %>
+          <%= f.label :user_id, t("common.user_id"), class: "input-group-text" %>
           <%= f.text_field :user_id, class: "form-control", required: true %>
         </div>
         <div class="input-group mb-3">
-          <%= f.label :password, class: "input-group-text" %>
+          <%= f.label :password, t("common.password"), class: "input-group-text" %>
           <%= f.password_field :password, class: "form-control", required: true %>
         </div>
         <p class="form-text">新規ユーザーは
-          <%= link_to "こちら", pass_new_user_path() %>
+          <%= link_to "こちら", new_user_path, data: { turbo_frame: "_top" } %>
           から作成<br>
           ※ユーザー作成せずにセットは作成できます。
         </p>

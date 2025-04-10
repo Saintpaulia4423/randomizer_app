@@ -4,11 +4,6 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  # turbo_frame modalからのログインフォームから離脱するため
-  def pass_new
-    render turbo_stream: turbo_stream.action(:redirect, new_user_path)
-  end
-
   def create
     @user = User.new(user_params)
     respond_to do |format|
@@ -17,10 +12,10 @@ class UsersController < ApplicationController
         user_remember(@user)
         user_log_in(@user)
         format.turbo_stream { flash.now.notice = @user.user_id + "を作成しました。" }
-        format.html { render "show" }
+        render turbo_stream: turbo_stream.action(:redirect, user_path(@user))
       else
-        # format.turbo_stream { flash.now.alert = "作成に失敗しました。" }
-        format.html { render :new, status: :unprocessable_entity, params: "user"  }
+        format.turbo_stream { flash.now.alert = "作成に失敗しました。" }
+        format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -38,6 +33,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    @user = User.find_by(id: params[:id])
+    user_log_out
+    @user.destroy! unless @user.nil?
+    render turbo_stream: turbo_stream.action(:redirect, root_path)
   end
 
   def destroy_list

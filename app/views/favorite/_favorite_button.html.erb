@@ -5,7 +5,7 @@
       data: { turbo_stream: true } do
     %>
       <div class="my-auto" data-controller="tooltip" data-tooltip="お気に入り数 クリックでお気に入りに">
-        <span class="bi icon-pink <%= @current_user.has_favorite?(@random_set) ? "bi-heart" : "bi-heart-fill" %>"></span><%= @random_set.favorities_count %>
+        <span class="bi icon-pink <%= @current_user.has_favorite?(@random_set) ? "bi-heart-fill" : "bi-heart" %>"></span><%= @random_set.favorities_count %>
       </div>
     <% end %>
   <% else %>

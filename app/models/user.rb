@@ -25,15 +25,15 @@ class User < ApplicationRecord
     UserFavoriteRandomSet.create!(user_id: self.id, random_set_id: random_set.id)
   end
   def has_favorite?(random_set)
-    UserFavoriteRandomSet.where(user_id: self.id, random_set_id: random_set.id).empty?
+    UserFavoriteRandomSet.where(user_id: self.id, random_set_id: random_set.id).present?
   end
   def flip_favorite(random_set)
     if has_favorite?(random_set)
-      add_favorite(random_set)
-      true
-    else
       delete_favorite(random_set)
       false
+    else
+      add_favorite(random_set)
+      true
     end
   end
   def delete_favorite(random_set)
