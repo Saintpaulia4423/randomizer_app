@@ -12,10 +12,10 @@ services:
       - back_net
     volumes:
       - .postgres:/posgtres
-      - randomizer_vol:/var/lib/postgresql/data
+      - randomizer_vol:/var/lib/postgres
   web:
     build:
-      context: ./randomizer_private
+      context: .
       dockerfile: Dockerfile
     environment:
       - POSTGRES_PASSWORD
@@ -28,11 +28,11 @@ services:
       - back_net
     depends_on:
       - db
-    secrets:
-      - source: rails_env
-        target: /rails/.env
-      - source: rails_product_key
-        target: /rails/config/credentials/production.key
+      # secrets:
+      # - source: rails_env
+      #   target: /rails/.env
+      # - source: rails_product_key
+      #   target: /rails/config/credentials/production.key
     tty: true
     stdin_open: true
   nginx:

@@ -91,7 +91,7 @@ RSpec.describe User, type: :model do
         it "created_all" do
           user.add_random_set(set)
           result = user.created_all
-          expect(result[0].random_set).to eq set 
+          expect(result[0].random_set).to eq set
         end
       end
     end

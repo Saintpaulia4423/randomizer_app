@@ -18,7 +18,6 @@ RSpec.describe "RandomSets", type: :system do
   # 大量のドロー
   let(:draw_lots_num) { 999 }
 describe "random_set" do
-
     describe "index" do
       before(:each) do
         visit random_sets_path
@@ -1269,19 +1268,18 @@ describe "random_set" do
       it "制作者がなければ表示されない" do
         visit random_set_path(set.id)
         within "turbo-frame[id=random_set_info]" do
-          expect(page).to_not have_content("制作者") 
-          expect(page).to_not have_content(user.user_id) 
+          expect(page).to_not have_content("制作者")
+          expect(page).to_not have_content(user.user_id)
         end
       end
       it "制作者があれば表示される" do
         user.add_random_set(set)
         visit random_set_path(set.id)
         within "turbo-frame[id=random_set_info]" do
-          expect(page).to have_content("制作者") 
-          expect(page).to have_content(user.user_id) 
+          expect(page).to have_content("制作者")
+          expect(page).to have_content(user.user_id)
         end
       end
     end
   end
-
 end

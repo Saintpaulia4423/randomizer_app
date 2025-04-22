@@ -1,0 +1,7 @@
+
+FROM postgres:16.4
+
+ARG UID
+ARG GID
+RUN groupmod -g ${GID} postgres && \
+  usermod -u ${UID} postgres

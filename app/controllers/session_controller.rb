@@ -55,7 +55,7 @@ class SessionController < ApplicationController
     when "user"
       user_log_out if user_logged_in?
       render turbo_stream: turbo_stream.action(:redirect, root_path)
-    end      
+    end
   end
 
   def reject_params_by_session_mode

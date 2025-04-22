@@ -1,0 +1,143 @@
+services:
+  db:
+    container_name: postgres-db
+    image: 127.0.0.1:5000/postgres
+    build:
+      context: ./postgresql/
+      args:
+        - UID
+        - GID
+    environment:
+      POSTGRES_USER: $POSTGRES_USERNAME
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    restart: always
+    networks:
+      - back_net
+    volumes:
+      - randomizer_vol:/var/lib/postgresql/data
+      - randomizer_log:/var/log/nginx/
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+  web:
+    image: 127.0.0.1:5000/randomizer_web
+    build:
+      context: ./randomizer_app
+      dockerfile: Dockerfile
+      args:
+        - UID
+        - GID
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_HOST
+    command: bash -c "rm -f tmp/pids/server.pid  && bin/rails db:create && bin/rails db:migrate && bundle exec rails s -b 0.0.0.0"
+    # command: ls public/assets # debug
+    volumes:
+      - web_server:/rails
+      - rails_assets:/rails/public/assets
+    networks:
+      - back_net
+    user: $UID:$GID
+    depends_on:
+      - db
+    secrets:
+      - source: rails_env
+        target: /rails/.env
+      - source: rails_product_key
+        target: /rails/config/credentials/production.key
+    tty: true
+    stdin_open: true
+    hostname: "{{.Service.Name}}-{{.Task.Name}}"
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+  nginx:
+    image: 127.0.0.1:5000/nginx
+    build:
+      context: ./nginx/
+      args:
+        - UID
+        - GID
+        - USERNAME
+        - GROUPNAME
+    networks:
+      - default
+      - back_net
+    depends_on:
+      - db
+    volumes:
+      - randomizer_log:/var/log/nginx
+    secrets:
+      - source: nginx_key_pem_secret
+        target: /etc/nginx/ssl/nginx-key.pem
+      - source: nginx_pem_secret
+        target: /etc/nginx/ssl/nginx.pem
+      - source: nginx_origin_ca
+        target: /etc/nginx/ssl/origin_ca_ecc_root.pem
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    networks:
+      - default
+      - back_net
+    command: "tunnel --no-autoupdate run --token-file /run/secrets/cloudflare_token"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    secrets:
+      - source: cloudflare_token
+        target: /run/secrets/cloudflare_token
+
+volumes:
+  randomizer_vol:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=$NFS_ADDRESS,rw,nfsvers=$NFSVERS"
+      device: ":$NFS_PATH/db"
+  randomizer_log:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=$NFS_ADDRESS,rw,nfsvers=$NFSVERS"
+      device: ":$NFS_PATH/logs"
+  rails_assets:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=$NFS_ADDRESS,rw,nfsvers=$NFSVERS"
+      device: ":$NFS_PATH/assets"
+  web_server:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=$NFS_ADDRESS,rw,nfsvers=$NFSVERS"
+      device: ":$NFS_PATH/rails"
+networks:
+  back_net:
+    name: back_net
+    internal: true
+secrets:
+  nginx_origin_ca:
+    file: ./secrets/origin_ca_ecc_root.pem
+  nginx_key_pem_secret:
+    file: ./secrets/nginx-key.pem
+  nginx_pem_secret:
+    file: ./secrets/nginx.pem
+  rails_env:
+    file: ./secrets/.env
+  rails_product_key:
+    file: ./secrets/production.key
+  cloudflare_token:
+    file: ./secrets/cloudflare_token
+configs:
+  randomizer:
+    external: true

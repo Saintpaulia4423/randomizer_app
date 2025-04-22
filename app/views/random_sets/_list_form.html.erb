@@ -14,7 +14,6 @@
         <%= f.hidden_field :reality, value: target %>
       <% end %>
 
-      <%= f.label :value, class:"input-group-text" %>
       <%= f.number_field :value, class: "form-control", value: reality_value.to_i , min: get_list_parameter(params[:target_list])["min_value"] ? -1 : 0 %>
 
     </div>

@@ -43,7 +43,7 @@ class User < ApplicationRecord
   end
   # user.favorite_all.eachで各random_set情報取得
   def favorite_all
-    User.preload(:user_favorite_random_sets => :random_set).find(self.id).user_favorite_random_sets
+    User.preload(user_favorite_random_sets: :random_set).find(self.id).user_favorite_random_sets
   end
 
   def add_create_random_set(random_set_params)
@@ -61,7 +61,7 @@ class User < ApplicationRecord
     target.destroy
   end
   def created_all
-    User.preload(:user_created_random_sets => :random_set).find(self.id).user_created_random_sets
+    User.preload(user_created_random_sets: :random_set).find(self.id).user_created_random_sets
   end
 
   class << self

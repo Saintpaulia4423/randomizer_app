@@ -50,7 +50,7 @@ RSpec.describe SessionHelper, type: :helper do
       context "user_log in" do
         it "ログイン後、トークンが登録されているか" do
           helper.user_log_in(user)
-          expect(helper.session[:user_session_token]).to eq user.session_digest 
+          expect(helper.session[:user_session_token]).to eq user.session_digest
         end
       end
       context "user_logged_in?" do
